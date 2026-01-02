@@ -76,9 +76,7 @@ export default function TaskItem({ id, text, onComplete, onDelete, isMidnight, d
         opacity: 0,
         transition: { duration: 0.5, ease: 'easeIn' }
       }}
-      className={`glass-effect rounded-xl p-4 shadow-glow group relative overflow-visible ${
-        isMidnight ? 'border border-red-300/10' : 'border border-red-400/10'
-      }`}
+      className="glass-effect rounded-lg p-3 shadow-glow group relative overflow-visible"
     >
       {/* Particle effects */}
       <AnimatePresence>
@@ -109,28 +107,22 @@ export default function TaskItem({ id, text, onComplete, onDelete, isMidnight, d
         </>
       )}
 
-      <div className="flex items-center gap-3 relative z-10">
+      <div className="flex items-center gap-2 relative z-10">
         {/* Drag Handle */}
         <div
           {...dragHandleProps}
-          className={`drag-handle cursor-grab active:cursor-grabbing opacity-40 group-hover:opacity-100 transition-opacity ${
-            isMidnight ? 'text-red-300' : 'text-red-200'
-          }`}
+          className="drag-handle cursor-grab active:cursor-grabbing opacity-30 group-hover:opacity-80 transition-opacity text-red-500"
         >
-          <GripVertical className="w-5 h-5" />
+          <GripVertical className="w-4 h-4" />
         </div>
 
         {/* Checkbox */}
         <motion.button
           onClick={handleComplete}
-          className={`w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center ${
-            isMidnight
-              ? 'border-red-300 hover:border-red-200 hover:bg-red-500/20 hover:shadow-[0_0_12px_rgba(255,51,51,0.4)]'
-              : 'border-red-400 hover:border-red-300 hover:bg-red-500/20 hover:shadow-[0_0_12px_rgba(204,0,0,0.4)]'
-          }`}
+          className="w-5 h-5 rounded-full border-2 border-red-500 transition-all flex items-center justify-center hover:bg-red-500/10"
           disabled={isDestroying}
-          whileHover={{ scale: 1.15 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           <AnimatePresence>
             {isDestroying && (
@@ -138,9 +130,9 @@ export default function TaskItem({ id, text, onComplete, onDelete, isMidnight, d
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 exit={{ scale: 0 }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
               >
-                <Check className={`w-4 h-4 ${isMidnight ? 'text-red-200' : 'text-red-300'}`} />
+                <Check className="w-3 h-3 text-red-500" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -148,12 +140,10 @@ export default function TaskItem({ id, text, onComplete, onDelete, isMidnight, d
 
         {/* Task Text */}
         <motion.span
-          className={`flex-1 text-base font-medium transition-all ${
-            isMidnight ? 'text-red-50' : 'text-red-100'
-          } ${isDestroying ? 'line-through opacity-30' : ''}`}
+          className={`flex-1 text-sm font-medium text-red-400 transition-all ${isDestroying ? 'line-through opacity-30' : ''}`}
           animate={isDestroying ? {
-            x: 8,
-            transition: { duration: 0.4 }
+            x: 6,
+            transition: { duration: 0.3 }
           } : {}}
         >
           {text}
@@ -162,14 +152,10 @@ export default function TaskItem({ id, text, onComplete, onDelete, isMidnight, d
         {/* Delete Button */}
         <motion.button
           onClick={() => onDelete(id)}
-          className={`opacity-0 group-hover:opacity-100 transition-all p-2 rounded-lg ${
-            isMidnight
-              ? 'text-red-300 hover:text-red-200 hover:bg-red-500/15'
-              : 'text-red-400 hover:text-red-300 hover:bg-red-500/15'
-          }`}
+          className="opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
           disabled={isDestroying}
-          whileHover={{ scale: 1.15 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           <X className="w-4 h-4" />
         </motion.button>

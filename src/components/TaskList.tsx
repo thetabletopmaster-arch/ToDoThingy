@@ -125,31 +125,23 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
   return (
     <div className="space-y-6">
       {/* Today's Tasks */}
-      <div className="glass-effect rounded-2xl p-6 shadow-glow">
-        <h2 className={`text-2xl font-bold mb-4 ${isMidnight ? 'text-red-300' : 'text-red-100'}`}>
+      <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <h2 className="text-xl font-bold mb-3 text-red-500">
           Today's Focus
         </h2>
 
-        <form onSubmit={handleAddTodayTask} className="mb-5">
-          <div className="flex gap-3">
+        <form onSubmit={handleAddTodayTask} className="mb-4">
+          <div className="flex gap-2">
             <input
               type="text"
               value={newTodayTask}
               onChange={(e) => setNewTodayTask(e.target.value)}
               placeholder="Add a task for today..."
-              className={`flex-1 px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all ${
-                isMidnight
-                  ? 'border-red-300/20 focus:ring-red-300 focus:border-red-300 bg-black text-red-50 placeholder-red-300/40'
-                  : 'border-red-400/20 focus:ring-red-400 focus:border-red-400 bg-red-950/40 text-red-50 placeholder-red-200/40'
-              }`}
+              className="flex-1 px-4 py-2 rounded-lg border-2 border-red-500/40 focus:outline-none focus:border-red-500 bg-black/60 text-red-400 placeholder-red-500/30 transition-all"
             />
             <button
               type="submit"
-              className={`px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-glow hover:scale-105 active:scale-95 ${
-                isMidnight
-                  ? 'bg-red-600 hover:bg-red-500 text-white'
-                  : 'bg-red-600 hover:bg-red-500 text-white'
-              }`}
+              className="px-4 py-2 rounded-lg border-2 border-red-500 bg-transparent text-red-500 font-medium flex items-center gap-2 hover:bg-red-500/10 hover:border-red-400 transition-all"
             >
               <Plus className="w-5 h-5" />
               Add
@@ -166,7 +158,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
             items={todayTasks.map(t => t.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-3 max-h-[35vh] overflow-y-auto pr-2">
+            <div className="space-y-2 max-h-[25vh] overflow-y-auto pr-2">
               {todayTasks.map(task => (
                 <SortableTaskItem
                   key={task.id}
@@ -178,7 +170,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
                 />
               ))}
               {todayTasks.length === 0 && (
-                <div className={`text-center py-8 ${isMidnight ? 'text-red-300/50' : 'text-red-200/50'}`}>
+                <div className="text-center py-6 text-red-500/50">
                   No tasks for today. Add one to get started!
                 </div>
               )}
@@ -188,31 +180,23 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
       </div>
 
       {/* Long-term Goals */}
-      <div className="glass-effect rounded-2xl p-6 shadow-glow">
-        <h2 className={`text-2xl font-bold mb-4 ${isMidnight ? 'text-red-300' : 'text-red-100'}`}>
+      <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <h2 className="text-xl font-bold mb-3 text-red-500">
           Long-term Goals
         </h2>
 
-        <form onSubmit={handleAddLongtermTask} className="mb-5">
-          <div className="flex gap-3">
+        <form onSubmit={handleAddLongtermTask} className="mb-4">
+          <div className="flex gap-2">
             <input
               type="text"
               value={newLongtermTask}
               onChange={(e) => setNewLongtermTask(e.target.value)}
               placeholder="Add a long-term goal..."
-              className={`flex-1 px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all ${
-                isMidnight
-                  ? 'border-red-300/20 focus:ring-red-300 focus:border-red-300 bg-black text-red-50 placeholder-red-300/40'
-                  : 'border-red-400/20 focus:ring-red-400 focus:border-red-400 bg-red-950/40 text-red-50 placeholder-red-200/40'
-              }`}
+              className="flex-1 px-4 py-2 rounded-lg border-2 border-red-500/40 focus:outline-none focus:border-red-500 bg-black/60 text-red-400 placeholder-red-500/30 transition-all"
             />
             <button
               type="submit"
-              className={`px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-glow hover:scale-105 active:scale-95 ${
-                isMidnight
-                  ? 'bg-red-600 hover:bg-red-500 text-white'
-                  : 'bg-red-600 hover:bg-red-500 text-white'
-              }`}
+              className="px-4 py-2 rounded-lg border-2 border-red-500 bg-transparent text-red-500 font-medium flex items-center gap-2 hover:bg-red-500/10 hover:border-red-400 transition-all"
             >
               <Plus className="w-5 h-5" />
               Add
@@ -229,7 +213,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
             items={longtermTasks.map(t => t.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-3 max-h-[35vh] overflow-y-auto pr-2">
+            <div className="space-y-2 max-h-[25vh] overflow-y-auto pr-2">
               {longtermTasks.map(task => (
                 <SortableTaskItem
                   key={task.id}
@@ -241,7 +225,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
                 />
               ))}
               {longtermTasks.length === 0 && (
-                <div className={`text-center py-8 ${isMidnight ? 'text-red-300/50' : 'text-red-200/50'}`}>
+                <div className="text-center py-6 text-red-500/50">
                   No long-term goals yet. Add one to start planning!
                 </div>
               )}

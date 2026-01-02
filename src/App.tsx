@@ -22,21 +22,21 @@ function App() {
     <>
       <ThemeToggle isMidnight={isMidnight} onToggle={() => setIsMidnight(!isMidnight)} />
 
-      <div className="min-h-screen max-h-screen overflow-hidden p-4 md:p-6">
-        <div className="max-w-7xl mx-auto h-full flex flex-col">
+      <div className="min-h-screen p-4 md:p-6">
+        <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.header
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-4"
+            className="text-center mb-6"
           >
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <ListTodo className={`w-8 h-8 ${isMidnight ? 'text-red-400' : 'text-blue-400'}`} />
-              <h1 className={`text-3xl md:text-4xl font-bold ${isMidnight ? 'text-red-100' : 'text-blue-100'}`}>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <ListTodo className="w-8 h-8 text-red-500" />
+              <h1 className="text-3xl md:text-4xl font-bold text-red-500">
                 Productivity Dashboard
               </h1>
             </div>
-            <p className={`text-sm ${isMidnight ? 'text-red-300/70' : 'text-slate-400'}`}>
+            <p className="text-sm text-red-500/60">
               Stay focused, organized, and on track
             </p>
           </motion.header>
@@ -62,13 +62,13 @@ function App() {
           </motion.div>
 
           {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Tasks - Takes up more space */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="lg:col-span-2 min-h-0"
+              className="lg:col-span-2"
             >
               <TaskList isMidnight={isMidnight} />
             </motion.div>
@@ -78,7 +78,6 @@ function App() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
-              className="flex items-start"
             >
               <CompactTimer isMidnight={isMidnight} />
             </motion.div>

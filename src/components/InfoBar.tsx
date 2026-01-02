@@ -72,79 +72,79 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Time */}
-      <div className="glass-effect rounded-xl p-4 shadow-warm">
+      <div className="glass-effect rounded-xl p-4 shadow-glow">
         <div className="flex items-center gap-2 mb-2">
-          <Clock className={`w-4 h-4 ${isMidnight ? 'text-red-400' : 'text-blue-400'}`} />
-          <span className={`text-xs font-medium ${isMidnight ? 'text-red-200' : 'text-slate-300'}`}>Time</span>
+          <Clock className="w-4 h-4 text-red-500" />
+          <span className="text-xs font-medium text-red-500">Time</span>
         </div>
-        <div className={`text-2xl font-bold tabular-nums ${isMidnight ? 'text-red-50' : 'text-slate-100'}`}>
+        <div className="text-2xl font-bold tabular-nums text-red-400">
           {formatTime(time)}
         </div>
-        <div className={`text-xs ${isMidnight ? 'text-red-300/60' : 'text-slate-400'} mt-1`}>
+        <div className="text-xs text-red-500/60 mt-1">
           {time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
         </div>
       </div>
 
       {/* Weather */}
-      <div className="glass-effect rounded-xl p-4 shadow-warm">
+      <div className="glass-effect rounded-xl p-4 shadow-glow">
         <div className="flex items-center gap-2 mb-2">
-          <Cloud className={`w-4 h-4 ${isMidnight ? 'text-red-400' : 'text-blue-400'}`} />
-          <span className={`text-xs font-medium ${isMidnight ? 'text-red-200' : 'text-slate-300'}`}>Weather</span>
+          <Cloud className="w-4 h-4 text-red-500" />
+          <span className="text-xs font-medium text-red-500">Weather</span>
         </div>
         {weather ? (
           <>
-            <div className={`text-2xl font-bold ${isMidnight ? 'text-red-50' : 'text-slate-100'}`}>
+            <div className="text-2xl font-bold text-red-400">
               {weather.temperature}°C
             </div>
             <div className="flex gap-3 mt-2 text-xs">
               <div className="flex items-center gap-1">
-                <Droplets className="w-3 h-3 text-blue-400" />
-                <span className={isMidnight ? 'text-red-200/80' : 'text-slate-300'}>{weather.humidity}%</span>
+                <Droplets className="w-3 h-3 text-red-500" />
+                <span className="text-red-400">{weather.humidity}%</span>
               </div>
               <div className="flex items-center gap-1">
-                <Wind className="w-3 h-3 text-slate-400" />
-                <span className={isMidnight ? 'text-red-200/80' : 'text-slate-300'}>{weather.windSpeed}km/h</span>
+                <Wind className="w-3 h-3 text-red-500" />
+                <span className="text-red-400">{weather.windSpeed}km/h</span>
               </div>
               <div className="flex items-center gap-1">
-                <Sun className="w-3 h-3 text-orange-400" />
-                <span className={uvInfo?.color}>{weather.uvIndex} {uvInfo?.level}</span>
+                <Sun className="w-3 h-3 text-red-500" />
+                <span className="text-red-400">{weather.uvIndex} {uvInfo?.level}</span>
               </div>
             </div>
           </>
         ) : (
-          <div className={`text-sm ${isMidnight ? 'text-red-300/60' : 'text-slate-400'}`}>Loading...</div>
+          <div className="text-sm text-red-500/60">Loading...</div>
         )}
       </div>
 
       {/* Sun Times */}
-      <div className="glass-effect rounded-xl p-4 shadow-warm">
+      <div className="glass-effect rounded-xl p-4 shadow-glow">
         <div className="flex items-center gap-2 mb-2">
-          <Sun className={`w-4 h-4 ${isMidnight ? 'text-red-400' : 'text-blue-400'}`} />
-          <span className={`text-xs font-medium ${isMidnight ? 'text-red-200' : 'text-slate-300'}`}>Sun</span>
+          <Sun className="w-4 h-4 text-red-500" />
+          <span className="text-xs font-medium text-red-500">Sun</span>
         </div>
         {sunTimes ? (
           <div className="flex gap-4">
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <Sunrise className="w-3 h-3 text-orange-400" />
-                <span className={`text-xs ${isMidnight ? 'text-red-300/80' : 'text-slate-400'}`}>Rise</span>
+                <Sunrise className="w-3 h-3 text-red-500" />
+                <span className="text-xs text-red-500/80">Rise</span>
               </div>
-              <div className={`text-lg font-bold tabular-nums ${isMidnight ? 'text-red-50' : 'text-slate-100'}`}>
+              <div className="text-lg font-bold tabular-nums text-red-400">
                 {sunTimes.sunrise}
               </div>
             </div>
             <div>
               <div className="flex items-center gap-1 mb-1">
-                <Sunset className="w-3 h-3 text-amber-500" />
-                <span className={`text-xs ${isMidnight ? 'text-red-300/80' : 'text-slate-400'}`}>Set</span>
+                <Sunset className="w-3 h-3 text-red-500" />
+                <span className="text-xs text-red-500/80">Set</span>
               </div>
-              <div className={`text-lg font-bold tabular-nums ${isMidnight ? 'text-red-50' : 'text-slate-100'}`}>
+              <div className="text-lg font-bold tabular-nums text-red-400">
                 {sunTimes.sunset}
               </div>
             </div>
           </div>
         ) : (
-          <div className={`text-sm ${isMidnight ? 'text-red-300/60' : 'text-slate-400'}`}>Loading...</div>
+          <div className="text-sm text-red-500/60">Loading...</div>
         )}
       </div>
     </div>

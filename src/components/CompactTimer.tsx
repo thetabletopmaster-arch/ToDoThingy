@@ -64,53 +64,49 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
   const progress = (totalSeconds / initialSeconds) * 100;
 
   return (
-    <div className="glass-effect rounded-xl p-4 shadow-warm">
-      <div className="flex items-center gap-2 mb-3">
-        <TimerIcon className={`w-4 h-4 ${isMidnight ? 'text-red-400' : 'text-blue-400'}`} />
-        <h3 className={`text-sm font-semibold ${isMidnight ? 'text-red-100' : 'text-blue-100'}`}>Timer</h3>
+    <div className="glass-effect rounded-xl p-6 shadow-glow">
+      <div className="flex items-center gap-2 mb-4">
+        <TimerIcon className="w-5 h-5 text-red-500" />
+        <h3 className="text-lg font-semibold text-red-500">Timer</h3>
       </div>
 
-      <div className="relative mb-3">
-        <svg className="w-32 h-32 mx-auto transform -rotate-90">
+      <div className="relative mb-6">
+        <svg className="w-48 h-48 mx-auto transform -rotate-90">
           <circle
-            cx="64"
-            cy="64"
-            r="58"
-            stroke={isMidnight ? 'rgba(220, 38, 38, 0.2)' : 'rgba(59, 130, 246, 0.2)'}
-            strokeWidth="6"
+            cx="96"
+            cy="96"
+            r="88"
+            stroke="rgba(255, 51, 51, 0.2)"
+            strokeWidth="8"
             fill="none"
           />
           <motion.circle
-            cx="64"
-            cy="64"
-            r="58"
-            stroke={`url(#gradient-${isMidnight ? 'red' : 'blue'})`}
-            strokeWidth="6"
+            cx="96"
+            cy="96"
+            r="88"
+            stroke="url(#gradient-red)"
+            strokeWidth="8"
             fill="none"
             strokeLinecap="round"
-            initial={{ strokeDasharray: '364', strokeDashoffset: '364' }}
-            animate={{ strokeDashoffset: 364 - (364 * progress) / 100 }}
+            initial={{ strokeDasharray: '553', strokeDashoffset: '553' }}
+            animate={{ strokeDashoffset: 553 - (553 * progress) / 100 }}
             transition={{ duration: 0.5 }}
           />
           <defs>
             <linearGradient id="gradient-red" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#dc2626" />
-              <stop offset="100%" stopColor="#f97316" />
-            </linearGradient>
-            <linearGradient id="gradient-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" />
-              <stop offset="100%" stopColor="#06b6d4" />
+              <stop offset="0%" stopColor="#ff3333" />
+              <stop offset="100%" stopColor="#dc2626" />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`text-3xl font-bold tabular-nums ${isMidnight ? 'text-red-50' : 'text-slate-100'}`}>
+          <div className="text-5xl font-bold tabular-nums text-red-400">
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
           </div>
         </div>
       </div>
 
-      <div className="flex gap-2 mb-3">
+      <div className="flex gap-2 mb-4">
         <input
           type="number"
           value={inputMinutes}
@@ -119,51 +115,39 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
           disabled={isRunning}
           min="1"
           max="120"
-          className={`flex-1 px-2 py-1 text-sm rounded-lg border focus:outline-none focus:ring-2 ${
-            isMidnight
-              ? 'border-red-500/30 focus:ring-red-500 bg-black/50 text-red-50 placeholder-red-300/50'
-              : 'border-blue-500/30 focus:ring-blue-500 bg-slate-900/50 text-slate-100 placeholder-slate-400'
-          } disabled:opacity-50`}
-          placeholder="Min"
+          className="flex-1 px-3 py-2 rounded-lg border-2 border-red-500/40 focus:outline-none focus:border-red-500 bg-black/60 text-red-400 placeholder-red-500/30 transition-all disabled:opacity-50"
+          placeholder="Minutes"
         />
         <button
           onClick={handleSetTime}
           disabled={isRunning}
-          className={`px-3 py-1 text-sm rounded-lg transition-colors disabled:opacity-50 ${
-            isMidnight
-              ? 'bg-red-600 hover:bg-red-700 text-white'
-              : 'bg-blue-600 hover:bg-blue-700 text-white'
-          }`}
+          className="px-4 py-2 rounded-lg border-2 border-red-500 bg-transparent text-red-500 font-medium hover:bg-red-500/10 hover:border-red-400 transition-all disabled:opacity-50"
         >
           Set
         </button>
       </div>
 
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-3 justify-center">
         {!isRunning ? (
           <button
             onClick={handleStart}
-            className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition-colors shadow-lg"
+            className="border-2 border-red-500 bg-transparent text-red-500 p-3 rounded-full transition-all hover:bg-red-500/10 hover:border-red-400"
           >
-            <Play className="w-4 h-4" fill="white" />
+            <Play className="w-5 h-5" />
           </button>
         ) : (
           <button
             onClick={() => setIsRunning(false)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-full transition-colors shadow-lg"
+            className="border-2 border-red-500 bg-transparent text-red-500 p-3 rounded-full transition-all hover:bg-red-500/10 hover:border-red-400"
           >
-            <Pause className="w-4 h-4" fill="white" />
+            <Pause className="w-5 h-5" />
           </button>
         )}
         <button
           onClick={handleReset}
-          className={`p-2 rounded-full transition-colors shadow-lg ${
-            isMidnight
-              ? 'bg-red-500 hover:bg-red-600 text-white'
-              : 'bg-red-500 hover:bg-red-600 text-white'
-          }`}
+          className="border-2 border-red-500 bg-transparent text-red-500 p-3 rounded-full transition-all hover:bg-red-500/10 hover:border-red-400"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-5 h-5" />
         </button>
       </div>
     </div>

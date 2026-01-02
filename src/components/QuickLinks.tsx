@@ -4,15 +4,13 @@ import { motion } from 'framer-motion';
 interface QuickLink {
   name: string;
   url: string;
-  color: string;
-  midnightColor: string;
 }
 
 const links: QuickLink[] = [
-  { name: 'Claude', url: 'https://claude.ai', color: 'bg-amber-600 hover:bg-amber-700', midnightColor: 'bg-red-900 hover:bg-red-800' },
-  { name: 'ChatGPT', url: 'https://chat.openai.com', color: 'bg-emerald-600 hover:bg-emerald-700', midnightColor: 'bg-red-800 hover:bg-red-700' },
-  { name: 'Skool', url: 'https://www.skool.com', color: 'bg-blue-600 hover:bg-blue-700', midnightColor: 'bg-red-700 hover:bg-red-600' },
-  { name: 'Gmail', url: 'https://mail.google.com', color: 'bg-rose-600 hover:bg-rose-700', midnightColor: 'bg-red-600 hover:bg-red-500' },
+  { name: 'Claude', url: 'https://claude.ai' },
+  { name: 'ChatGPT', url: 'https://chat.openai.com' },
+  { name: 'Skool', url: 'https://www.skool.com' },
+  { name: 'Gmail', url: 'https://mail.google.com' },
 ];
 
 export default function QuickLinks({ isMidnight }: { isMidnight: boolean }) {
@@ -24,7 +22,7 @@ export default function QuickLinks({ isMidnight }: { isMidnight: boolean }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${isMidnight ? link.midnightColor : link.color} text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all transform hover:scale-105 shadow-lg`}
+          className="border-2 border-red-500 bg-transparent text-red-500 px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all hover:bg-red-500/10 hover:border-red-400"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}

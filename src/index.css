@@ -1,93 +1,67 @@
 @import "tailwindcss";
 
-@theme {
-  --color-red-950: #1a0000;
-  --color-red-900: #300000;
-  --color-red-800: #4d0000;
-  --color-red-700: #660000;
-  --color-red-600: #800000;
-  --color-red-500: #990000;
-  --color-red-400: #cc0000;
-  --color-red-300: #ff3333;
-  --color-red-200: #ff6666;
-  --color-red-100: #ff9999;
-  --color-red-50: #ffcccc;
-}
-
-/* Normal Mode - Red spectrum gradients for professional, cozy feel */
+/* Dark theme - black/gray backgrounds with red text, borders, and lines ONLY */
 body {
-  background: linear-gradient(135deg, #1a0000 0%, #2d0a0a 25%, #3d1010 50%, #2d0a0a 75%, #1a0000 100%);
+  background: #0a0a0a;
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #ffcccc;
+  color: #ff3333;
   overflow-x: hidden;
 }
 
-/* Midnight Mode - PURE BLACK with red accents only */
+/* Midnight Mode - Pure black */
 body.midnight {
   background: #000000;
 }
 
 .glass-effect {
-  background: rgba(77, 0, 0, 0.4);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(204, 0, 0, 0.15);
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.6),
-    0 0 20px 0 rgba(204, 0, 0, 0.1);
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 51, 51, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 body.midnight .glass-effect {
-  background: rgba(0, 0, 0, 0.95);
-  border: 1px solid rgba(255, 51, 51, 0.2);
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.9),
-    0 0 30px 0 rgba(255, 51, 51, 0.15);
+  background: rgba(10, 10, 10, 0.9);
+  border: 1px solid rgba(255, 51, 51, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 51, 51, 0.1);
 }
 
 .shadow-glow {
-  box-shadow:
-    0 4px 12px -1px rgba(204, 0, 0, 0.25),
-    0 2px 6px -1px rgba(204, 0, 0, 0.15),
-    0 0 20px 0 rgba(204, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(255, 51, 51, 0.2);
 }
 
 body.midnight .shadow-glow {
-  box-shadow:
-    0 4px 12px -1px rgba(255, 51, 51, 0.4),
-    0 2px 6px -1px rgba(255, 51, 51, 0.3),
-    0 0 30px 0 rgba(255, 51, 51, 0.2);
+  box-shadow: 0 2px 10px rgba(255, 51, 51, 0.3);
 }
 
-/* Scrollbar styling for red theme */
+/* Scrollbar - dark with red accents */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(26, 0, 0, 0.3);
-  border-radius: 4px;
+  background: #1a1a1a;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(204, 0, 0, 0.4);
-  border-radius: 4px;
+  background: #333;
+  border-radius: 5px;
+  border: 2px solid #ff3333;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(204, 0, 0, 0.6);
+  background: #444;
 }
 
 body.midnight ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.5);
+  background: #000;
 }
 
 body.midnight ::-webkit-scrollbar-thumb {
-  background: rgba(255, 51, 51, 0.5);
-}
-
-body.midnight ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 51, 51, 0.7);
+  background: #1a1a1a;
+  border: 2px solid #ff3333;
 }
 
 @keyframes particle-float {
@@ -101,7 +75,6 @@ body.midnight ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-/* Dragging styles */
 .dragging {
   opacity: 0.5;
   cursor: grabbing;
