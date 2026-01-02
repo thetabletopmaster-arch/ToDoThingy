@@ -1,73 +1,136 @@
-# React + TypeScript + Vite
+# Productivity Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A beautiful, cozy, and professional productivity dashboard built with React, TypeScript, and Tailwind CSS. Stay focused, organized, and on track with this all-in-one productivity tool.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Task Management
+- **Add and manage tasks** with an intuitive interface
+- **Beautiful destruction animation** when completing tasks
+- **Delete tasks** with a simple click
+- Tasks persist during the session
 
-## React Compiler
+### Time Display
+- **Real-time clock** showing current time with date
+- Updates every second for accurate timekeeping
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Sunrise & Sunset Times
+- **Automatic location detection** using browser geolocation
+- **Daily sunrise and sunset times** for your location
+- Beautiful sunrise/sunset icons
 
-## Expanding the ESLint configuration
+### Timer
+- **Customizable countdown timer** (default 25 minutes - perfect for Pomodoro technique)
+- **Visual progress indicator** with circular animation
+- **Play, pause, and reset controls**
+- **Browser notifications** when timer completes (with permission)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Design
+- **Cozy warm color palette** with subtle gradients
+- **Glass-effect UI components** for a modern, professional look
+- **Smooth animations** powered by Framer Motion
+- **Fully responsive** - works great on desktop and mobile
+- **Clean typography** using Inter font family
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS v4** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **Lucide React** - Beautiful icon set
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ installed
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd ToDoThingy
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Install dependencies:
+```bash
+npm install
 ```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser to `http://localhost:5173` (or the URL shown in terminal)
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist/` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Browser Permissions
+
+For the best experience, allow the following permissions when prompted:
+
+- **Location** - For accurate sunrise/sunset times
+- **Notifications** - For timer completion alerts
+
+## Usage Tips
+
+- **Tasks**: Click the plus button or press Enter to add a new task
+- **Timer**: Set your desired minutes and click play to start
+- **Completion**: Watch the satisfying destruction animation when you complete a task!
+
+## Development
+
+### Project Structure
+
+```
+ToDoThingy/
+├── src/
+│   ├── components/
+│   │   ├── TaskItem.tsx       # Individual task with animations
+│   │   ├── TaskList.tsx       # Task list manager
+│   │   ├── CurrentTime.tsx    # Real-time clock
+│   │   ├── SunriseSunset.tsx  # Sunrise/sunset display
+│   │   └── Timer.tsx          # Countdown timer
+│   ├── App.tsx                # Main application component
+│   ├── main.tsx               # Application entry point
+│   └── index.css              # Global styles and Tailwind config
+├── index.html                 # HTML template
+└── vite.config.ts             # Vite configuration
+```
+
+### Customization
+
+You can customize the color palette by editing the `@theme` section in `src/index.css`:
+
+```css
+@theme {
+  --color-warm-50: #fdf8f6;
+  --color-warm-100: #f2e8e5;
+  /* ... more colors */
+}
+```
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
