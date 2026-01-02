@@ -1,54 +1,93 @@
 @import "tailwindcss";
 
 @theme {
-  --color-dark-50: #e8e9f3;
-  --color-dark-100: #c5c7db;
-  --color-dark-200: #9ea2c3;
-  --color-dark-300: #777cab;
-  --color-dark-400: #5a5f98;
-  --color-dark-500: #3d4285;
-  --color-dark-600: #373c7d;
-  --color-dark-700: #2f3372;
-  --color-dark-800: #272b68;
-  --color-dark-900: #1a1d55;
-  --color-accent-400: #a78bfa;
-  --color-accent-500: #8b5cf6;
-  --color-accent-600: #7c3aed;
+  --color-red-950: #1a0000;
+  --color-red-900: #300000;
+  --color-red-800: #4d0000;
+  --color-red-700: #660000;
+  --color-red-600: #800000;
+  --color-red-500: #990000;
+  --color-red-400: #cc0000;
+  --color-red-300: #ff3333;
+  --color-red-200: #ff6666;
+  --color-red-100: #ff9999;
+  --color-red-50: #ffcccc;
 }
 
-/* Default Dark Theme */
+/* Normal Mode - Red spectrum gradients for professional, cozy feel */
 body {
-  background: linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%);
+  background: linear-gradient(135deg, #1a0000 0%, #2d0a0a 25%, #3d1010 50%, #2d0a0a 75%, #1a0000 100%);
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #e2e8f0;
+  color: #ffcccc;
   overflow-x: hidden;
 }
 
-/* Midnight Mode */
+/* Midnight Mode - PURE BLACK with red accents only */
 body.midnight {
-  background: linear-gradient(135deg, #000000 0%, #0d0d0d 50%, #1a0000 100%);
+  background: #000000;
 }
 
 .glass-effect {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(96, 165, 250, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  background: rgba(77, 0, 0, 0.4);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(204, 0, 0, 0.15);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.6),
+    0 0 20px 0 rgba(204, 0, 0, 0.1);
 }
 
 body.midnight .glass-effect {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.2);
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 51, 51, 0.2);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.9),
+    0 0 30px 0 rgba(255, 51, 51, 0.15);
 }
 
-.shadow-warm {
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -1px rgba(59, 130, 246, 0.2);
+.shadow-glow {
+  box-shadow:
+    0 4px 12px -1px rgba(204, 0, 0, 0.25),
+    0 2px 6px -1px rgba(204, 0, 0, 0.15),
+    0 0 20px 0 rgba(204, 0, 0, 0.1);
 }
 
-body.midnight .shadow-warm {
-  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4), 0 2px 4px -1px rgba(220, 38, 38, 0.3);
+body.midnight .shadow-glow {
+  box-shadow:
+    0 4px 12px -1px rgba(255, 51, 51, 0.4),
+    0 2px 6px -1px rgba(255, 51, 51, 0.3),
+    0 0 30px 0 rgba(255, 51, 51, 0.2);
+}
+
+/* Scrollbar styling for red theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(26, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(204, 0, 0, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(204, 0, 0, 0.6);
+}
+
+body.midnight ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+body.midnight ::-webkit-scrollbar-thumb {
+  background: rgba(255, 51, 51, 0.5);
+}
+
+body.midnight ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 51, 51, 0.7);
 }
 
 @keyframes particle-float {
@@ -60,4 +99,19 @@ body.midnight .shadow-warm {
     transform: translate(var(--tx), var(--ty)) rotate(var(--rotation));
     opacity: 0;
   }
+}
+
+/* Dragging styles */
+.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
