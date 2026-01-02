@@ -1,91 +1,91 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ListTodo } from 'lucide-react';
 import TaskList from './components/TaskList';
-import CurrentTime from './components/CurrentTime';
-import SunriseSunset from './components/SunriseSunset';
-import Timer from './components/Timer';
-import WeatherWidget from './components/WeatherWidget';
+import InfoBar from './components/InfoBar';
+import CompactTimer from './components/CompactTimer';
+import QuickLinks from './components/QuickLinks';
+import ThemeToggle from './components/ThemeToggle';
 
 function App() {
-  return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.header
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <ListTodo className="w-10 h-10 text-purple-400" />
-            <h1 className="text-5xl font-bold text-slate-100">
-              Productivity Dashboard
-            </h1>
-          </div>
-          <p className="text-slate-300 text-lg">
-            Stay focused, organized, and on track
-          </p>
-        </motion.header>
+  const [isMidnight, setIsMidnight] = useState(() => {
+    const saved = localStorage.getItem('midnight-mode');
+    return saved === 'true';
+  });
 
-        {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Tasks */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="lg:col-span-2"
+  useEffect(() => {
+    document.body.classList.toggle('midnight', isMidnight);
+    localStorage.setItem('midnight-mode', String(isMidnight));
+  }, [isMidnight]);
+
+  return (
+    <>
+      <ThemeToggle isMidnight={isMidnight} onToggle={() => setIsMidnight(!isMidnight)} />
+
+      <div className="min-h-screen max-h-screen overflow-hidden p-4 md:p-6">
+        <div className="max-w-7xl mx-auto h-full flex flex-col">
+          {/* Header */}
+          <motion.header
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-4"
           >
-            <TaskList />
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <ListTodo className={`w-8 h-8 ${isMidnight ? 'text-red-400' : 'text-blue-400'}`} />
+              <h1 className={`text-3xl md:text-4xl font-bold ${isMidnight ? 'text-red-100' : 'text-blue-100'}`}>
+                Productivity Dashboard
+              </h1>
+            </div>
+            <p className={`text-sm ${isMidnight ? 'text-red-300/70' : 'text-slate-400'}`}>
+              Stay focused, organized, and on track
+            </p>
+          </motion.header>
+
+          {/* Quick Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-4"
+          >
+            <QuickLinks isMidnight={isMidnight} />
           </motion.div>
 
-          {/* Right Column - Widgets */}
-          <div className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <CurrentTime />
-            </motion.div>
+          {/* Info Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-4"
+          >
+            <InfoBar isMidnight={isMidnight} />
+          </motion.div>
 
+          {/* Main Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
+            {/* Tasks - Takes up more space */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.25 }}
-            >
-              <WeatherWidget />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
+              className="lg:col-span-2 min-h-0"
             >
-              <SunriseSunset />
+              <TaskList isMidnight={isMidnight} />
             </motion.div>
 
+            {/* Timer */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.35 }}
+              transition={{ delay: 0.4 }}
+              className="flex items-start"
             >
-              <Timer />
+              <CompactTimer isMidnight={isMidnight} />
             </motion.div>
           </div>
         </div>
-
-        {/* Footer */}
-        <motion.footer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-12 text-slate-500 text-sm"
-        >
-          Built with focus and intention
-        </motion.footer>
       </div>
-    </div>
+    </>
   );
 }
 

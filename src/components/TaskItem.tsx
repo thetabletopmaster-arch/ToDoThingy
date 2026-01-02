@@ -7,9 +7,10 @@ interface TaskItemProps {
   text: string;
   onComplete: (id: string) => void;
   onDelete: (id: string) => void;
+  isMidnight: boolean;
 }
 
-const Particle = ({ index }: { index: number }) => {
+const Particle = ({ index, isMidnight }: { index: number; isMidnight: boolean }) => {
   const angle = (index / 20) * Math.PI * 2;
   const distance = 100 + Math.random() * 50;
   const tx = Math.cos(angle) * distance;
@@ -20,7 +21,9 @@ const Particle = ({ index }: { index: number }) => {
 
   return (
     <motion.div
-      className="absolute rounded-full bg-gradient-to-br from-purple-400 to-pink-500"
+      className={`absolute rounded-full ${
+        isMidnight ? 'bg-gradient-to-br from-red-500 to-orange-600' : 'bg-gradient-to-br from-blue-400 to-cyan-500'
+      }`}
       style={{
         width: size,
         height: size,
@@ -44,7 +47,7 @@ const Particle = ({ index }: { index: number }) => {
   );
 };
 
-export default function TaskItem({ id, text, onComplete, onDelete }: TaskItemProps) {
+export default function TaskItem({ id, text, onComplete, onDelete, isMidnight }: TaskItemProps) {
   const [isDestroying, setIsDestroying] = useState(false);
 
   const handleComplete = () => {
@@ -73,14 +76,14 @@ export default function TaskItem({ id, text, onComplete, onDelete }: TaskItemPro
         opacity: 0,
         transition: { duration: 0.4, ease: 'easeIn' }
       }}
-      className="glass-effect rounded-xl p-4 shadow-warm group relative overflow-visible"
+      className="glass-effect rounded-lg p-3 shadow-warm group relative overflow-visible"
     >
       {/* Particle effects */}
       <AnimatePresence>
         {isDestroying && (
           <div className="absolute inset-0 pointer-events-none">
             {Array.from({ length: 20 }).map((_, i) => (
-              <Particle key={i} index={i} />
+              <Particle key={i} index={i} isMidnight={isMidnight} />
             ))}
           </div>
         )}
@@ -90,13 +93,15 @@ export default function TaskItem({ id, text, onComplete, onDelete }: TaskItemPro
       {isDestroying && (
         <>
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-20 rounded-xl"
+            className={`absolute inset-0 opacity-20 rounded-lg ${
+              isMidnight ? 'bg-gradient-to-r from-red-600 to-orange-600' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+            }`}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1.5, opacity: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           />
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-30 rounded-xl"
+            className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-30 rounded-lg"
             initial={{ x: '-100%' }}
             animate={{ x: '100%' }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
@@ -104,10 +109,14 @@ export default function TaskItem({ id, text, onComplete, onDelete }: TaskItemPro
         </>
       )}
 
-      <div className="flex items-center gap-3 relative z-10">
+      <div className="flex items-center gap-2 relative z-10">
         <motion.button
           onClick={handleComplete}
-          className="w-6 h-6 rounded-full border-2 border-purple-400 hover:border-green-400 hover:bg-green-500/20 transition-all flex items-center justify-center"
+          className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center ${
+            isMidnight
+              ? 'border-red-400 hover:border-green-400 hover:bg-green-500/20'
+              : 'border-blue-400 hover:border-green-400 hover:bg-green-500/20'
+          }`}
           disabled={isDestroying}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -120,14 +129,16 @@ export default function TaskItem({ id, text, onComplete, onDelete }: TaskItemPro
                 exit={{ scale: 0 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
               >
-                <Check className="w-4 h-4 text-green-400" />
+                <Check className="w-3 h-3 text-green-400" />
               </motion.div>
             )}
           </AnimatePresence>
         </motion.button>
 
         <motion.span
-          className={`flex-1 text-slate-200 transition-all ${isDestroying ? 'line-through opacity-40' : ''}`}
+          className={`flex-1 text-sm transition-all ${
+            isMidnight ? 'text-red-100' : 'text-slate-200'
+          } ${isDestroying ? 'line-through opacity-40' : ''}`}
           animate={isDestroying ? {
             x: 10,
             transition: { duration: 0.3 }
@@ -138,12 +149,16 @@ export default function TaskItem({ id, text, onComplete, onDelete }: TaskItemPro
 
         <motion.button
           onClick={() => onDelete(id)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-500 p-1 rounded-lg hover:bg-red-500/10"
+          className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg ${
+            isMidnight
+              ? 'text-red-400 hover:text-red-300 hover:bg-red-500/10'
+              : 'text-red-400 hover:text-red-500 hover:bg-red-500/10'
+          }`}
           disabled={isDestroying}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          <X className="w-4 h-4" />
+          <X className="w-3 h-3" />
         </motion.button>
       </div>
     </motion.div>

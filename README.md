@@ -1,131 +1,195 @@
 # Productivity Dashboard
 
-A beautiful, cozy, and professional productivity dashboard built with React, TypeScript, and Tailwind CSS. Stay focused, organized, and on track with this all-in-one productivity tool.
+A sleek, modern productivity dashboard designed to be your browser's homepage. Built with React, TypeScript, and Tailwind CSS, featuring dual themes and persistent task management.
 
 ## Features
 
 ### Task Management
-- **Add and manage tasks** with an intuitive interface
-- **Beautiful destruction animation** when completing tasks
-- **Delete tasks** with a simple click
-- Tasks persist during the session
-
-### Time Display
-- **Real-time clock** showing current time with date
-- Updates every second for accurate timekeeping
-
-### Sunrise & Sunset Times
-- **Automatic location detection** using browser geolocation
-- **Daily sunrise and sunset times** for your location
-- Beautiful sunrise/sunset icons
-
-### Timer
-- **Customizable countdown timer** (default 25 minutes - perfect for Pomodoro technique)
-- **Visual progress indicator** with circular animation
-- **Play, pause, and reset controls**
-- **Browser notifications** when timer completes (with permission)
-
-### Design
-- **Cozy warm color palette** with subtle gradients
-- **Glass-effect UI components** for a modern, professional look
+- **Persistent tasks** saved to localStorage (never lose your tasks!)
+- **Particle destruction animation** - 20 colorful particles burst when completing tasks
 - **Smooth animations** powered by Framer Motion
-- **Fully responsive** - works great on desktop and mobile
-- **Clean typography** using Inter font family
+- **Quick add** with keyboard shortcuts (Enter to submit)
+
+### Quick Links
+- **One-click access** to Claude, ChatGPT, Skool, and Gmail
+- **Beautiful buttons** with hover animations
+- Opens in new tabs for seamless workflow
+
+### Real-Time Information
+- **Live clock** with date display
+- **Weather widget** showing temperature, humidity, wind speed, and UV index
+- **Sunrise/sunset times** based on your location
+- **Auto-refreshing** data
+
+### Pomodoro Timer
+- **Customizable timer** (default 25 minutes)
+- **Visual progress ring** with smooth animations
+- **Browser notifications** when complete
+- **Play, pause, and reset** controls
+
+### Dual Themes
+- **Dark Mode** - Cool blue tones, perfect for daily use
+- **Midnight Shift** - Deep black with red accents for late-night productivity
+- **Toggle button** in top-right corner
+- **Theme persistence** remembers your preference
+
+### Compact Design
+- **Everything fits on one screen** - no scrolling needed
+- **Responsive layout** adapts to any screen size
+- **Glass-morphism effects** for modern aesthetics
 
 ## Tech Stack
 
 - **React 18** - UI library
 - **TypeScript** - Type safety
-- **Vite** - Fast build tool and dev server
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **Framer Motion** - Animation library
-- **Lucide React** - Beautiful icon set
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS v4** - Utility-first styling
+- **Framer Motion** - Smooth animations
+- **Lucide React** - Beautiful icons
+- **Open-Meteo API** - Free weather data
 
-## Getting Started
+## Installation
 
-### Prerequisites
-
-- Node.js 18+ installed
-- npm or yarn package manager
-
-### Installation
-
-1. Clone the repository:
 ```bash
+# Clone the repository
 git clone <repository-url>
 cd ToDoThingy
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
 
-3. Start the development server:
-```bash
+# Start development server
 npm run dev
-```
 
-4. Open your browser to `http://localhost:5173` (or the URL shown in terminal)
-
-### Building for Production
-
-```bash
+# Build for production
 npm run build
 ```
 
-The built files will be in the `dist/` directory.
+## Set as Browser Homepage
 
-### Preview Production Build
+### Chrome/Edge
+1. Build the project: `npm run build`
+2. Open `chrome://settings/` or `edge://settings/`
+3. Go to "On startup"
+4. Select "Open a specific page or set of pages"
+5. Click "Add a new page"
+6. Enter the path to `dist/index.html` (e.g., `file:///path/to/ToDoThingy/dist/index.html`)
+
+**Alternative (Recommended):**
+1. Deploy to a hosting service (Vercel, Netlify, GitHub Pages)
+2. Set the deployed URL as your homepage
+
+### Firefox
+1. Build the project: `npm run build`
+2. Open `about:preferences#home`
+3. Under "Homepage and new windows"
+4. Select "Custom URLs"
+5. Enter the path to `dist/index.html`
+
+### Deploy to GitHub Pages (Recommended)
 
 ```bash
-npm run preview
+# Build the project
+npm run build
+
+# Push dist folder to gh-pages branch
+git subtree push --prefix dist origin gh-pages
 ```
+
+Then set `https://<username>.github.io/<repo-name>` as your homepage.
+
+### Deploy to Vercel/Netlify
+1. Connect your GitHub repository
+2. Set build command: `npm run build`
+3. Set output directory: `dist`
+4. Deploy and use the URL as your homepage
 
 ## Browser Permissions
 
-For the best experience, allow the following permissions when prompted:
+For full functionality, allow these permissions:
 
-- **Location** - For accurate sunrise/sunset times
+- **Location** - For accurate weather and sunrise/sunset times
 - **Notifications** - For timer completion alerts
 
 ## Usage Tips
 
-- **Tasks**: Click the plus button or press Enter to add a new task
-- **Timer**: Set your desired minutes and click play to start
-- **Completion**: Watch the satisfying destruction animation when you complete a task!
+- **Add tasks**: Type and press Enter
+- **Complete tasks**: Click the checkbox for particle animation
+- **Delete tasks**: Hover over task and click X
+- **Change timer**: Enter minutes and click "Set"
+- **Switch themes**: Click moon/flame icon in top-right
+- **Quick links**: Click any button to open in new tab
 
-## Development
+## Theme Modes
 
-### Project Structure
+**Dark Mode (Default)**
+- Cool blue/slate color scheme
+- Perfect for daytime productivity
+- Easy on the eyes
+
+**Midnight Shift**
+- Deep black background
+- Red accent colors
+- Ideal for late-night work sessions
+- Reduces eye strain in darkness
+
+## Project Structure
 
 ```
 ToDoThingy/
 ├── src/
 │   ├── components/
-│   │   ├── TaskItem.tsx       # Individual task with animations
-│   │   ├── TaskList.tsx       # Task list manager
-│   │   ├── CurrentTime.tsx    # Real-time clock
-│   │   ├── SunriseSunset.tsx  # Sunrise/sunset display
-│   │   └── Timer.tsx          # Countdown timer
-│   ├── App.tsx                # Main application component
-│   ├── main.tsx               # Application entry point
-│   └── index.css              # Global styles and Tailwind config
-├── index.html                 # HTML template
-└── vite.config.ts             # Vite configuration
+│   │   ├── TaskItem.tsx         # Task with particle animation
+│   │   ├── TaskList.tsx         # Task manager with localStorage
+│   │   ├── InfoBar.tsx          # Time, weather, sun times
+│   │   ├── CompactTimer.tsx     # Pomodoro timer
+│   │   ├── QuickLinks.tsx       # App shortcut buttons
+│   │   └── ThemeToggle.tsx      # Theme switcher
+│   ├── App.tsx                  # Main app layout
+│   ├── main.tsx                 # Entry point
+│   └── index.css                # Themes and global styles
+├── index.html                   # HTML template
+└── vite.config.ts              # Vite configuration
 ```
 
-### Customization
+## Customization
 
-You can customize the color palette by editing the `@theme` section in `src/index.css`:
+### Add More Quick Links
+
+Edit `src/components/QuickLinks.tsx`:
+
+```typescript
+const links: QuickLink[] = [
+  { name: 'Your App', url: 'https://example.com', color: 'bg-purple-600 hover:bg-purple-700', midnightColor: 'bg-red-600 hover:bg-red-500' },
+  // ... existing links
+];
+```
+
+### Customize Colors
+
+Edit `src/index.css` to change theme colors:
 
 ```css
-@theme {
-  --color-warm-50: #fdf8f6;
-  --color-warm-100: #f2e8e5;
-  /* ... more colors */
+/* Dark mode gradient */
+body {
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+/* Midnight mode gradient */
+body.midnight {
+  background: linear-gradient(135deg, #000000 0%, #0d0d0d 50%, #1a0000 100%);
 }
 ```
+
+## Browser Extension Alternative
+
+Want this as a new tab extension?
+
+1. Build the project
+2. Create `manifest.json` in the `dist` folder
+3. Load as unpacked extension in Chrome
+
+See the [New Tab Extension Guide](https://developer.chrome.com/docs/extensions/mv3/override/) for details.
 
 ## License
 
@@ -133,4 +197,18 @@ MIT
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Feel free to submit a Pull Request.
+
+## Support
+
+If you encounter issues:
+1. Check browser console for errors
+2. Ensure location permissions are granted
+3. Try clearing localStorage: `localStorage.clear()`
+4. Rebuild the project: `npm run build`
+
+## Credits
+
+- Weather data: [Open-Meteo](https://open-meteo.com/)
+- Icons: [Lucide](https://lucide.dev/)
+- Fonts: [Inter](https://fonts.google.com/specimen/Inter)

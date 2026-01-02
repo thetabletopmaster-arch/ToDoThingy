@@ -16,22 +16,39 @@
   --color-accent-600: #7c3aed;
 }
 
+/* Default Dark Theme */
 body {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%);
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: #e2e8f0;
+  overflow-x: hidden;
+}
+
+/* Midnight Mode */
+body.midnight {
+  background: linear-gradient(135deg, #000000 0%, #0d0d0d 50%, #1a0000 100%);
 }
 
 .glass-effect {
-  background: rgba(30, 27, 75, 0.6);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+body.midnight .glass-effect {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.2);
 }
 
 .shadow-warm {
-  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3), 0 2px 4px -1px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -1px rgba(59, 130, 246, 0.2);
+}
+
+body.midnight .shadow-warm {
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4), 0 2px 4px -1px rgba(220, 38, 38, 0.3);
 }
 
 @keyframes particle-float {
