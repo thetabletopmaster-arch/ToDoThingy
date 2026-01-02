@@ -4,6 +4,7 @@ import TaskList from './components/TaskList';
 import CurrentTime from './components/CurrentTime';
 import SunriseSunset from './components/SunriseSunset';
 import Timer from './components/Timer';
+import WeatherWidget from './components/WeatherWidget';
 
 function App() {
   return (
@@ -16,12 +17,12 @@ function App() {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center gap-3 mb-2">
-            <ListTodo className="w-10 h-10 text-warm-600" />
-            <h1 className="text-5xl font-bold text-warm-800">
+            <ListTodo className="w-10 h-10 text-purple-400" />
+            <h1 className="text-5xl font-bold text-slate-100">
               Productivity Dashboard
             </h1>
           </div>
-          <p className="text-warm-600 text-lg">
+          <p className="text-slate-300 text-lg">
             Stay focused, organized, and on track
           </p>
         </motion.header>
@@ -51,6 +52,14 @@ function App() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <WeatherWidget />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
               <SunriseSunset />
@@ -59,7 +68,7 @@ function App() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.35 }}
             >
               <Timer />
             </motion.div>
@@ -71,7 +80,7 @@ function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-center mt-12 text-warm-500 text-sm"
+          className="text-center mt-12 text-slate-500 text-sm"
         >
           Built with focus and intention
         </motion.footer>

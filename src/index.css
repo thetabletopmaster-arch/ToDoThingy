@@ -1,30 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --color-warm-50: #fdf8f6;
-  --color-warm-100: #f2e8e5;
-  --color-warm-200: #eaddd7;
-  --color-warm-300: #e0cec7;
-  --color-warm-400: #d2bab0;
-  --color-warm-500: #bfa094;
-  --color-warm-600: #a18072;
-  --color-warm-700: #977669;
-  --color-warm-800: #846358;
-  --color-warm-900: #43302b;
+  --color-dark-50: #e8e9f3;
+  --color-dark-100: #c5c7db;
+  --color-dark-200: #9ea2c3;
+  --color-dark-300: #777cab;
+  --color-dark-400: #5a5f98;
+  --color-dark-500: #3d4285;
+  --color-dark-600: #373c7d;
+  --color-dark-700: #2f3372;
+  --color-dark-800: #272b68;
+  --color-dark-900: #1a1d55;
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
 }
 
 body {
-  background: linear-gradient(to bottom right, #fdf8f6, #ffedd5, #fef3c7);
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #e2e8f0;
 }
 
 .glass-effect {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(30, 27, 75, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .shadow-warm {
-  box-shadow: 0 4px 6px -1px rgba(194, 120, 80, 0.1), 0 2px 4px -1px rgba(194, 120, 80, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3), 0 2px 4px -1px rgba(139, 92, 246, 0.2);
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rotation));
+    opacity: 0;
+  }
 }

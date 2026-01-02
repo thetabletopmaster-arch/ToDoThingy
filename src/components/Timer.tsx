@@ -82,8 +82,8 @@ export default function Timer() {
   return (
     <div className="glass-effect rounded-2xl p-6 shadow-warm">
       <div className="flex items-center gap-3 mb-4">
-        <TimerIcon className="w-6 h-6 text-warm-600" />
-        <h2 className="text-xl font-semibold text-warm-800">Timer</h2>
+        <TimerIcon className="w-6 h-6 text-purple-400" />
+        <h2 className="text-xl font-semibold text-slate-100">Timer</h2>
       </div>
 
       <div className="relative mb-6">
@@ -92,7 +92,7 @@ export default function Timer() {
             cx="96"
             cy="96"
             r="88"
-            stroke="rgba(191, 160, 148, 0.2)"
+            stroke="rgba(139, 92, 246, 0.2)"
             strokeWidth="8"
             fill="none"
           />
@@ -112,15 +112,15 @@ export default function Timer() {
           />
           <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f97316" />
-              <stop offset="100%" stopColor="#ea580c" />
+              <stop offset="0%" stopColor="#a78bfa" />
+              <stop offset="100%" stopColor="#8b5cf6" />
             </linearGradient>
           </defs>
         </svg>
 
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-5xl font-bold text-warm-700 tabular-nums">
+            <div className="text-5xl font-bold text-slate-100 tabular-nums">
               {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
             </div>
           </div>
@@ -136,13 +136,13 @@ export default function Timer() {
           disabled={isRunning}
           min="1"
           max="120"
-          className="flex-1 px-4 py-2 rounded-lg border border-warm-200 focus:outline-none focus:ring-2 focus:ring-warm-400 bg-white/50 disabled:opacity-50"
+          className="flex-1 px-4 py-2 rounded-lg border border-purple-500/30 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-slate-800/50 text-slate-100 placeholder-slate-400 disabled:opacity-50"
           placeholder="Minutes"
         />
         <button
           onClick={handleSetTime}
           disabled={isRunning}
-          className="bg-warm-500 hover:bg-warm-600 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Set
         </button>

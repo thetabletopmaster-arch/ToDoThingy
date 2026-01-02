@@ -76,30 +76,30 @@ export default function SunriseSunset() {
   return (
     <div className="glass-effect rounded-2xl p-6 shadow-warm">
       <div className="flex items-center gap-2 mb-4">
-        <MapPin className="w-5 h-5 text-warm-600" />
-        <span className="text-sm text-warm-600">{location}</span>
+        <MapPin className="w-5 h-5 text-purple-400" />
+        <span className="text-sm text-slate-300">{location}</span>
       </div>
 
       {loading ? (
-        <div className="text-center py-4 text-warm-500">Loading...</div>
+        <div className="text-center py-4 text-slate-400">Loading...</div>
       ) : (
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center">
             <div className="flex justify-center mb-2">
-              <Sunrise className="w-8 h-8 text-orange-500" />
+              <Sunrise className="w-8 h-8 text-orange-400" />
             </div>
-            <div className="text-sm text-warm-600 mb-1">Sunrise</div>
-            <div className="text-2xl font-bold text-warm-700 tabular-nums">
+            <div className="text-sm text-slate-400 mb-1">Sunrise</div>
+            <div className="text-2xl font-bold text-slate-100 tabular-nums">
               {sunTimes?.sunrise}
             </div>
           </div>
 
           <div className="text-center">
             <div className="flex justify-center mb-2">
-              <Sunset className="w-8 h-8 text-amber-600" />
+              <Sunset className="w-8 h-8 text-amber-500" />
             </div>
-            <div className="text-sm text-warm-600 mb-1">Sunset</div>
-            <div className="text-2xl font-bold text-warm-700 tabular-nums">
+            <div className="text-sm text-slate-400 mb-1">Sunset</div>
+            <div className="text-2xl font-bold text-slate-100 tabular-nums">
               {sunTimes?.sunset}
             </div>
           </div>

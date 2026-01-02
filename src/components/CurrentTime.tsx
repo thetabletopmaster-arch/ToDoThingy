@@ -33,15 +33,15 @@ export default function CurrentTime() {
   return (
     <div className="glass-effect rounded-2xl p-6 shadow-warm">
       <div className="flex items-center gap-3 mb-3">
-        <Clock className="w-6 h-6 text-warm-600" />
-        <h2 className="text-xl font-semibold text-warm-800">Current Time</h2>
+        <Clock className="w-6 h-6 text-purple-400" />
+        <h2 className="text-xl font-semibold text-slate-100">Current Time</h2>
       </div>
 
       <div className="text-center">
-        <div className="text-5xl font-bold text-warm-700 tabular-nums">
+        <div className="text-5xl font-bold text-slate-100 tabular-nums">
           {formatTime(time)}
         </div>
-        <div className="text-sm text-warm-500 mt-2">
+        <div className="text-sm text-slate-400 mt-2">
           {formatDate(time)}
         </div>
       </div>

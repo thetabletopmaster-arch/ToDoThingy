@@ -33,7 +33,7 @@ export default function TaskList() {
 
   return (
     <div className="glass-effect rounded-2xl p-6 shadow-warm">
-      <h2 className="text-2xl font-semibold text-warm-800 mb-4">Today's Tasks</h2>
+      <h2 className="text-2xl font-semibold text-slate-100 mb-4">Today's Tasks</h2>
 
       <form onSubmit={handleAddTask} className="mb-4">
         <div className="flex gap-2">
@@ -42,11 +42,11 @@ export default function TaskList() {
             value={newTaskText}
             onChange={(e) => setNewTaskText(e.target.value)}
             placeholder="Add a new task..."
-            className="flex-1 px-4 py-2 rounded-lg border border-warm-200 focus:outline-none focus:ring-2 focus:ring-warm-400 bg-white/50"
+            className="flex-1 px-4 py-2 rounded-lg border border-purple-500/30 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-slate-800/50 text-slate-100 placeholder-slate-400"
           />
           <button
             type="submit"
-            className="bg-warm-500 hover:bg-warm-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-warm"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-warm"
           >
             <Plus className="w-5 h-5" />
             Add
@@ -65,7 +65,7 @@ export default function TaskList() {
           />
         ))}
         {tasks.length === 0 && (
-          <div className="text-center py-8 text-warm-400">
+          <div className="text-center py-8 text-slate-400">
             No tasks yet. Add one to get started!
           </div>
         )}
