@@ -23,7 +23,7 @@ const Particle = ({ index }: { index: number }) => {
 
   return (
     <motion.div
-      className="absolute rounded-full bg-gradient-to-br from-orange-500 via-amber-400 to-orange-600"
+      className="absolute rounded-full bg-gradient-to-br from-[#cd7f32] via-[#d4af37] to-[#cd7f32]"
       style={{
         width: size,
         height: size,
@@ -98,13 +98,13 @@ export default function TaskItem({ id, text, completed, onToggle, onDelete, isMi
       {isDestroying && (
         <>
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 opacity-20 rounded-xl"
+            className="absolute inset-0 bg-gradient-to-r from-[#cd7f32] via-[#d4af37] to-[#cd7f32] opacity-20 rounded-xl"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1.8, opacity: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           />
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-600 opacity-25 rounded-xl"
+            className="absolute inset-0 bg-gradient-to-r from-amber-400 to-[#cd7f32] opacity-25 rounded-xl"
             initial={{ x: '-100%' }}
             animate={{ x: '100%' }}
             transition={{ duration: 0.6, ease: 'easeInOut' }}
@@ -116,7 +116,7 @@ export default function TaskItem({ id, text, completed, onToggle, onDelete, isMi
         {/* Drag Handle */}
         <div
           {...dragHandleProps}
-          className="drag-handle cursor-grab active:cursor-grabbing opacity-30 group-hover:opacity-80 transition-opacity text-amber-500"
+          className="drag-handle cursor-grab active:cursor-grabbing opacity-30 group-hover:opacity-80 transition-opacity text-[#d4af37]"
         >
           <GripVertical className="w-4 h-4" />
         </div>
@@ -126,8 +126,8 @@ export default function TaskItem({ id, text, completed, onToggle, onDelete, isMi
           onClick={handleToggle}
           className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center ${
             completed
-              ? 'border-amber-500 bg-amber-500/20'
-              : 'border-amber-500/60 hover:bg-amber-500/10'
+              ? 'border-[#d4af37] bg-[#d4af37]/20'
+              : 'border-[#d4af37]/60 hover:bg-[#d4af37]/10'
           }`}
           disabled={isDestroying}
           whileHover={{ scale: 1.1 }}
@@ -141,7 +141,7 @@ export default function TaskItem({ id, text, completed, onToggle, onDelete, isMi
                 exit={{ scale: 0 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
               >
-                <Check className="w-3 h-3 text-amber-300" />
+                <Check className="w-3 h-3 text-[#ddc3a5]" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -151,8 +151,8 @@ export default function TaskItem({ id, text, completed, onToggle, onDelete, isMi
         <motion.span
           className={`flex-1 text-sm font-medium transition-all ${
             completed
-              ? 'line-through text-amber-500/50'
-              : 'text-amber-300'
+              ? 'line-through text-[#d4af37]/50'
+              : 'text-[#ddc3a5]'
           } ${isDestroying ? 'opacity-30' : ''}`}
           animate={isDestroying ? {
             x: 6,
@@ -165,7 +165,7 @@ export default function TaskItem({ id, text, completed, onToggle, onDelete, isMi
         {/* Delete Button */}
         <motion.button
           onClick={handleDeleteWithAnimation}
-          className="opacity-0 group-hover:opacity-100 transition-opacity text-orange-500 hover:text-orange-400 p-1 rounded hover:bg-orange-500/10"
+          className="opacity-0 group-hover:opacity-100 transition-opacity text-[#cd7f32] hover:text-[#cd7f32] p-1 rounded hover:bg-orange-500/10"
           disabled={isDestroying}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind } from 'lucide-react';
+import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3 } from 'lucide-react';
 import LocationSelector from './LocationSelector';
 
 interface WeatherData {
@@ -13,18 +13,30 @@ interface WeatherData {
 interface SunTimes {
   sunrise: string;
   sunset: string;
+  sunriseDate: Date;
+  sunsetDate: Date;
 }
+
+const TIME_FORMAT_KEY = 'productivity-dashboard-time-format';
 
 export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   const [time, setTime] = useState(new Date());
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [sunTimes, setSunTimes] = useState<SunTimes | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
+  const [is24Hour, setIs24Hour] = useState(() => {
+    const stored = localStorage.getItem(TIME_FORMAT_KEY);
+    return stored === 'true';
+  });
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(TIME_FORMAT_KEY, String(is24Hour));
+  }, [is24Hour]);
 
   useEffect(() => {
     if (coordinates) {
@@ -52,6 +64,8 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
       setSunTimes({
         sunrise: sunrise.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sunset: sunset.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+        sunriseDate: sunrise,
+        sunsetDate: sunset,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -63,98 +77,158 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: !is24Hour
+    });
+  };
+
+  const getHoursUntil = (targetDate: Date) => {
+    const now = new Date();
+    const diff = targetDate.getTime() - now.getTime();
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    if (hours < 0) {
+      return null; // Event has passed
+    }
+
+    if (hours === 0) {
+      return `${minutes}m`;
+    }
+    return `${hours}h ${minutes}m`;
   };
 
   const getUVLevel = (uv: number) => {
     if (uv <= 2) return { level: 'Low', color: isMidnight ? 'text-green-400' : 'text-green-400' };
     if (uv <= 5) return { level: 'Mod', color: isMidnight ? 'text-yellow-300' : 'text-yellow-400' };
-    if (uv <= 7) return { level: 'High', color: isMidnight ? 'text-orange-300' : 'text-orange-400' };
+    if (uv <= 7) return { level: 'High', color: isMidnight ? 'text-orange-300' : 'text-[#cd7f32]' };
     return { level: 'Extreme', color: isMidnight ? 'text-red-300' : 'text-red-400' };
   };
 
   const uvInfo = weather ? getUVLevel(weather.uvIndex) : null;
+
+  const toggleTimeFormat = () => {
+    setIs24Hour(!is24Hour);
+  };
 
   return (
     <div className="space-y-4">
       {/* Location Selector */}
       <LocationSelector onLocationChange={handleLocationChange} isMidnight={isMidnight} />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Time */}
         <div className="glass-effect rounded-xl p-4 shadow-glow">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-medium text-amber-500">Time</span>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-[#d4af37]" />
+              <span className="text-xs font-medium text-[#d4af37]">Tempus</span>
+            </div>
+            <button
+              onClick={toggleTimeFormat}
+              className="text-[#d4af37]/60 hover:text-[#d4af37] transition-colors"
+              title={is24Hour ? 'Switch to 12-hour format' : 'Switch to 24-hour format'}
+            >
+              {is24Hour ? <Clock3 className="w-3 h-3" /> : <Clock12 className="w-3 h-3" />}
+            </button>
           </div>
-          <div className="text-2xl font-bold tabular-nums text-amber-300">
+          <div className="text-2xl font-bold tabular-nums text-[#ddc3a5]">
             {formatTime(time)}
           </div>
-          <div className="text-xs text-amber-500/60 mt-1">
+          <div className="text-xs text-[#d4af37]/60 mt-1">
             {time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
           </div>
+        </div>
+
+        {/* UV Index - Prominent Display */}
+        <div className="glass-effect rounded-xl p-4 shadow-glow">
+          <div className="flex items-center gap-2 mb-2">
+            <Sun className="w-4 h-4 text-[#d4af37]" />
+            <span className="text-xs font-medium text-[#d4af37]">Sol Index</span>
+          </div>
+          {weather ? (
+            <>
+              <div className="text-3xl font-bold text-[#ddc3a5]">
+                {weather.uvIndex}
+              </div>
+              <div className="text-sm text-[#d4af37] mt-1">
+                {uvInfo?.level}
+              </div>
+            </>
+          ) : (
+            <div className="text-sm text-[#d4af37]/60">Select location</div>
+          )}
         </div>
 
         {/* Weather */}
         <div className="glass-effect rounded-xl p-4 shadow-glow">
           <div className="flex items-center gap-2 mb-2">
-            <Cloud className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-medium text-amber-500">Weather</span>
+            <Cloud className="w-4 h-4 text-[#d4af37]" />
+            <span className="text-xs font-medium text-[#d4af37]">Caelum</span>
           </div>
           {weather ? (
             <>
-              <div className="text-2xl font-bold text-amber-300">
+              <div className="text-2xl font-bold text-[#ddc3a5]">
                 {weather.temperature}°C
               </div>
               <div className="flex gap-3 mt-2 text-xs">
                 <div className="flex items-center gap-1">
-                  <Droplets className="w-3 h-3 text-amber-500" />
-                  <span className="text-amber-300">{weather.humidity}%</span>
+                  <Droplets className="w-3 h-3 text-[#cd7f32]" />
+                  <span className="text-[#ddc3a5]">{weather.humidity}%</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Wind className="w-3 h-3 text-amber-500" />
-                  <span className="text-amber-300">{weather.windSpeed}km/h</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Sun className="w-3 h-3 text-amber-500" />
-                  <span className="text-amber-300">{weather.uvIndex} {uvInfo?.level}</span>
+                  <Wind className="w-3 h-3 text-[#cd7f32]" />
+                  <span className="text-[#ddc3a5]">{weather.windSpeed}km/h</span>
                 </div>
               </div>
             </>
           ) : (
-            <div className="text-sm text-amber-500/60">Select a location</div>
+            <div className="text-sm text-[#d4af37]/60">Select location</div>
           )}
         </div>
 
         {/* Sun Times */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <div className="glass-effect rounded-xl p-4 shadow-glow md:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-2 mb-2">
-            <Sun className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-medium text-amber-500">Sun</span>
+            <Sun className="w-4 h-4 text-[#d4af37]" />
+            <span className="text-xs font-medium text-[#d4af37]">Sol Ortus & Occasus</span>
           </div>
           {sunTimes ? (
-            <div className="flex gap-4">
+            <div className="space-y-3">
               <div>
-                <div className="flex items-center gap-1 mb-1">
-                  <Sunrise className="w-3 h-3 text-amber-500" />
-                  <span className="text-xs text-amber-500/80">Rise</span>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-1">
+                    <Sunrise className="w-3 h-3 text-[#cd7f32]" />
+                    <span className="text-xs text-[#d4af37]/80">Sunrise</span>
+                  </div>
+                  {getHoursUntil(sunTimes.sunriseDate) && (
+                    <span className="text-xs text-[#d4af37]/60">in {getHoursUntil(sunTimes.sunriseDate)}</span>
+                  )}
                 </div>
-                <div className="text-lg font-bold tabular-nums text-amber-300">
+                <div className="text-lg font-bold tabular-nums text-[#ddc3a5]">
                   {sunTimes.sunrise}
                 </div>
               </div>
               <div>
-                <div className="flex items-center gap-1 mb-1">
-                  <Sunset className="w-3 h-3 text-amber-500" />
-                  <span className="text-xs text-amber-500/80">Set</span>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-1">
+                    <Sunset className="w-3 h-3 text-[#cd7f32]" />
+                    <span className="text-xs text-[#d4af37]/80">Sunset</span>
+                  </div>
+                  {getHoursUntil(sunTimes.sunsetDate) && (
+                    <span className="text-xs text-[#d4af37]/60">in {getHoursUntil(sunTimes.sunsetDate)}</span>
+                  )}
                 </div>
-                <div className="text-lg font-bold tabular-nums text-amber-300">
+                <div className="text-lg font-bold tabular-nums text-[#ddc3a5]">
                   {sunTimes.sunset}
                 </div>
               </div>
             </div>
           ) : (
-            <div className="text-sm text-amber-500/60">Select a location</div>
+            <div className="text-sm text-[#d4af37]/60">Select location</div>
           )}
         </div>
       </div>

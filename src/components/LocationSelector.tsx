@@ -116,7 +116,7 @@ export default function LocationSelector({ onLocationChange, isMidnight }: Locat
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-amber-500/40 bg-black/40 text-amber-300 hover:bg-amber-500/10 hover:border-amber-500 transition-all"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-[#d4af37]/40 bg-black/40 text-[#ddc3a5] hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
       >
         <MapPin className="w-4 h-4" />
         <span className="text-sm">{selectedLocation || 'Select Location'}</span>
@@ -131,28 +131,28 @@ export default function LocationSelector({ onLocationChange, isMidnight }: Locat
             className="absolute top-full mt-2 left-0 right-0 glass-effect rounded-lg p-3 z-50 min-w-[300px]"
           >
             <div className="flex items-center gap-2 mb-3">
-              <Search className="w-4 h-4 text-amber-500" />
+              <Search className="w-4 h-4 text-[#d4af37]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search city..."
-                className="flex-1 px-3 py-2 rounded-lg border-2 border-amber-500/40 focus:outline-none focus:border-amber-500 bg-black/40 text-amber-200 placeholder-amber-500/30 transition-all"
+                className="flex-1 px-3 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
                 autoFocus
               />
             </div>
 
             <div className="max-h-[300px] overflow-y-auto space-y-1">
               {isSearching && (
-                <div className="text-center py-4 text-amber-400/50">Searching...</div>
+                <div className="text-center py-4 text-[#d4af37]/50">Searching...</div>
               )}
 
               {!isSearching && results.length === 0 && searchQuery && (
-                <div className="text-center py-4 text-amber-400/50">No results found</div>
+                <div className="text-center py-4 text-[#d4af37]/50">No results found</div>
               )}
 
               {!isSearching && results.length === 0 && !searchQuery && (
-                <div className="text-center py-4 text-amber-400/50">
+                <div className="text-center py-4 text-[#d4af37]/50">
                   Type to search for a city
                 </div>
               )}
@@ -161,12 +161,12 @@ export default function LocationSelector({ onLocationChange, isMidnight }: Locat
                 <button
                   key={index}
                   onClick={() => selectLocation(result)}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-amber-500/10 border border-transparent hover:border-amber-500/40 transition-all"
+                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#d4af37]/10 border border-transparent hover:border-[#d4af37]/40 transition-all"
                 >
-                  <div className="text-sm font-medium text-amber-300">
+                  <div className="text-sm font-medium text-[#ddc3a5]">
                     {result.name}
                   </div>
-                  <div className="text-xs text-amber-500/60">
+                  <div className="text-xs text-[#d4af37]/60">
                     {result.admin1 && `${result.admin1}, `}{result.country}
                   </div>
                 </button>

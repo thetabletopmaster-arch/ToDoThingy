@@ -1,68 +1,99 @@
 @import "tailwindcss";
 
-/* Warm, cozy dark theme with softer colors */
+/* Ancient Roman/Greek theme - warm terracotta, gold, and sandstone */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:wght@400;500;600&display=swap');
+
 body {
-  background: linear-gradient(135deg, #1a1410 0%, #0f0c0a 100%);
+  background: linear-gradient(135deg, #2a1f17 0%, #1a120d 100%);
   min-height: 100vh;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #ff9966;
+  font-family: 'Lora', 'Georgia', serif;
+  color: #ddc3a5;
   overflow-x: hidden;
 }
 
-/* Midnight Mode - Deeper warmth */
+/* Midnight Mode - Deeper classical warmth */
 body.midnight {
-  background: linear-gradient(135deg, #0a0604 0%, #000000 100%);
+  background: linear-gradient(135deg, #1a120d 0%, #000000 100%);
 }
 
 .glass-effect {
-  background: rgba(30, 20, 15, 0.85);
+  background: rgba(42, 31, 23, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 153, 102, 0.25);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(255, 120, 70, 0.15);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(205, 127, 50, 0.3)) 1;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(212, 130, 108, 0.15),
+    inset 0 1px 0 rgba(212, 175, 55, 0.1);
+  position: relative;
+}
+
+/* Greek key pattern effect */
+.glass-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 8px,
+    rgba(212, 175, 55, 0.2) 8px,
+    rgba(212, 175, 55, 0.2) 10px
+  );
 }
 
 body.midnight .glass-effect {
-  background: rgba(20, 12, 8, 0.9);
-  border: 1px solid rgba(255, 153, 102, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 2px 12px rgba(255, 120, 70, 0.2);
+  background: rgba(26, 18, 13, 0.9);
+  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(205, 127, 50, 0.4)) 1;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.7),
+    0 2px 12px rgba(212, 130, 108, 0.2),
+    inset 0 1px 0 rgba(212, 175, 55, 0.15);
 }
 
 .shadow-glow {
-  box-shadow: 0 4px 16px rgba(255, 120, 70, 0.15), 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 16px rgba(212, 130, 108, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(212, 175, 55, 0.1);
 }
 
 body.midnight .shadow-glow {
-  box-shadow: 0 4px 20px rgba(255, 120, 70, 0.25), 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 4px 20px rgba(212, 130, 108, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(212, 175, 55, 0.15);
 }
 
-/* Scrollbar - warm dark with orange-red accents */
+/* Classical serif headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cinzel', 'Georgia', serif;
+  letter-spacing: 0.05em;
+}
+
+/* Scrollbar - ancient bronze and gold */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 14px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(30, 20, 15, 0.6);
-  border-radius: 6px;
+  background: rgba(42, 31, 23, 0.6);
+  border-radius: 7px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(50, 35, 25, 0.8);
-  border-radius: 6px;
-  border: 2px solid rgba(255, 153, 102, 0.4);
+  background: linear-gradient(180deg, rgba(205, 127, 50, 0.8), rgba(184, 148, 30, 0.8));
+  border-radius: 7px;
+  border: 2px solid rgba(212, 175, 55, 0.4);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(60, 40, 30, 0.9);
-  border-color: rgba(255, 153, 102, 0.6);
-}
-
-body.midnight ::-webkit-scrollbar-track {
-  background: rgba(10, 6, 4, 0.8);
-}
-
-body.midnight ::-webkit-scrollbar-thumb {
-  background: rgba(30, 20, 15, 0.9);
-  border: 2px solid rgba(255, 153, 102, 0.5);
+  background: linear-gradient(180deg, rgba(205, 127, 50, 0.9), rgba(184, 148, 30, 0.9));
+  border-color: rgba(212, 175, 55, 0.6);
 }
 
 @keyframes particle-float {

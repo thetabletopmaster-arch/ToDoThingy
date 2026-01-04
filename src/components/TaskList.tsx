@@ -148,10 +148,10 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
       {/* Today's Tasks */}
       <div className="glass-effect rounded-xl p-4 shadow-glow">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-bold text-amber-400">
+          <h2 className="text-xl font-bold text-[#d4af37]">
             Today's Focus
           </h2>
-          <div className="text-sm font-medium text-amber-300">
+          <div className="text-sm font-medium text-[#ddc3a5]">
             {todayProgress}% complete
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {/* Progress Bar */}
         <div className="mb-4 h-2 bg-black/40 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500 rounded-full"
+            className="h-full bg-gradient-to-r from-[#d4af37] to-[#cd7f32] transition-all duration-500 rounded-full"
             style={{ width: `${todayProgress}%` }}
           />
         </div>
@@ -171,11 +171,11 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
               value={newTodayTask}
               onChange={(e) => setNewTodayTask(e.target.value)}
               placeholder="Add a task for today..."
-              className="flex-1 px-4 py-2 rounded-lg border-2 border-amber-500/40 focus:outline-none focus:border-amber-500 bg-black/40 text-amber-200 placeholder-amber-500/30 transition-all"
+              className="flex-1 px-4 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg border-2 border-amber-500 bg-transparent text-amber-400 font-medium flex items-center gap-2 hover:bg-amber-500/10 hover:border-amber-400 transition-all"
+              className="px-4 py-2 rounded-lg border-2 border-[#d4af37] bg-transparent text-[#d4af37] font-medium flex items-center gap-2 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
             >
               <Plus className="w-5 h-5" />
               Add
@@ -205,7 +205,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
                 />
               ))}
               {todayTasks.length === 0 && (
-                <div className="text-center py-6 text-amber-400/50">
+                <div className="text-center py-6 text-[#d4af37]/50">
                   No tasks for today. Add one to get started!
                 </div>
               )}
@@ -217,7 +217,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {todayTasks.some(t => t.completed) && (
           <button
             onClick={handleClearTodayCompleted}
-            className="mt-4 w-full px-4 py-2 rounded-lg border-2 border-orange-500/50 bg-transparent text-orange-400 font-medium flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-orange-400 transition-all"
+            className="mt-4 w-full px-4 py-2 rounded-lg border-2 border-[#cd7f32]/50 bg-transparent text-[#cd7f32] font-medium flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-[#cd7f32] transition-all"
           >
             <Trash2 className="w-4 h-4" />
             Clear Completed
@@ -228,10 +228,10 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
       {/* Long-term Goals */}
       <div className="glass-effect rounded-xl p-4 shadow-glow">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-bold text-amber-400">
+          <h2 className="text-xl font-bold text-[#d4af37]">
             Long-term Goals
           </h2>
-          <div className="text-sm font-medium text-amber-300">
+          <div className="text-sm font-medium text-[#ddc3a5]">
             {longtermProgress}% complete
           </div>
         </div>
@@ -239,7 +239,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {/* Progress Bar */}
         <div className="mb-4 h-2 bg-black/40 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500 rounded-full"
+            className="h-full bg-gradient-to-r from-[#d4af37] to-[#cd7f32] transition-all duration-500 rounded-full"
             style={{ width: `${longtermProgress}%` }}
           />
         </div>
@@ -251,11 +251,11 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
               value={newLongtermTask}
               onChange={(e) => setNewLongtermTask(e.target.value)}
               placeholder="Add a long-term goal..."
-              className="flex-1 px-4 py-2 rounded-lg border-2 border-amber-500/40 focus:outline-none focus:border-amber-500 bg-black/40 text-amber-200 placeholder-amber-500/30 transition-all"
+              className="flex-1 px-4 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg border-2 border-amber-500 bg-transparent text-amber-400 font-medium flex items-center gap-2 hover:bg-amber-500/10 hover:border-amber-400 transition-all"
+              className="px-4 py-2 rounded-lg border-2 border-[#d4af37] bg-transparent text-[#d4af37] font-medium flex items-center gap-2 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
             >
               <Plus className="w-5 h-5" />
               Add
@@ -285,7 +285,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
                 />
               ))}
               {longtermTasks.length === 0 && (
-                <div className="text-center py-6 text-amber-400/50">
+                <div className="text-center py-6 text-[#d4af37]/50">
                   No long-term goals yet. Add one to start planning!
                 </div>
               )}
@@ -297,7 +297,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {longtermTasks.some(t => t.completed) && (
           <button
             onClick={handleClearLongtermCompleted}
-            className="mt-4 w-full px-4 py-2 rounded-lg border-2 border-orange-500/50 bg-transparent text-orange-400 font-medium flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-orange-400 transition-all"
+            className="mt-4 w-full px-4 py-2 rounded-lg border-2 border-[#cd7f32]/50 bg-transparent text-[#cd7f32] font-medium flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-[#cd7f32] transition-all"
           >
             <Trash2 className="w-4 h-4" />
             Clear Completed

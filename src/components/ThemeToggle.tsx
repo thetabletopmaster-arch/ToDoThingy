@@ -10,7 +10,7 @@ export default function ThemeToggle({ isMidnight, onToggle }: ThemeToggleProps) 
   return (
     <motion.button
       onClick={onToggle}
-      className="fixed top-4 right-4 z-50 p-3 rounded-full border-2 border-amber-500 bg-transparent text-amber-500 transition-all hover:bg-amber-500/10 hover:border-amber-400"
+      className="fixed top-4 right-4 z-50 p-3 rounded-full border-2 border-[#d4af37] bg-transparent text-[#d4af37] transition-all hover:bg-[#d4af37]/10 hover:border-[#d4af37]"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       title={isMidnight ? 'Switch to Dark Mode' : 'Switch to Midnight Mode'}

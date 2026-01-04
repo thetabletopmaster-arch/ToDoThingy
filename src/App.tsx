@@ -6,6 +6,7 @@ import InfoBar from './components/InfoBar';
 import CompactTimer from './components/CompactTimer';
 import QuickLinks from './components/QuickLinks';
 import ThemeToggle from './components/ThemeToggle';
+import Notes from './components/Notes';
 
 function App() {
   const [isMidnight, setIsMidnight] = useState(() => {
@@ -31,13 +32,13 @@ function App() {
             className="text-center mb-6"
           >
             <div className="flex items-center justify-center gap-3 mb-2">
-              <ListTodo className="w-8 h-8 text-amber-500" />
-              <h1 className="text-3xl md:text-4xl font-bold text-amber-400">
-                Productivity Dashboard
+              <ListTodo className="w-8 h-8 text-[#d4af37]" />
+              <h1 className="text-3xl md:text-4xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
+                Tabula Productivitatis
               </h1>
             </div>
-            <p className="text-sm text-amber-500/60">
-              Stay focused, organized, and on track
+            <p className="text-sm text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
+              Fortis Fortuna Adiuvat · Fortune Favors the Bold
             </p>
           </motion.header>
 
@@ -68,18 +69,20 @@ function App() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="lg:col-span-2"
+              className="lg:col-span-2 space-y-4"
             >
               <TaskList isMidnight={isMidnight} />
             </motion.div>
 
-            {/* Timer */}
+            {/* Timer and Notes Column */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
+              className="space-y-4"
             >
               <CompactTimer isMidnight={isMidnight} />
+              <Notes isMidnight={isMidnight} />
             </motion.div>
           </div>
         </div>
