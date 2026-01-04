@@ -31,12 +31,12 @@ function App() {
             className="text-center mb-6"
           >
             <div className="flex items-center justify-center gap-3 mb-2">
-              <ListTodo className="w-8 h-8 text-red-500" />
-              <h1 className="text-3xl md:text-4xl font-bold text-red-500">
+              <ListTodo className="w-8 h-8 text-amber-500" />
+              <h1 className="text-3xl md:text-4xl font-bold text-amber-400">
                 Productivity Dashboard
               </h1>
             </div>
-            <p className="text-sm text-red-500/60">
+            <p className="text-sm text-amber-500/60">
               Stay focused, organized, and on track
             </p>
           </motion.header>

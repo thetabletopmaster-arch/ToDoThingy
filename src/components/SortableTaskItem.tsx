@@ -5,12 +5,13 @@ import TaskItem from './TaskItem';
 interface SortableTaskItemProps {
   id: string;
   text: string;
-  onComplete: (id: string) => void;
+  completed: boolean;
+  onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   isMidnight: boolean;
 }
 
-export default function SortableTaskItem({ id, text, onComplete, onDelete, isMidnight }: SortableTaskItemProps) {
+export default function SortableTaskItem({ id, text, completed, onToggle, onDelete, isMidnight }: SortableTaskItemProps) {
   const {
     attributes,
     listeners,
@@ -31,7 +32,8 @@ export default function SortableTaskItem({ id, text, onComplete, onDelete, isMid
       <TaskItem
         id={id}
         text={text}
-        onComplete={onComplete}
+        completed={completed}
+        onToggle={onToggle}
         onDelete={onDelete}
         isMidnight={isMidnight}
         dragHandleProps={{ ...attributes, ...listeners }}

@@ -66,8 +66,8 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
   return (
     <div className="glass-effect rounded-xl p-6 shadow-glow">
       <div className="flex items-center gap-2 mb-4">
-        <TimerIcon className="w-5 h-5 text-red-500" />
-        <h3 className="text-lg font-semibold text-red-500">Timer</h3>
+        <TimerIcon className="w-5 h-5 text-amber-500" />
+        <h3 className="text-lg font-semibold text-amber-400">Timer</h3>
       </div>
 
       <div className="relative mb-6">
@@ -76,7 +76,7 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
             cx="96"
             cy="96"
             r="88"
-            stroke="rgba(255, 51, 51, 0.2)"
+            stroke="rgba(251, 191, 36, 0.2)"
             strokeWidth="8"
             fill="none"
           />
@@ -84,7 +84,7 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
             cx="96"
             cy="96"
             r="88"
-            stroke="url(#gradient-red)"
+            stroke="url(#gradient-warm)"
             strokeWidth="8"
             fill="none"
             strokeLinecap="round"
@@ -93,14 +93,14 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
             transition={{ duration: 0.5 }}
           />
           <defs>
-            <linearGradient id="gradient-red" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ff3333" />
-              <stop offset="100%" stopColor="#dc2626" />
+            <linearGradient id="gradient-warm" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fbbf24" />
+              <stop offset="100%" stopColor="#f97316" />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-5xl font-bold tabular-nums text-red-400">
+          <div className="text-5xl font-bold tabular-nums text-amber-300">
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
           </div>
         </div>
@@ -115,13 +115,13 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
           disabled={isRunning}
           min="1"
           max="120"
-          className="flex-1 px-3 py-2 rounded-lg border-2 border-red-500/40 focus:outline-none focus:border-red-500 bg-black/60 text-red-400 placeholder-red-500/30 transition-all disabled:opacity-50"
+          className="flex-1 px-3 py-2 rounded-lg border-2 border-amber-500/40 focus:outline-none focus:border-amber-500 bg-black/40 text-amber-200 placeholder-amber-500/30 transition-all disabled:opacity-50"
           placeholder="Minutes"
         />
         <button
           onClick={handleSetTime}
           disabled={isRunning}
-          className="px-4 py-2 rounded-lg border-2 border-red-500 bg-transparent text-red-500 font-medium hover:bg-red-500/10 hover:border-red-400 transition-all disabled:opacity-50"
+          className="px-4 py-2 rounded-lg border-2 border-amber-500 bg-transparent text-amber-400 font-medium hover:bg-amber-500/10 hover:border-amber-400 transition-all disabled:opacity-50"
         >
           Set
         </button>
@@ -131,21 +131,21 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
         {!isRunning ? (
           <button
             onClick={handleStart}
-            className="border-2 border-red-500 bg-transparent text-red-500 p-3 rounded-full transition-all hover:bg-red-500/10 hover:border-red-400"
+            className="border-2 border-amber-500 bg-transparent text-amber-500 p-3 rounded-full transition-all hover:bg-amber-500/10 hover:border-amber-400"
           >
             <Play className="w-5 h-5" />
           </button>
         ) : (
           <button
             onClick={() => setIsRunning(false)}
-            className="border-2 border-red-500 bg-transparent text-red-500 p-3 rounded-full transition-all hover:bg-red-500/10 hover:border-red-400"
+            className="border-2 border-orange-500 bg-transparent text-orange-500 p-3 rounded-full transition-all hover:bg-orange-500/10 hover:border-orange-400"
           >
             <Pause className="w-5 h-5" />
           </button>
         )}
         <button
           onClick={handleReset}
-          className="border-2 border-red-500 bg-transparent text-red-500 p-3 rounded-full transition-all hover:bg-red-500/10 hover:border-red-400"
+          className="border-2 border-amber-500 bg-transparent text-amber-500 p-3 rounded-full transition-all hover:bg-amber-500/10 hover:border-amber-400"
         >
           <RotateCcw className="w-5 h-5" />
         </button>
