@@ -7,6 +7,7 @@ import CompactTimer from './components/CompactTimer';
 import QuickLinks from './components/QuickLinks';
 import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
+import PhilosophyQuote from './components/PhilosophyQuote';
 
 function App() {
   const [isMidnight, setIsMidnight] = useState(() => {
@@ -34,11 +35,11 @@ function App() {
             <div className="flex items-center justify-center gap-3 mb-2">
               <ListTodo className="w-8 h-8 text-[#d4af37]" />
               <h1 className="text-3xl md:text-4xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
-                Tabula Productivitatis
+                Productivity Dashboard
               </h1>
             </div>
             <p className="text-sm text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
-              Fortis Fortuna Adiuvat · Fortune Favors the Bold
+              Build Your Legacy, One Task at a Time
             </p>
           </motion.header>
 
@@ -50,6 +51,16 @@ function App() {
             className="mb-4"
           >
             <QuickLinks isMidnight={isMidnight} />
+          </motion.div>
+
+          {/* Philosophy Quote */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-4"
+          >
+            <PhilosophyQuote isMidnight={isMidnight} />
           </motion.div>
 
           {/* Info Bar */}

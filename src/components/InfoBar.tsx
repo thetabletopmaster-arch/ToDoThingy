@@ -125,7 +125,7 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-[#d4af37]" />
-              <span className="text-xs font-medium text-[#d4af37]">Tempus</span>
+              <span className="text-xs font-medium text-[#d4af37]">Time</span>
             </div>
             <button
               onClick={toggleTimeFormat}
@@ -147,15 +147,18 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
         <div className="glass-effect rounded-xl p-4 shadow-glow">
           <div className="flex items-center gap-2 mb-2">
             <Sun className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-xs font-medium text-[#d4af37]">Sol Index</span>
+            <span className="text-xs font-medium text-[#d4af37]">UV Radiation</span>
           </div>
           {weather ? (
             <>
-              <div className="text-3xl font-bold text-[#ddc3a5]">
+              <div className="text-3xl font-bold text-[#ddc3a5] mb-1">
                 {weather.uvIndex}
               </div>
-              <div className="text-sm text-[#d4af37] mt-1">
+              <div className="text-sm text-[#d4af37] mb-2">
                 {uvInfo?.level}
+              </div>
+              <div className="flex gap-2 text-xs">
+                <span className="text-[#cd7f32]">UVA+UVB</span>
               </div>
             </>
           ) : (
@@ -167,7 +170,7 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
         <div className="glass-effect rounded-xl p-4 shadow-glow">
           <div className="flex items-center gap-2 mb-2">
             <Cloud className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-xs font-medium text-[#d4af37]">Caelum</span>
+            <span className="text-xs font-medium text-[#d4af37]">Weather</span>
           </div>
           {weather ? (
             <>
@@ -194,7 +197,7 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
         <div className="glass-effect rounded-xl p-4 shadow-glow md:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-2 mb-2">
             <Sun className="w-4 h-4 text-[#d4af37]" />
-            <span className="text-xs font-medium text-[#d4af37]">Sol Ortus & Occasus</span>
+            <span className="text-xs font-medium text-[#d4af37]">Sunrise & Sunset</span>
           </div>
           {sunTimes ? (
             <div className="space-y-3">

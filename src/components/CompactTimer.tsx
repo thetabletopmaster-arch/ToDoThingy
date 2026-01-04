@@ -121,7 +121,7 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
         <button
           onClick={handleSetTime}
           disabled={isRunning}
-          className="px-4 py-2 rounded-lg border-2 border-[#d4af37] bg-transparent text-[#d4af37] font-medium hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium hover:bg-[#cd7f32] transition-all disabled:opacity-50 shadow-md"
         >
           Set
         </button>
@@ -131,21 +131,21 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
         {!isRunning ? (
           <button
             onClick={handleStart}
-            className="border-2 border-[#d4af37] bg-transparent text-[#d4af37] p-3 rounded-full transition-all hover:bg-[#d4af37]/10 hover:border-[#d4af37]"
+            className="bg-[#b8941e] text-[#1a120d] p-3 rounded-full transition-all hover:bg-[#d4af37] shadow-md"
           >
             <Play className="w-5 h-5" />
           </button>
         ) : (
           <button
             onClick={() => setIsRunning(false)}
-            className="border-2 border-[#cd7f32] bg-transparent text-[#cd7f32] p-3 rounded-full transition-all hover:bg-orange-500/10 hover:border-[#cd7f32]"
+            className="bg-[#cd7f32] text-[#1a120d] p-3 rounded-full transition-all hover:bg-[#b8941e] shadow-md"
           >
             <Pause className="w-5 h-5" />
           </button>
         )}
         <button
           onClick={handleReset}
-          className="border-2 border-[#d4af37] bg-transparent text-[#d4af37] p-3 rounded-full transition-all hover:bg-[#d4af37]/10 hover:border-[#d4af37]"
+          className="bg-[#cd7f32] text-[#1a120d] p-3 rounded-full transition-all hover:bg-[#b8941e] shadow-md"
         >
           <RotateCcw className="w-5 h-5" />
         </button>

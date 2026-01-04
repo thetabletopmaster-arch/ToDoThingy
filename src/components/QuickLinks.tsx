@@ -22,7 +22,7 @@ export default function QuickLinks({ isMidnight }: { isMidnight: boolean }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="border-2 border-[#d4af37] bg-transparent text-[#d4af37] px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all hover:bg-[#d4af37]/10 hover:border-[#d4af37]"
+          className="bg-[#d4af37] text-[#1a120d] px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all hover:bg-[#cd7f32] shadow-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}

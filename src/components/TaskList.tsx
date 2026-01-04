@@ -175,7 +175,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg border-2 border-[#d4af37] bg-transparent text-[#d4af37] font-medium flex items-center gap-2 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
+              className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-2 hover:bg-[#cd7f32] transition-all shadow-md"
             >
               <Plus className="w-5 h-5" />
               Add
@@ -217,7 +217,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {todayTasks.some(t => t.completed) && (
           <button
             onClick={handleClearTodayCompleted}
-            className="mt-4 w-full px-4 py-2 rounded-lg border-2 border-[#cd7f32]/50 bg-transparent text-[#cd7f32] font-medium flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-[#cd7f32] transition-all"
+            className="mt-4 w-full px-4 py-2 rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
           >
             <Trash2 className="w-4 h-4" />
             Clear Completed
@@ -255,7 +255,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg border-2 border-[#d4af37] bg-transparent text-[#d4af37] font-medium flex items-center gap-2 hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
+              className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-2 hover:bg-[#cd7f32] transition-all shadow-md"
             >
               <Plus className="w-5 h-5" />
               Add
@@ -297,7 +297,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {longtermTasks.some(t => t.completed) && (
           <button
             onClick={handleClearLongtermCompleted}
-            className="mt-4 w-full px-4 py-2 rounded-lg border-2 border-[#cd7f32]/50 bg-transparent text-[#cd7f32] font-medium flex items-center justify-center gap-2 hover:bg-orange-500/10 hover:border-[#cd7f32] transition-all"
+            className="mt-4 w-full px-4 py-2 rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
           >
             <Trash2 className="w-4 h-4" />
             Clear Completed
