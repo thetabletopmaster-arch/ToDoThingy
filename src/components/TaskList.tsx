@@ -26,7 +26,12 @@ interface Task {
 const TODAY_TASKS_KEY = 'productivity-dashboard-today-tasks';
 const LONGTERM_TASKS_KEY = 'productivity-dashboard-longterm-tasks';
 
-export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
+interface TaskListProps {
+  isMidnight: boolean;
+  onAddTasksCallback?: (addTasks: (tasks: string[]) => void) => void;
+}
+
+export default function TaskList({ isMidnight, onAddTasksCallback }: TaskListProps) {
   const [todayTasks, setTodayTasks] = useState<Task[]>(() => {
     const stored = localStorage.getItem(TODAY_TASKS_KEY);
     if (stored) {
@@ -68,6 +73,23 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
   useEffect(() => {
     localStorage.setItem(LONGTERM_TASKS_KEY, JSON.stringify(longtermTasks));
   }, [longtermTasks]);
+
+  // Function to add multiple tasks to today's list
+  const addTasksToToday = (taskTexts: string[]) => {
+    const newTasks = taskTexts.map(text => ({
+      id: `${Date.now()}-${Math.random()}`,
+      text,
+      completed: false
+    }));
+    setTodayTasks([...todayTasks, ...newTasks]);
+  };
+
+  // Expose the addTasksToToday function to parent via callback
+  useEffect(() => {
+    if (onAddTasksCallback) {
+      onAddTasksCallback(addTasksToToday);
+    }
+  }, [todayTasks, onAddTasksCallback]);
 
   const handleAddTodayTask = (e: React.FormEvent) => {
     e.preventDefault();

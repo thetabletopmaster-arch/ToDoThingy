@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ListTodo } from 'lucide-react';
 import TaskList from './components/TaskList';
@@ -8,6 +8,7 @@ import QuickLinks from './components/QuickLinks';
 import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
 import PhilosophyQuote from './components/PhilosophyQuote';
+import DailyTaskTemplates from './components/DailyTaskTemplates';
 
 function App() {
   const [isMidnight, setIsMidnight] = useState(() => {
@@ -15,10 +16,22 @@ function App() {
     return saved === 'true';
   });
 
+  const addTasksToTodayRef = useRef<((tasks: string[]) => void) | null>(null);
+
   useEffect(() => {
     document.body.classList.toggle('midnight', isMidnight);
     localStorage.setItem('midnight-mode', String(isMidnight));
   }, [isMidnight]);
+
+  const handleAddTasksCallback = (addTasksFn: (tasks: string[]) => void) => {
+    addTasksToTodayRef.current = addTasksFn;
+  };
+
+  const handleAddDailyTasksToToday = (tasks: string[]) => {
+    if (addTasksToTodayRef.current) {
+      addTasksToTodayRef.current(tasks);
+    }
+  };
 
   return (
     <>
@@ -82,7 +95,7 @@ function App() {
               transition={{ delay: 0.3 }}
               className="lg:col-span-2 space-y-3"
             >
-              <TaskList isMidnight={isMidnight} />
+              <TaskList isMidnight={isMidnight} onAddTasksCallback={handleAddTasksCallback} />
             </motion.div>
 
             {/* Timer and Notes Column */}
@@ -96,6 +109,19 @@ function App() {
               <Notes isMidnight={isMidnight} />
             </motion.div>
           </div>
+
+          {/* Daily Task Templates - Full width section below */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-3"
+          >
+            <DailyTaskTemplates
+              onAddToToday={handleAddDailyTasksToToday}
+              isMidnight={isMidnight}
+            />
+          </motion.div>
         </div>
       </div>
     </>
