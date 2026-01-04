@@ -72,7 +72,7 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
     }
   };
 
-  const handleLocationChange = (lat: number, lon: number, name: string) => {
+  const handleLocationChange = (lat: number, lon: number, _name: string) => {
     setCoordinates({ lat, lon });
   };
 
@@ -115,16 +115,16 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {/* Location Selector */}
       <LocationSelector onLocationChange={handleLocationChange} isMidnight={isMidnight} />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
         {/* Time */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#d4af37]" />
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3 text-[#d4af37]" />
               <span className="text-xs font-medium text-[#d4af37]">Time</span>
             </div>
             <button
@@ -135,26 +135,26 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
               {is24Hour ? <Clock3 className="w-3 h-3" /> : <Clock12 className="w-3 h-3" />}
             </button>
           </div>
-          <div className="text-2xl font-bold tabular-nums text-[#ddc3a5]">
+          <div className="text-xl font-bold tabular-nums text-[#ddc3a5]">
             {formatTime(time)}
           </div>
-          <div className="text-xs text-[#d4af37]/60 mt-1">
+          <div className="text-xs text-[#d4af37]/60 mt-0.5">
             {time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
           </div>
         </div>
 
         {/* UV Index - Prominent Display */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
-          <div className="flex items-center gap-2 mb-2">
-            <Sun className="w-4 h-4 text-[#d4af37]" />
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
+          <div className="flex items-center gap-1 mb-1">
+            <Sun className="w-3 h-3 text-[#d4af37]" />
             <span className="text-xs font-medium text-[#d4af37]">UV Radiation</span>
           </div>
           {weather ? (
             <>
-              <div className="text-3xl font-bold text-[#ddc3a5] mb-1">
+              <div className="text-2xl font-bold text-[#ddc3a5] mb-0.5">
                 {weather.uvIndex}
               </div>
-              <div className="text-sm text-[#d4af37] mb-2">
+              <div className="text-xs text-[#d4af37] mb-1">
                 {uvInfo?.level}
               </div>
               <div className="flex gap-2 text-xs">
@@ -162,22 +162,22 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
               </div>
             </>
           ) : (
-            <div className="text-sm text-[#d4af37]/60">Select location</div>
+            <div className="text-xs text-[#d4af37]/60">Select location</div>
           )}
         </div>
 
         {/* Weather */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
-          <div className="flex items-center gap-2 mb-2">
-            <Cloud className="w-4 h-4 text-[#d4af37]" />
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
+          <div className="flex items-center gap-1 mb-1">
+            <Cloud className="w-3 h-3 text-[#d4af37]" />
             <span className="text-xs font-medium text-[#d4af37]">Weather</span>
           </div>
           {weather ? (
             <>
-              <div className="text-2xl font-bold text-[#ddc3a5]">
+              <div className="text-xl font-bold text-[#ddc3a5]">
                 {weather.temperature}°C
               </div>
-              <div className="flex gap-3 mt-2 text-xs">
+              <div className="flex gap-2 mt-1 text-xs">
                 <div className="flex items-center gap-1">
                   <Droplets className="w-3 h-3 text-[#cd7f32]" />
                   <span className="text-[#ddc3a5]">{weather.humidity}%</span>
@@ -189,20 +189,20 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
               </div>
             </>
           ) : (
-            <div className="text-sm text-[#d4af37]/60">Select location</div>
+            <div className="text-xs text-[#d4af37]/60">Select location</div>
           )}
         </div>
 
         {/* Sun Times */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow md:col-span-2 lg:col-span-1">
-          <div className="flex items-center gap-2 mb-2">
-            <Sun className="w-4 h-4 text-[#d4af37]" />
+        <div className="glass-effect rounded-xl p-3 shadow-glow md:col-span-2 lg:col-span-1">
+          <div className="flex items-center gap-1 mb-1">
+            <Sun className="w-3 h-3 text-[#d4af37]" />
             <span className="text-xs font-medium text-[#d4af37]">Sunrise & Sunset</span>
           </div>
           {sunTimes ? (
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div>
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-0.5">
                   <div className="flex items-center gap-1">
                     <Sunrise className="w-3 h-3 text-[#cd7f32]" />
                     <span className="text-xs text-[#d4af37]/80">Sunrise</span>
@@ -211,12 +211,12 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
                     <span className="text-xs text-[#d4af37]/60">in {getHoursUntil(sunTimes.sunriseDate)}</span>
                   )}
                 </div>
-                <div className="text-lg font-bold tabular-nums text-[#ddc3a5]">
+                <div className="text-base font-bold tabular-nums text-[#ddc3a5]">
                   {sunTimes.sunrise}
                 </div>
               </div>
               <div>
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-0.5">
                   <div className="flex items-center gap-1">
                     <Sunset className="w-3 h-3 text-[#cd7f32]" />
                     <span className="text-xs text-[#d4af37]/80">Sunset</span>
@@ -225,13 +225,13 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
                     <span className="text-xs text-[#d4af37]/60">in {getHoursUntil(sunTimes.sunsetDate)}</span>
                   )}
                 </div>
-                <div className="text-lg font-bold tabular-nums text-[#ddc3a5]">
+                <div className="text-base font-bold tabular-nums text-[#ddc3a5]">
                   {sunTimes.sunset}
                 </div>
               </div>
             </div>
           ) : (
-            <div className="text-sm text-[#d4af37]/60">Select location</div>
+            <div className="text-xs text-[#d4af37]/60">Select location</div>
           )}
         </div>
       </div>

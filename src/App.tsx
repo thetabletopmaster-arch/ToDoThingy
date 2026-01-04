@@ -24,21 +24,21 @@ function App() {
     <>
       <ThemeToggle isMidnight={isMidnight} onToggle={() => setIsMidnight(!isMidnight)} />
 
-      <div className="min-h-screen p-4 md:p-6">
+      <div className="min-h-screen p-2 md:p-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.header
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-6"
+            className="text-center mb-3"
           >
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <ListTodo className="w-8 h-8 text-[#d4af37]" />
-              <h1 className="text-3xl md:text-4xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <ListTodo className="w-6 h-6 text-[#d4af37]" />
+              <h1 className="text-2xl md:text-3xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
                 Productivity Dashboard
               </h1>
             </div>
-            <p className="text-sm text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
+            <p className="text-xs text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
               Build Your Legacy, One Task at a Time
             </p>
           </motion.header>
@@ -48,7 +48,7 @@ function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-4"
+            className="mb-2"
           >
             <QuickLinks isMidnight={isMidnight} />
           </motion.div>
@@ -58,7 +58,7 @@ function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="mb-4"
+            className="mb-2"
           >
             <PhilosophyQuote isMidnight={isMidnight} />
           </motion.div>
@@ -68,19 +68,19 @@ function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-4"
+            className="mb-3"
           >
             <InfoBar isMidnight={isMidnight} />
           </motion.div>
 
           {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             {/* Tasks - Takes up more space */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="lg:col-span-2 space-y-4"
+              className="lg:col-span-2 space-y-3"
             >
               <TaskList isMidnight={isMidnight} />
             </motion.div>
@@ -90,7 +90,7 @@ function App() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
-              className="space-y-4"
+              className="space-y-3"
             >
               <CompactTimer isMidnight={isMidnight} />
               <Notes isMidnight={isMidnight} />

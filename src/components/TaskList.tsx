@@ -144,40 +144,40 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
     : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Today's Tasks */}
-      <div className="glass-effect rounded-xl p-4 shadow-glow">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-bold text-[#d4af37]">
+      <div className="glass-effect rounded-xl p-3 shadow-glow">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-bold text-[#d4af37]">
             Today's Focus
           </h2>
-          <div className="text-sm font-medium text-[#ddc3a5]">
+          <div className="text-xs font-medium text-[#ddc3a5]">
             {todayProgress}% complete
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-4 h-2 bg-black/40 rounded-full overflow-hidden">
+        <div className="mb-3 h-1.5 bg-black/40 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-[#d4af37] to-[#cd7f32] transition-all duration-500 rounded-full"
             style={{ width: `${todayProgress}%` }}
           />
         </div>
 
-        <form onSubmit={handleAddTodayTask} className="mb-4">
+        <form onSubmit={handleAddTodayTask} className="mb-3">
           <div className="flex gap-2">
             <input
               type="text"
               value={newTodayTask}
               onChange={(e) => setNewTodayTask(e.target.value)}
               placeholder="Add a task for today..."
-              className="flex-1 px-4 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
+              className="flex-1 px-3 py-1.5 text-sm rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-2 hover:bg-[#cd7f32] transition-all shadow-md"
+              className="px-3 py-1.5 text-sm rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-1 hover:bg-[#cd7f32] transition-all shadow-md"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4" />
               Add
             </button>
           </div>
@@ -192,7 +192,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
             items={todayTasks.map(t => t.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-2 max-h-[25vh] overflow-y-auto pr-2">
+            <div className="space-y-1.5 max-h-[20vh] overflow-y-auto pr-2">
               {todayTasks.map(task => (
                 <SortableTaskItem
                   key={task.id}
@@ -205,7 +205,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
                 />
               ))}
               {todayTasks.length === 0 && (
-                <div className="text-center py-6 text-[#d4af37]/50">
+                <div className="text-center py-4 text-[#d4af37]/50 text-xs">
                   No tasks for today. Add one to get started!
                 </div>
               )}
@@ -217,47 +217,47 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {todayTasks.some(t => t.completed) && (
           <button
             onClick={handleClearTodayCompleted}
-            className="mt-4 w-full px-4 py-2 rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
+            className="mt-3 w-full px-3 py-1.5 text-sm rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3 h-3" />
             Clear Completed
           </button>
         )}
       </div>
 
       {/* Long-term Goals */}
-      <div className="glass-effect rounded-xl p-4 shadow-glow">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-bold text-[#d4af37]">
+      <div className="glass-effect rounded-xl p-3 shadow-glow">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-bold text-[#d4af37]">
             Long-term Goals
           </h2>
-          <div className="text-sm font-medium text-[#ddc3a5]">
+          <div className="text-xs font-medium text-[#ddc3a5]">
             {longtermProgress}% complete
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-4 h-2 bg-black/40 rounded-full overflow-hidden">
+        <div className="mb-3 h-1.5 bg-black/40 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-[#d4af37] to-[#cd7f32] transition-all duration-500 rounded-full"
             style={{ width: `${longtermProgress}%` }}
           />
         </div>
 
-        <form onSubmit={handleAddLongtermTask} className="mb-4">
+        <form onSubmit={handleAddLongtermTask} className="mb-3">
           <div className="flex gap-2">
             <input
               type="text"
               value={newLongtermTask}
               onChange={(e) => setNewLongtermTask(e.target.value)}
               placeholder="Add a long-term goal..."
-              className="flex-1 px-4 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
+              className="flex-1 px-3 py-1.5 text-sm rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-2 hover:bg-[#cd7f32] transition-all shadow-md"
+              className="px-3 py-1.5 text-sm rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-1 hover:bg-[#cd7f32] transition-all shadow-md"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4" />
               Add
             </button>
           </div>
@@ -272,7 +272,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
             items={longtermTasks.map(t => t.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-2 max-h-[25vh] overflow-y-auto pr-2">
+            <div className="space-y-1.5 max-h-[20vh] overflow-y-auto pr-2">
               {longtermTasks.map(task => (
                 <SortableTaskItem
                   key={task.id}
@@ -285,7 +285,7 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
                 />
               ))}
               {longtermTasks.length === 0 && (
-                <div className="text-center py-6 text-[#d4af37]/50">
+                <div className="text-center py-4 text-[#d4af37]/50 text-xs">
                   No long-term goals yet. Add one to start planning!
                 </div>
               )}
@@ -297,9 +297,9 @@ export default function TaskList({ isMidnight }: { isMidnight: boolean }) {
         {longtermTasks.some(t => t.completed) && (
           <button
             onClick={handleClearLongtermCompleted}
-            className="mt-4 w-full px-4 py-2 rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
+            className="mt-3 w-full px-3 py-1.5 text-sm rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3 h-3" />
             Clear Completed
           </button>
         )}

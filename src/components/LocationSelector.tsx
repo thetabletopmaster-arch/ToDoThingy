@@ -17,7 +17,7 @@ interface LocationSelectorProps {
 
 const LOCATION_KEY = 'productivity-dashboard-location';
 
-export default function LocationSelector({ onLocationChange, isMidnight }: LocationSelectorProps) {
+export default function LocationSelector({ onLocationChange, isMidnight: _isMidnight }: LocationSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState<LocationOption[]>([]);
@@ -116,10 +116,10 @@ export default function LocationSelector({ onLocationChange, isMidnight }: Locat
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-[#d4af37]/40 bg-black/40 text-[#ddc3a5] hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
+        className="flex items-center gap-2 px-2 py-1.5 rounded-lg border-2 border-[#d4af37]/40 bg-black/40 text-[#ddc3a5] hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
       >
-        <MapPin className="w-4 h-4" />
-        <span className="text-sm">{selectedLocation || 'Select Location'}</span>
+        <MapPin className="w-3 h-3" />
+        <span className="text-xs">{selectedLocation || 'Select Location'}</span>
       </button>
 
       <AnimatePresence>

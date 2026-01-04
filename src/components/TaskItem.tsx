@@ -48,7 +48,7 @@ const Particle = ({ index }: { index: number }) => {
   );
 };
 
-export default function TaskItem({ id, text, completed, onToggle, onDelete, isMidnight, dragHandleProps }: TaskItemProps) {
+export default function TaskItem({ id, text, completed, onToggle, onDelete, isMidnight: _isMidnight, dragHandleProps }: TaskItemProps) {
   const [isDestroying, setIsDestroying] = useState(false);
 
   const handleToggle = () => {

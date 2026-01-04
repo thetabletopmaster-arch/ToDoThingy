@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Quote, RefreshCw } from 'lucide-react';
 
 const quotes = [
@@ -30,7 +30,7 @@ const quotes = [
 const QUOTE_KEY = 'productivity-dashboard-daily-quote';
 const QUOTE_DATE_KEY = 'productivity-dashboard-quote-date';
 
-export default function PhilosophyQuote({ isMidnight }: { isMidnight: boolean }) {
+export default function PhilosophyQuote({ isMidnight: _isMidnight }: { isMidnight: boolean }) {
   const [quote, setQuote] = useState(() => {
     const today = new Date().toDateString();
     const storedDate = localStorage.getItem(QUOTE_DATE_KEY);
@@ -55,11 +55,11 @@ export default function PhilosophyQuote({ isMidnight }: { isMidnight: boolean })
   };
 
   return (
-    <div className="glass-effect rounded-xl p-4 shadow-glow">
-      <div className="flex items-center justify-between mb-3">
+    <div className="glass-effect rounded-xl p-3 shadow-glow">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <Quote className="w-4 h-4 text-[#d4af37]" />
-          <h3 className="text-sm font-medium text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
+          <Quote className="w-3 h-3 text-[#d4af37]" />
+          <h3 className="text-xs font-medium text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
             Daily Wisdom
           </h3>
         </div>
@@ -73,7 +73,7 @@ export default function PhilosophyQuote({ isMidnight }: { isMidnight: boolean })
       </div>
 
       <blockquote className="relative">
-        <p className="text-sm text-[#ddc3a5] italic leading-relaxed mb-2" style={{ fontFamily: 'Lora, Georgia, serif' }}>
+        <p className="text-xs text-[#ddc3a5] italic leading-relaxed mb-1" style={{ fontFamily: 'Lora, Georgia, serif' }}>
           "{quote.text}"
         </p>
         <footer className="text-xs text-[#d4af37]/80" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>

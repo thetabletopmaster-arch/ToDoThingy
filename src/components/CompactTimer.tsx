@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Timer as TimerIcon, Play, Pause, RotateCcw } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
+export default function CompactTimer({ isMidnight: _isMidnight }: { isMidnight: boolean }) {
   const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -64,32 +64,32 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
   const progress = (totalSeconds / initialSeconds) * 100;
 
   return (
-    <div className="glass-effect rounded-xl p-6 shadow-glow">
-      <div className="flex items-center gap-2 mb-4">
-        <TimerIcon className="w-5 h-5 text-[#d4af37]" />
-        <h3 className="text-lg font-semibold text-[#d4af37]">Timer</h3>
+    <div className="glass-effect rounded-xl p-3 shadow-glow">
+      <div className="flex items-center gap-2 mb-3">
+        <TimerIcon className="w-4 h-4 text-[#d4af37]" />
+        <h3 className="text-base font-semibold text-[#d4af37]">Timer</h3>
       </div>
 
-      <div className="relative mb-6">
-        <svg className="w-48 h-48 mx-auto transform -rotate-90">
+      <div className="relative mb-4">
+        <svg className="w-36 h-36 mx-auto transform -rotate-90">
           <circle
-            cx="96"
-            cy="96"
-            r="88"
+            cx="72"
+            cy="72"
+            r="66"
             stroke="rgba(251, 191, 36, 0.2)"
-            strokeWidth="8"
+            strokeWidth="6"
             fill="none"
           />
           <motion.circle
-            cx="96"
-            cy="96"
-            r="88"
+            cx="72"
+            cy="72"
+            r="66"
             stroke="url(#gradient-warm)"
-            strokeWidth="8"
+            strokeWidth="6"
             fill="none"
             strokeLinecap="round"
-            initial={{ strokeDasharray: '553', strokeDashoffset: '553' }}
-            animate={{ strokeDashoffset: 553 - (553 * progress) / 100 }}
+            initial={{ strokeDasharray: '415', strokeDashoffset: '415' }}
+            animate={{ strokeDashoffset: 415 - (415 * progress) / 100 }}
             transition={{ duration: 0.5 }}
           />
           <defs>
@@ -100,13 +100,13 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
           </defs>
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-5xl font-bold tabular-nums text-[#ddc3a5]">
+          <div className="text-3xl font-bold tabular-nums text-[#ddc3a5]">
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
           </div>
         </div>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-3">
         <input
           type="number"
           value={inputMinutes}
@@ -115,39 +115,39 @@ export default function CompactTimer({ isMidnight }: { isMidnight: boolean }) {
           disabled={isRunning}
           min="1"
           max="120"
-          className="flex-1 px-3 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all disabled:opacity-50"
+          className="flex-1 px-2 py-1.5 text-sm rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all disabled:opacity-50"
           placeholder="Minutes"
         />
         <button
           onClick={handleSetTime}
           disabled={isRunning}
-          className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium hover:bg-[#cd7f32] transition-all disabled:opacity-50 shadow-md"
+          className="px-3 py-1.5 text-sm rounded-lg bg-[#d4af37] text-[#1a120d] font-medium hover:bg-[#cd7f32] transition-all disabled:opacity-50 shadow-md"
         >
           Set
         </button>
       </div>
 
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-2 justify-center">
         {!isRunning ? (
           <button
             onClick={handleStart}
-            className="bg-[#b8941e] text-[#1a120d] p-3 rounded-full transition-all hover:bg-[#d4af37] shadow-md"
+            className="bg-[#b8941e] text-[#1a120d] p-2 rounded-full transition-all hover:bg-[#d4af37] shadow-md"
           >
-            <Play className="w-5 h-5" />
+            <Play className="w-4 h-4" />
           </button>
         ) : (
           <button
             onClick={() => setIsRunning(false)}
-            className="bg-[#cd7f32] text-[#1a120d] p-3 rounded-full transition-all hover:bg-[#b8941e] shadow-md"
+            className="bg-[#cd7f32] text-[#1a120d] p-2 rounded-full transition-all hover:bg-[#b8941e] shadow-md"
           >
-            <Pause className="w-5 h-5" />
+            <Pause className="w-4 h-4" />
           </button>
         )}
         <button
           onClick={handleReset}
-          className="bg-[#cd7f32] text-[#1a120d] p-3 rounded-full transition-all hover:bg-[#b8941e] shadow-md"
+          className="bg-[#cd7f32] text-[#1a120d] p-2 rounded-full transition-all hover:bg-[#b8941e] shadow-md"
         >
-          <RotateCcw className="w-5 h-5" />
+          <RotateCcw className="w-4 h-4" />
         </button>
       </div>
     </div>
