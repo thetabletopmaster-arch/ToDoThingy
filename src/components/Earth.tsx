@@ -62,7 +62,7 @@ function EarthGlobe({ latitude, longitude, mouseX, mouseY, scrollY }: EarthGlobe
 
       targetRotation.current = {
         x: -latRad,
-        y: -lonRad + Math.PI,
+        y: -lonRad, // Removed + Math.PI to show correct location
       };
     }
   }, [latitude, longitude]);
