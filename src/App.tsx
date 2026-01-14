@@ -9,11 +9,18 @@ import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
 import PhilosophyQuote from './components/PhilosophyQuote';
 import DailyTaskTemplates from './components/DailyTaskTemplates';
+import BackgroundSelector from './components/BackgroundSelector';
+
+const BACKGROUND_KEY = 'productivity-dashboard-background';
 
 function App() {
   const [isMidnight, setIsMidnight] = useState(() => {
     const saved = localStorage.getItem('midnight-mode');
     return saved === 'true';
+  });
+
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(() => {
+    return localStorage.getItem(BACKGROUND_KEY) || null;
   });
 
   const addTasksToTodayRef = useRef<((tasks: string[]) => void) | null>(null);
@@ -22,6 +29,17 @@ function App() {
     document.body.classList.toggle('midnight', isMidnight);
     localStorage.setItem('midnight-mode', String(isMidnight));
   }, [isMidnight]);
+
+  useEffect(() => {
+    if (backgroundImage) {
+      document.body.style.backgroundImage = `url('${backgroundImage}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundAttachment = 'fixed';
+    } else {
+      document.body.style.backgroundImage = '';
+    }
+  }, [backgroundImage]);
 
   const handleAddTasksCallback = (addTasksFn: (tasks: string[]) => void) => {
     addTasksToTodayRef.current = addTasksFn;
@@ -33,9 +51,14 @@ function App() {
     }
   };
 
+  const handleBackgroundChange = (newBackground: string | null) => {
+    setBackgroundImage(newBackground);
+  };
+
   return (
     <>
       <ThemeToggle isMidnight={isMidnight} onToggle={() => setIsMidnight(!isMidnight)} />
+      <BackgroundSelector onBackgroundChange={handleBackgroundChange} />
 
       <div className="min-h-screen p-2 md:p-4">
         <div className="max-w-7xl mx-auto">
@@ -115,7 +138,7 @@ function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="mt-12 pt-8"
+            className="mt-32 pt-16"
           >
             <DailyTaskTemplates
               onAddToToday={handleAddDailyTasksToToday}

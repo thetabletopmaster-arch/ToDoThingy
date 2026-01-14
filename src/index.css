@@ -17,14 +17,14 @@ body.midnight {
 }
 
 .glass-effect {
-  background: rgba(42, 31, 23, 0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(42, 31, 23, 0.45);
+  backdrop-filter: blur(12px);
   border: 2px solid;
-  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(205, 127, 50, 0.3)) 1;
+  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(205, 127, 50, 0.4)) 1;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    0 2px 8px rgba(212, 130, 108, 0.15),
-    inset 0 1px 0 rgba(212, 175, 55, 0.1);
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 2px 8px rgba(212, 130, 108, 0.2),
+    inset 0 1px 0 rgba(212, 175, 55, 0.15);
   position: relative;
 }
 
@@ -46,12 +46,12 @@ body.midnight {
 }
 
 body.midnight .glass-effect {
-  background: rgba(26, 18, 13, 0.9);
-  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(205, 127, 50, 0.4)) 1;
+  background: rgba(26, 18, 13, 0.5);
+  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.6), rgba(205, 127, 50, 0.5)) 1;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.7),
-    0 2px 12px rgba(212, 130, 108, 0.2),
-    inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    0 2px 12px rgba(212, 130, 108, 0.25),
+    inset 0 1px 0 rgba(212, 175, 55, 0.2);
 }
 
 .shadow-glow {
