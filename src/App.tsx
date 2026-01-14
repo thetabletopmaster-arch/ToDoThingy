@@ -10,6 +10,7 @@ import Notes from './components/Notes';
 import PhilosophyQuote from './components/PhilosophyQuote';
 import DailyTaskTemplates from './components/DailyTaskTemplates';
 import BackgroundSelector from './components/BackgroundSelector';
+import MusicPlayer from './components/MusicPlayer';
 
 const BACKGROUND_KEY = 'productivity-dashboard-background';
 
@@ -121,7 +122,7 @@ function App() {
               <TaskList isMidnight={isMidnight} onAddTasksCallback={handleAddTasksCallback} />
             </motion.div>
 
-            {/* Timer and Notes Column */}
+            {/* Timer, Notes and Music Column */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -129,6 +130,7 @@ function App() {
               className="space-y-3"
             >
               <CompactTimer isMidnight={isMidnight} />
+              <MusicPlayer isMidnight={isMidnight} />
               <Notes isMidnight={isMidnight} />
             </motion.div>
           </div>

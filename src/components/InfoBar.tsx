@@ -21,6 +21,7 @@ const TIME_FORMAT_KEY = 'productivity-dashboard-time-format';
 
 export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   const [time, setTime] = useState(new Date());
+  const [timezone, setTimezone] = useState<string | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [sunTimes, setSunTimes] = useState<SunTimes | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
@@ -51,6 +52,11 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
       );
       const weatherData = await weatherResponse.json();
 
+      // Store timezone from API
+      if (weatherData.timezone) {
+        setTimezone(weatherData.timezone);
+      }
+
       setWeather({
         temperature: Math.round(weatherData.current.temperature_2m),
         weatherCode: weatherData.current.weather_code,
@@ -77,12 +83,24 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
+    const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
-      hour12: !is24Hour
-    });
+      hour12: !is24Hour,
+      ...(timezone && { timeZone: timezone })
+    };
+    return date.toLocaleTimeString('en-US', options);
+  };
+
+  const formatDate = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      ...(timezone && { timeZone: timezone })
+    };
+    return date.toLocaleDateString('en-US', options);
   };
 
   const getHoursUntil = (targetDate: Date) => {
@@ -139,7 +157,7 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
             {formatTime(time)}
           </div>
           <div className="text-xs text-[#d4af37]/60 mt-0.5">
-            {time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+            {formatDate(time)}
           </div>
         </div>
 
