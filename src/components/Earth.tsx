@@ -59,7 +59,7 @@ function EarthGlobe({ latitude, longitude }: EarthProps) {
       // Rotate to show the selected location facing the camera
       targetRotation.current = {
         x: -latRad,
-        y: -lonRad + Math.PI / 2, // Add 90° to face the location correctly
+        y: lonRad, // Direct longitude without offset
       };
     }
   }, [latitude, longitude]);
