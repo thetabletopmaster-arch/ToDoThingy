@@ -4,10 +4,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:wght@400;500;600&display=swap');
 
 body {
-  background: linear-gradient(135deg, #2a1f17 0%, #1a120d 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
   min-height: 100vh;
   font-family: 'Lora', 'Georgia', serif;
-  color: #ddc3a5;
+  color: rgba(255, 255, 255, 0.95);
   overflow-x: hidden;
 }
 
@@ -17,14 +17,13 @@ body.midnight {
 }
 
 .glass-effect {
-  background: rgba(42, 31, 23, 0.45);
-  backdrop-filter: blur(12px);
-  border: 2px solid;
-  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(205, 127, 50, 0.4)) 1;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 2px 8px rgba(212, 130, 108, 0.2),
-    inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
 }
 
@@ -46,12 +45,12 @@ body.midnight {
 }
 
 body.midnight .glass-effect {
-  background: rgba(26, 18, 13, 0.5);
-  border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.6), rgba(205, 127, 50, 0.5)) 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.25);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.7),
-    0 2px 12px rgba(212, 130, 108, 0.25),
-    inset 0 1px 0 rgba(212, 175, 55, 0.2);
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .shadow-glow {

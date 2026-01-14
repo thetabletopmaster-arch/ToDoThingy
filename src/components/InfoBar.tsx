@@ -19,7 +19,12 @@ interface SunTimes {
 
 const TIME_FORMAT_KEY = 'productivity-dashboard-time-format';
 
-export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
+interface InfoBarProps {
+  isMidnight: boolean;
+  onCoordinatesChange?: (lat: number, lon: number) => void;
+}
+
+export default function InfoBar({ isMidnight, onCoordinatesChange }: InfoBarProps) {
   const [time, setTime] = useState(new Date());
   const [timezone, setTimezone] = useState<string | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -42,8 +47,9 @@ export default function InfoBar({ isMidnight }: { isMidnight: boolean }) {
   useEffect(() => {
     if (coordinates) {
       fetchWeatherData(coordinates.lat, coordinates.lon);
+      onCoordinatesChange?.(coordinates.lat, coordinates.lon);
     }
-  }, [coordinates]);
+  }, [coordinates, onCoordinatesChange]);
 
   const fetchWeatherData = async (latitude: number, longitude: number) => {
     try {
