@@ -62,12 +62,13 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
       // Check cache first
       const cached = getCachedWeather(coordinates);
       if (cached) {
-        console.log('InfoBar: Using cached weather data');
+        console.log('InfoBar: Using cached weather data:', cached.data);
         setWeather(cached.data.weather);
         setSunTimes(cached.data.sunTimes);
         setTimezone(cached.data.timezone);
+        console.log('InfoBar: State updated from cache');
       } else {
-        console.log('InfoBar: No cache found, fetching weather data');
+        console.log('InfoBar: No valid cache, fetching weather data');
         fetchWeatherData(coordinates.lat, coordinates.lon);
       }
     } else {
@@ -78,22 +79,39 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   const getCachedWeather = (coords: { lat: number; lon: number }): WeatherCache | null => {
     try {
       const cached = localStorage.getItem(WEATHER_CACHE_KEY);
-      if (!cached) return null;
+      if (!cached) {
+        console.log('InfoBar: No cached weather in localStorage');
+        return null;
+      }
 
       const cacheData: WeatherCache = JSON.parse(cached);
       const now = Date.now();
+      const cacheAge = now - cacheData.timestamp;
+      const latDiff = Math.abs(cacheData.coordinates.lat - coords.lat);
+      const lonDiff = Math.abs(cacheData.coordinates.lon - coords.lon);
+
+      console.log('InfoBar: Cache check:', {
+        cacheAge: `${Math.floor(cacheAge / 1000)}s`,
+        maxAge: `${CACHE_DURATION / 1000}s`,
+        latDiff,
+        lonDiff,
+        isValid: cacheAge < CACHE_DURATION && latDiff < 0.01 && lonDiff < 0.01
+      });
 
       // Check if cache is still valid (within 10 minutes) and for same location
       if (
         now - cacheData.timestamp < CACHE_DURATION &&
-        Math.abs(cacheData.coordinates.lat - coords.lat) < 0.01 &&
-        Math.abs(cacheData.coordinates.lon - coords.lon) < 0.01
+        latDiff < 0.01 &&
+        lonDiff < 0.01
       ) {
+        console.log('InfoBar: Cache is valid, returning cached data');
         return cacheData;
       }
 
+      console.log('InfoBar: Cache expired or location changed');
       return null;
-    } catch {
+    } catch (error) {
+      console.error('InfoBar: Error reading cache:', error);
       return null;
     }
   };
@@ -142,6 +160,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
 
       // Store timezone
       const tz = weatherData.timezone || null;
+      console.log('InfoBar: Setting weather state:', { weather: weatherObj, sunTimes: sunTimesObj, timezone: tz });
       setTimezone(tz);
       setWeather(weatherObj);
       setSunTimes(sunTimesObj);
@@ -158,7 +177,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
       };
       localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(cacheData));
 
-      console.log('Weather state updated and cached successfully');
+      console.log('InfoBar: Weather state updated and cached successfully');
     } catch (error) {
       console.error('Error fetching weather data:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch weather data';
@@ -223,6 +242,15 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   const toggleTimeFormat = () => {
     setIs24Hour(!is24Hour);
   };
+
+  // Debug: log current state
+  console.log('InfoBar: Current state:', {
+    hasCoordinates: !!coordinates,
+    hasWeather: !!weather,
+    hasSunTimes: !!sunTimes,
+    isLoading,
+    timezone
+  });
 
   return (
     <div className="space-y-3">
