@@ -57,13 +57,13 @@ function EarthGlobe({ latitude, longitude }: EarthProps) {
       const lonRad = (longitude * Math.PI) / 180;
 
       // Rotate to show the selected location facing the camera
-      // Try opposite rotation direction
+      // Latitude is correct, add 180° offset to longitude
       targetRotation.current = {
         x: latRad,
-        y: lonRad,
+        y: lonRad + Math.PI,
       };
 
-      console.log('Earth rotating to:', { lat: latitude, lon: longitude, x: latRad, y: lonRad });
+      console.log('Earth rotating to:', { lat: latitude, lon: longitude, x: latRad, y: lonRad + Math.PI });
     }
   }, [latitude, longitude]);
 
