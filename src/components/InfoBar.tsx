@@ -19,7 +19,7 @@ interface SunTimes {
 
 const TIME_FORMAT_KEY = 'productivity-dashboard-time-format';
 const WEATHER_CACHE_KEY = 'productivity-dashboard-weather-cache';
-const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds (increased to avoid rate limits)
 
 interface WeatherCache {
   data: {
@@ -42,6 +42,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   const [sunTimes, setSunTimes] = useState<SunTimes | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [is24Hour, setIs24Hour] = useState(() => {
     const stored = localStorage.getItem(TIME_FORMAT_KEY);
     return stored === 'true';
@@ -66,6 +67,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         setWeather(cached.data.weather);
         setSunTimes(cached.data.sunTimes);
         setTimezone(cached.data.timezone);
+        setError(null); // Clear any errors
         console.log('InfoBar: State updated from cache');
       } else {
         console.log('InfoBar: No valid cache, fetching weather data');
@@ -178,10 +180,12 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
       localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(cacheData));
 
       console.log('InfoBar: Weather state updated and cached successfully');
+      setError(null); // Clear any previous errors
     } catch (error) {
       console.error('Error fetching weather data:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch weather data';
       console.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -192,6 +196,14 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
     console.log('InfoBar: Setting coordinates to:', { lat, lon });
     setCoordinates({ lat, lon });
   }, []);
+
+  const handleRetry = () => {
+    console.log('InfoBar: Manual retry requested');
+    if (coordinates) {
+      setError(null);
+      fetchWeatherData(coordinates.lat, coordinates.lon);
+    }
+  };
 
   const formatTime = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -312,6 +324,18 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           </div>
           {isLoading ? (
             <div className="text-sm text-white/60">Loading...</div>
+          ) : error ? (
+            <div className="space-y-2">
+              <div className="text-xs text-red-400">
+                {error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+              </div>
+              <button
+                onClick={handleRetry}
+                className="text-xs px-3 py-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
           ) : weather ? (
             <>
               <div className="text-4xl font-bold text-white mb-2">
@@ -343,6 +367,10 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           </div>
           {isLoading ? (
             <div className="text-sm text-white/60">Loading...</div>
+          ) : error ? (
+            <div className="text-xs text-red-400">
+              {error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+            </div>
           ) : weather ? (
             <>
               <div className="text-4xl font-bold text-white mb-3">
@@ -374,6 +402,10 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           </div>
           {isLoading ? (
             <div className="text-sm text-white/60">Loading...</div>
+          ) : error ? (
+            <div className="text-xs text-red-400">
+              {error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+            </div>
           ) : sunTimes ? (
             <div className="space-y-4">
               <div>
