@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3 } from 'lucide-react';
 import LocationSelector from './LocationSelector';
 
@@ -57,17 +57,21 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   }, [is24Hour]);
 
   useEffect(() => {
+    console.log('InfoBar: Coordinates changed:', coordinates);
     if (coordinates) {
       // Check cache first
       const cached = getCachedWeather(coordinates);
       if (cached) {
-        console.log('Using cached weather data');
+        console.log('InfoBar: Using cached weather data');
         setWeather(cached.data.weather);
         setSunTimes(cached.data.sunTimes);
         setTimezone(cached.data.timezone);
       } else {
+        console.log('InfoBar: No cache found, fetching weather data');
         fetchWeatherData(coordinates.lat, coordinates.lon);
       }
+    } else {
+      console.log('InfoBar: No coordinates set yet');
     }
   }, [coordinates]);
 
@@ -164,10 +168,11 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
     }
   };
 
-  const handleLocationChange = (lat: number, lon: number, name: string) => {
-    console.log('Location changed:', { name, lat, lon });
+  const handleLocationChange = useCallback((lat: number, lon: number, name: string) => {
+    console.log('InfoBar: Location changed:', { name, lat, lon });
+    console.log('InfoBar: Setting coordinates to:', { lat, lon });
     setCoordinates({ lat, lon });
-  };
+  }, []);
 
   const formatTime = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {

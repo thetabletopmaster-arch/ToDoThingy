@@ -29,19 +29,20 @@ export default function LocationSelector({ onLocationChange, isMidnight: _isMidn
     if (stored) {
       try {
         const { name, latitude, longitude } = JSON.parse(stored);
-        console.log('Loading saved location:', { name, latitude, longitude });
+        console.log('LocationSelector: Loading saved location:', { name, latitude, longitude });
         setSelectedLocation(name);
+        console.log('LocationSelector: About to call onLocationChange');
         onLocationChange(latitude, longitude, name);
-      } catch {
-        console.log('Failed to parse saved location');
+        console.log('LocationSelector: onLocationChange called successfully');
+      } catch (error) {
+        console.error('LocationSelector: Failed to parse saved location:', error);
         setSelectedLocation('Select a location');
       }
     } else {
-      console.log('No saved location, prompting user to select');
+      console.log('LocationSelector: No saved location found');
       setSelectedLocation('Select a location');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onLocationChange]);
 
   const searchLocations = async (query: string) => {
     if (query.length < 2) {
