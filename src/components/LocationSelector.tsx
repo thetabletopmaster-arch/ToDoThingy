@@ -29,31 +29,19 @@ export default function LocationSelector({ onLocationChange, isMidnight: _isMidn
     if (stored) {
       try {
         const { name, latitude, longitude } = JSON.parse(stored);
+        console.log('Loading saved location:', { name, latitude, longitude });
         setSelectedLocation(name);
         onLocationChange(latitude, longitude, name);
       } catch {
-        // If parsing fails, use geolocation
-        getGeolocation();
+        console.log('Failed to parse saved location');
+        setSelectedLocation('Select a location');
       }
     } else {
-      getGeolocation();
+      console.log('No saved location, prompting user to select');
+      setSelectedLocation('Select a location');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const getGeolocation = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setSelectedLocation('Current Location');
-          onLocationChange(latitude, longitude, 'Current Location');
-        },
-        () => {
-          setSelectedLocation('Location Unknown');
-        }
-      );
-    }
-  };
 
   const searchLocations = async (query: string) => {
     if (query.length < 2) {
@@ -95,6 +83,7 @@ export default function LocationSelector({ onLocationChange, isMidnight: _isMidn
 
   const selectLocation = (location: LocationOption) => {
     const displayName = `${location.name}, ${location.country}`;
+    console.log('Location selected:', { displayName, lat: location.latitude, lon: location.longitude });
     setSelectedLocation(displayName);
     setIsOpen(false);
     setSearchQuery('');
@@ -109,6 +98,7 @@ export default function LocationSelector({ onLocationChange, isMidnight: _isMidn
       })
     );
 
+    console.log('Calling onLocationChange with:', location.latitude, location.longitude, displayName);
     onLocationChange(location.latitude, location.longitude, displayName);
   };
 
