@@ -18,6 +18,18 @@ interface SunTimes {
 }
 
 const TIME_FORMAT_KEY = 'productivity-dashboard-time-format';
+const WEATHER_CACHE_KEY = 'productivity-dashboard-weather-cache';
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+interface WeatherCache {
+  data: {
+    weather: WeatherData;
+    sunTimes: SunTimes;
+    timezone: string;
+  };
+  timestamp: number;
+  coordinates: { lat: number; lon: number };
+}
 
 interface InfoBarProps {
   isMidnight: boolean;
@@ -29,6 +41,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [sunTimes, setSunTimes] = useState<SunTimes | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [is24Hour, setIs24Hour] = useState(() => {
     const stored = localStorage.getItem(TIME_FORMAT_KEY);
     return stored === 'true';
@@ -45,53 +58,109 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
 
   useEffect(() => {
     if (coordinates) {
-      fetchWeatherData(coordinates.lat, coordinates.lon);
+      // Check cache first
+      const cached = getCachedWeather(coordinates);
+      if (cached) {
+        console.log('Using cached weather data');
+        setWeather(cached.data.weather);
+        setSunTimes(cached.data.sunTimes);
+        setTimezone(cached.data.timezone);
+      } else {
+        fetchWeatherData(coordinates.lat, coordinates.lon);
+      }
     }
   }, [coordinates]);
 
+  const getCachedWeather = (coords: { lat: number; lon: number }): WeatherCache | null => {
+    try {
+      const cached = localStorage.getItem(WEATHER_CACHE_KEY);
+      if (!cached) return null;
+
+      const cacheData: WeatherCache = JSON.parse(cached);
+      const now = Date.now();
+
+      // Check if cache is still valid (within 10 minutes) and for same location
+      if (
+        now - cacheData.timestamp < CACHE_DURATION &&
+        Math.abs(cacheData.coordinates.lat - coords.lat) < 0.01 &&
+        Math.abs(cacheData.coordinates.lon - coords.lon) < 0.01
+      ) {
+        return cacheData;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
   const fetchWeatherData = async (latitude: number, longitude: number) => {
+    if (isLoading) {
+      console.log('Already fetching weather, skipping...');
+      return;
+    }
+
     console.log('Fetching weather for:', { latitude, longitude });
+    setIsLoading(true);
+
     try {
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=uv_index_max,sunrise,sunset&timezone=auto`
       );
 
       if (!weatherResponse.ok) {
+        if (weatherResponse.status === 429) {
+          throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+        }
         throw new Error(`HTTP error! status: ${weatherResponse.status}`);
       }
 
       const weatherData = await weatherResponse.json();
       console.log('Weather data received:', weatherData);
 
-      // Store timezone from API
-      if (weatherData.timezone) {
-        console.log('Setting timezone:', weatherData.timezone);
-        setTimezone(weatherData.timezone);
-      }
-
-      setWeather({
+      const weatherObj: WeatherData = {
         temperature: Math.round(weatherData.current.temperature_2m),
         weatherCode: weatherData.current.weather_code,
         humidity: weatherData.current.relative_humidity_2m,
         windSpeed: Math.round(weatherData.current.wind_speed_10m),
         uvIndex: Math.round(weatherData.daily.uv_index_max[0] || 0),
-      });
+      };
 
       const sunrise = new Date(weatherData.daily.sunrise[0]);
       const sunset = new Date(weatherData.daily.sunset[0]);
-      console.log('Sun times:', { sunrise, sunset });
 
-      setSunTimes({
+      const sunTimesObj: SunTimes = {
         sunrise: sunrise.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sunset: sunset.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sunriseDate: sunrise,
         sunsetDate: sunset,
-      });
+      };
 
-      console.log('Weather state updated successfully');
+      // Store timezone
+      const tz = weatherData.timezone || null;
+      setTimezone(tz);
+      setWeather(weatherObj);
+      setSunTimes(sunTimesObj);
+
+      // Cache the data
+      const cacheData: WeatherCache = {
+        data: {
+          weather: weatherObj,
+          sunTimes: sunTimesObj,
+          timezone: tz,
+        },
+        timestamp: Date.now(),
+        coordinates: { lat: latitude, lon: longitude },
+      };
+      localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(cacheData));
+
+      console.log('Weather state updated and cached successfully');
     } catch (error) {
       console.error('Error fetching weather data:', error);
-      alert('Failed to fetch weather data. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch weather data';
+      console.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -208,7 +277,9 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <Sun className="w-4 h-4 text-white/80" />
             <span className="text-sm font-medium text-white/80">UV Radiation</span>
           </div>
-          {weather ? (
+          {isLoading ? (
+            <div className="text-sm text-white/60">Loading...</div>
+          ) : weather ? (
             <>
               <div className="text-4xl font-bold text-white mb-2">
                 {weather.uvIndex}
@@ -237,7 +308,9 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <Cloud className="w-4 h-4 text-white/80" />
             <span className="text-sm font-medium text-white/80">Current Weather</span>
           </div>
-          {weather ? (
+          {isLoading ? (
+            <div className="text-sm text-white/60">Loading...</div>
+          ) : weather ? (
             <>
               <div className="text-4xl font-bold text-white mb-3">
                 {weather.temperature}°C
@@ -266,7 +339,9 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <Sun className="w-4 h-4 text-white/80" />
             <span className="text-sm font-medium text-white/80">Sunrise & Sunset</span>
           </div>
-          {sunTimes ? (
+          {isLoading ? (
+            <div className="text-sm text-white/60">Loading...</div>
+          ) : sunTimes ? (
             <div className="space-y-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
