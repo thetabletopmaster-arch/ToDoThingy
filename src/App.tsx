@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ListTodo } from 'lucide-react';
 import TaskList from './components/TaskList';
@@ -8,7 +8,6 @@ import QuickLinks from './components/QuickLinks';
 import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
 import PhilosophyQuote from './components/PhilosophyQuote';
-import DailyTaskTemplates from './components/DailyTaskTemplates';
 import BackgroundSelector from './components/BackgroundSelector';
 import MusicPlayer from './components/MusicPlayer';
 import Earth from './components/Earth';
@@ -27,8 +26,6 @@ function App() {
 
   const [earthCoordinates, setEarthCoordinates] = useState<{ lat: number; lon: number } | null>(null);
 
-  const addTasksToTodayRef = useRef<((tasks: string[]) => void) | null>(null);
-
   useEffect(() => {
     document.body.classList.toggle('midnight', isMidnight);
     localStorage.setItem('midnight-mode', String(isMidnight));
@@ -45,22 +42,13 @@ function App() {
     }
   }, [backgroundImage]);
 
-  const handleAddTasksCallback = (addTasksFn: (tasks: string[]) => void) => {
-    addTasksToTodayRef.current = addTasksFn;
-  };
-
-  const handleAddDailyTasksToToday = (tasks: string[]) => {
-    if (addTasksToTodayRef.current) {
-      addTasksToTodayRef.current(tasks);
-    }
-  };
-
   const handleBackgroundChange = (newBackground: string | null) => {
     setBackgroundImage(newBackground);
   };
 
   const handleCoordinatesChange = (lat: number, lon: number) => {
     setEarthCoordinates({ lat, lon });
+    console.log('Coordinates set:', { lat, lon });
   };
 
   return (
@@ -127,7 +115,7 @@ function App() {
               transition={{ delay: 0.3 }}
               className="lg:col-span-2 space-y-3"
             >
-              <TaskList isMidnight={isMidnight} onAddTasksCallback={handleAddTasksCallback} />
+              <TaskList isMidnight={isMidnight} />
             </motion.div>
 
             {/* Timer, Notes and Music Column */}
@@ -142,19 +130,6 @@ function App() {
               <Notes isMidnight={isMidnight} />
             </motion.div>
           </div>
-
-          {/* Daily Task Templates - Full width section below */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mt-32 pt-16"
-          >
-            <DailyTaskTemplates
-              onAddToToday={handleAddDailyTasksToToday}
-              isMidnight={isMidnight}
-            />
-          </motion.div>
         </div>
       </div>
     </>
