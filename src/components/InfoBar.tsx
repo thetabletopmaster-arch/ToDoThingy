@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff } from 'lucide-react';
 import LocationSelector from './LocationSelector';
+import WhatsAppLink from './WhatsAppLink';
 
 interface WeatherData {
   temperature: number;
@@ -338,7 +339,12 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   return (
     <div className="space-y-3">
       {/* Location Selector */}
-      <LocationSelector onLocationChange={handleLocationChange} isMidnight={isMidnight} />
+      <LocationSelector
+        onLocationChange={handleLocationChange}
+        isMidnight={isMidnight}
+        isOnline={isOnline}
+        connectionSpeed={connectionSpeed}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
         {/* Time & Coordinates */}
@@ -381,36 +387,8 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           )}
         </div>
 
-        {/* Internet Connection */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
-          <div className="flex items-center gap-2 mb-2">
-            {isOnline ? (
-              <Wifi className="w-4 h-4 text-green-400" />
-            ) : (
-              <WifiOff className="w-4 h-4 text-red-400" />
-            )}
-            <span className="text-sm font-medium text-white/80">Internet</span>
-          </div>
-          {isOnline ? (
-            <>
-              <div className="text-2xl font-bold text-green-400 mb-1">
-                Connected
-              </div>
-              <div className="text-sm text-white/70">
-                Speed: {connectionSpeed}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="text-2xl font-bold text-red-400 mb-1">
-                Offline
-              </div>
-              <div className="text-sm text-white/60">
-                No current connection
-              </div>
-            </>
-          )}
-        </div>
+        {/* WhatsApp */}
+        <WhatsAppLink isMidnight={isMidnight} />
 
         {/* UV Index - Prominent Display */}
         <div className="glass-effect rounded-xl p-4 shadow-glow">

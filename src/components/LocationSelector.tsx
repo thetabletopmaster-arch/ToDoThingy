@@ -13,11 +13,13 @@ interface LocationOption {
 interface LocationSelectorProps {
   onLocationChange: (lat: number, lon: number, name: string) => void;
   isMidnight: boolean;
+  isOnline: boolean;
+  connectionSpeed: string;
 }
 
 const LOCATION_KEY = 'productivity-dashboard-location';
 
-export default function LocationSelector({ onLocationChange, isMidnight: _isMidnight }: LocationSelectorProps) {
+export default function LocationSelector({ onLocationChange, isMidnight: _isMidnight, isOnline, connectionSpeed }: LocationSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState<LocationOption[]>([]);
@@ -105,13 +107,23 @@ export default function LocationSelector({ onLocationChange, isMidnight: _isMidn
 
   return (
     <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-lg border-2 border-[#d4af37]/40 bg-black/40 text-[#ddc3a5] hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
-      >
-        <MapPin className="w-3 h-3" />
-        <span className="text-xs">{selectedLocation || 'Select Location'}</span>
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 px-2 py-1.5 rounded-lg border-2 border-[#d4af37]/40 bg-black/40 text-[#ddc3a5] hover:bg-[#d4af37]/10 hover:border-[#d4af37] transition-all"
+        >
+          <MapPin className="w-3 h-3" />
+          <span className="text-xs">{selectedLocation || 'Select Location'}</span>
+        </button>
+
+        <div className="text-xs text-white/60">
+          {isOnline ? (
+            <span className="text-green-400">● Connected ({connectionSpeed})</span>
+          ) : (
+            <span className="text-red-400">● Offline</span>
+          )}
+        </div>
+      </div>
 
       <AnimatePresence>
         {isOpen && (
