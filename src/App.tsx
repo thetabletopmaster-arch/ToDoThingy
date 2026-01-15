@@ -10,7 +10,6 @@ import Notes from './components/Notes';
 import PhilosophyQuote from './components/PhilosophyQuote';
 import BackgroundSelector from './components/BackgroundSelector';
 import MusicPlayer from './components/MusicPlayer';
-import Earth from './components/Earth';
 
 const BACKGROUND_KEY = 'productivity-dashboard-background';
 
@@ -23,8 +22,6 @@ function App() {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(() => {
     return localStorage.getItem(BACKGROUND_KEY) || null;
   });
-
-  const [earthCoordinates, setEarthCoordinates] = useState<{ lat: number; lon: number } | null>(null);
 
   useEffect(() => {
     document.body.classList.toggle('midnight', isMidnight);
@@ -46,16 +43,10 @@ function App() {
     setBackgroundImage(newBackground);
   };
 
-  const handleCoordinatesChange = (lat: number, lon: number) => {
-    setEarthCoordinates({ lat, lon });
-    console.log('Coordinates set:', { lat, lon });
-  };
-
   return (
     <>
       <ThemeToggle isMidnight={isMidnight} onToggle={() => setIsMidnight(!isMidnight)} />
       <BackgroundSelector onBackgroundChange={handleBackgroundChange} />
-      <Earth latitude={earthCoordinates?.lat ?? null} longitude={earthCoordinates?.lon ?? null} />
 
       <div className="min-h-screen p-2 md:p-4">
         <div className="max-w-7xl mx-auto">
@@ -103,7 +94,7 @@ function App() {
             transition={{ delay: 0.2 }}
             className="mb-3"
           >
-            <InfoBar isMidnight={isMidnight} onCoordinatesChange={handleCoordinatesChange} />
+            <InfoBar isMidnight={isMidnight} />
           </motion.div>
 
           {/* Main Content */}

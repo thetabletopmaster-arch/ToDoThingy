@@ -21,10 +21,9 @@ const TIME_FORMAT_KEY = 'productivity-dashboard-time-format';
 
 interface InfoBarProps {
   isMidnight: boolean;
-  onCoordinatesChange?: (lat: number, lon: number) => void;
 }
 
-export default function InfoBar({ isMidnight, onCoordinatesChange }: InfoBarProps) {
+export default function InfoBar({ isMidnight }: InfoBarProps) {
   const [time, setTime] = useState(new Date());
   const [timezone, setTimezone] = useState<string | null>(null);
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -47,9 +46,8 @@ export default function InfoBar({ isMidnight, onCoordinatesChange }: InfoBarProp
   useEffect(() => {
     if (coordinates) {
       fetchWeatherData(coordinates.lat, coordinates.lon);
-      onCoordinatesChange?.(coordinates.lat, coordinates.lon);
     }
-  }, [coordinates, onCoordinatesChange]);
+  }, [coordinates]);
 
   const fetchWeatherData = async (latitude: number, longitude: number) => {
     try {
@@ -139,123 +137,160 @@ export default function InfoBar({ isMidnight, onCoordinatesChange }: InfoBarProp
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {/* Location Selector */}
       <LocationSelector onLocationChange={handleLocationChange} isMidnight={isMidnight} />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-        {/* Time */}
+      {/* Coordinates Display */}
+      {coordinates && (
         <div className="glass-effect rounded-xl p-3 shadow-glow">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3 text-white/80" />
-              <span className="text-xs font-medium text-white/80">Time</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div>
+                <span className="text-xs text-white/60">Latitude</span>
+                <div className="text-base font-bold text-white">{coordinates.lat.toFixed(4)}°</div>
+              </div>
+              <div>
+                <span className="text-xs text-white/60">Longitude</span>
+                <div className="text-base font-bold text-white">{coordinates.lon.toFixed(4)}°</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Time */}
+        <div className="glass-effect rounded-xl p-4 shadow-glow">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-white/80" />
+              <span className="text-sm font-medium text-white/80">Local Time</span>
             </div>
             <button
               onClick={toggleTimeFormat}
               className="text-white/60 hover:text-white transition-colors"
               title={is24Hour ? 'Switch to 12-hour format' : 'Switch to 24-hour format'}
             >
-              {is24Hour ? <Clock3 className="w-3 h-3" /> : <Clock12 className="w-3 h-3" />}
+              {is24Hour ? <Clock3 className="w-4 h-4" /> : <Clock12 className="w-4 h-4" />}
             </button>
           </div>
-          <div className="text-xl font-bold tabular-nums text-white">
+          <div className="text-3xl font-bold tabular-nums text-white mb-1">
             {formatTime(time)}
           </div>
-          <div className="text-xs text-white/60 mt-0.5">
+          <div className="text-sm text-white/70">
             {formatDate(time)}
           </div>
+          {timezone && (
+            <div className="text-xs text-white/50 mt-1">
+              {timezone}
+            </div>
+          )}
         </div>
 
         {/* UV Index - Prominent Display */}
-        <div className="glass-effect rounded-xl p-3 shadow-glow">
-          <div className="flex items-center gap-1 mb-1">
-            <Sun className="w-3 h-3 text-white/80" />
-            <span className="text-xs font-medium text-white/80">UV Radiation</span>
+        <div className="glass-effect rounded-xl p-4 shadow-glow">
+          <div className="flex items-center gap-2 mb-2">
+            <Sun className="w-4 h-4 text-white/80" />
+            <span className="text-sm font-medium text-white/80">UV Radiation</span>
           </div>
           {weather ? (
             <>
-              <div className="text-2xl font-bold text-white mb-0.5">
+              <div className="text-4xl font-bold text-white mb-2">
                 {weather.uvIndex}
               </div>
-              <div className="text-xs text-white/80 mb-1">
+              <div className="text-base font-medium text-white/90 mb-2">
                 {uvInfo?.level}
               </div>
-              <div className="flex gap-2 text-xs">
-                <span className="text-white/70">UVA+UVB</span>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm text-white/70">UVA + UVB Radiation</span>
+                <span className="text-xs text-white/60">
+                  {weather.uvIndex <= 2 && "Minimal protection needed"}
+                  {weather.uvIndex > 2 && weather.uvIndex <= 5 && "Moderate protection advised"}
+                  {weather.uvIndex > 5 && weather.uvIndex <= 7 && "High protection required"}
+                  {weather.uvIndex > 7 && "Extreme - Seek shade"}
+                </span>
               </div>
             </>
           ) : (
-            <div className="text-xs text-white/60">Select location</div>
+            <div className="text-sm text-white/60">Select location</div>
           )}
         </div>
 
         {/* Weather */}
-        <div className="glass-effect rounded-xl p-3 shadow-glow">
-          <div className="flex items-center gap-1 mb-1">
-            <Cloud className="w-3 h-3 text-white/80" />
-            <span className="text-xs font-medium text-white/80">Weather</span>
+        <div className="glass-effect rounded-xl p-4 shadow-glow">
+          <div className="flex items-center gap-2 mb-2">
+            <Cloud className="w-4 h-4 text-white/80" />
+            <span className="text-sm font-medium text-white/80">Current Weather</span>
           </div>
           {weather ? (
             <>
-              <div className="text-xl font-bold text-white">
+              <div className="text-4xl font-bold text-white mb-3">
                 {weather.temperature}°C
               </div>
-              <div className="flex gap-2 mt-1 text-xs">
-                <div className="flex items-center gap-1">
-                  <Droplets className="w-3 h-3 text-white/70" />
-                  <span className="text-white">{weather.humidity}%</span>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Droplets className="w-4 h-4 text-white/70" />
+                  <span className="text-sm text-white/90">Humidity:</span>
+                  <span className="text-sm font-medium text-white">{weather.humidity}%</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Wind className="w-3 h-3 text-white/70" />
-                  <span className="text-white">{weather.windSpeed}km/h</span>
+                <div className="flex items-center gap-2">
+                  <Wind className="w-4 h-4 text-white/70" />
+                  <span className="text-sm text-white/90">Wind:</span>
+                  <span className="text-sm font-medium text-white">{weather.windSpeed} km/h</span>
                 </div>
               </div>
             </>
           ) : (
-            <div className="text-xs text-white/60">Select location</div>
+            <div className="text-sm text-white/60">Select location</div>
           )}
         </div>
 
         {/* Sun Times */}
-        <div className="glass-effect rounded-xl p-3 shadow-glow md:col-span-2 lg:col-span-1">
-          <div className="flex items-center gap-1 mb-1">
-            <Sun className="w-3 h-3 text-white/80" />
-            <span className="text-xs font-medium text-white/80">Sunrise & Sunset</span>
+        <div className="glass-effect rounded-xl p-4 shadow-glow">
+          <div className="flex items-center gap-2 mb-3">
+            <Sun className="w-4 h-4 text-white/80" />
+            <span className="text-sm font-medium text-white/80">Sunrise & Sunset</span>
           </div>
           {sunTimes ? (
-            <div className="space-y-2">
+            <div className="space-y-4">
               <div>
-                <div className="flex items-center justify-between mb-0.5">
-                  <div className="flex items-center gap-1">
-                    <Sunrise className="w-3 h-3 text-white/70" />
-                    <span className="text-xs text-white/80">Sunrise</span>
-                  </div>
-                  {getHoursUntil(sunTimes.sunriseDate) && (
-                    <span className="text-xs text-white/60">in {getHoursUntil(sunTimes.sunriseDate)}</span>
-                  )}
+                <div className="flex items-center gap-2 mb-1">
+                  <Sunrise className="w-4 h-4 text-white/70" />
+                  <span className="text-sm text-white/80">Sunrise</span>
                 </div>
-                <div className="text-base font-bold tabular-nums text-white">
+                <div className="text-2xl font-bold tabular-nums text-white mb-1">
                   {sunTimes.sunrise}
                 </div>
+                {getHoursUntil(sunTimes.sunriseDate) && (
+                  <div className="text-sm text-white/70">
+                    In {getHoursUntil(sunTimes.sunriseDate)}
+                  </div>
+                )}
+                {!getHoursUntil(sunTimes.sunriseDate) && (
+                  <div className="text-sm text-white/70">Already passed today</div>
+                )}
               </div>
               <div>
-                <div className="flex items-center justify-between mb-0.5">
-                  <div className="flex items-center gap-1">
-                    <Sunset className="w-3 h-3 text-white/70" />
-                    <span className="text-xs text-white/80">Sunset</span>
-                  </div>
-                  {getHoursUntil(sunTimes.sunsetDate) && (
-                    <span className="text-xs text-white/60">in {getHoursUntil(sunTimes.sunsetDate)}</span>
-                  )}
+                <div className="flex items-center gap-2 mb-1">
+                  <Sunset className="w-4 h-4 text-white/70" />
+                  <span className="text-sm text-white/80">Sunset</span>
                 </div>
-                <div className="text-base font-bold tabular-nums text-white">
+                <div className="text-2xl font-bold tabular-nums text-white mb-1">
                   {sunTimes.sunset}
                 </div>
+                {getHoursUntil(sunTimes.sunsetDate) && (
+                  <div className="text-sm text-white/70">
+                    In {getHoursUntil(sunTimes.sunsetDate)}
+                  </div>
+                )}
+                {!getHoursUntil(sunTimes.sunsetDate) && (
+                  <div className="text-sm text-white/70">Already passed today</div>
+                )}
               </div>
             </div>
           ) : (
-            <div className="text-xs text-white/60">Select location</div>
+            <div className="text-sm text-white/60">Select location</div>
           )}
         </div>
       </div>
