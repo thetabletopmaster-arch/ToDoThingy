@@ -10,6 +10,7 @@ import Notes from './components/Notes';
 import PhilosophyQuote from './components/PhilosophyQuote';
 import BackgroundSelector from './components/BackgroundSelector';
 import MusicPlayer from './components/MusicPlayer';
+import WhatsAppLink from './components/WhatsAppLink';
 
 const BACKGROUND_KEY = 'productivity-dashboard-background';
 
@@ -95,6 +96,16 @@ function App() {
             className="mb-3"
           >
             <InfoBar isMidnight={isMidnight} />
+          </motion.div>
+
+          {/* WhatsApp Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="mb-3"
+          >
+            <WhatsAppLink isMidnight={isMidnight} />
           </motion.div>
 
           {/* Main Content */}

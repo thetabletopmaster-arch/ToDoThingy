@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -24,6 +24,7 @@ interface Task {
 }
 
 const LONGTERM_TASKS_KEY = 'productivity-dashboard-longterm-tasks';
+const GOALS_WALL_VISIBLE_KEY = 'productivity-dashboard-goals-wall-visible';
 
 interface TaskListProps {
   isMidnight: boolean;
@@ -42,6 +43,11 @@ export default function TaskList({ isMidnight }: TaskListProps) {
     return [];
   });
 
+  const [isVisible, setIsVisible] = useState(() => {
+    const stored = localStorage.getItem(GOALS_WALL_VISIBLE_KEY);
+    return stored === null ? true : stored === 'true';
+  });
+
   const [newLongtermTask, setNewLongtermTask] = useState('');
 
   const sensors = useSensors(
@@ -54,6 +60,14 @@ export default function TaskList({ isMidnight }: TaskListProps) {
   useEffect(() => {
     localStorage.setItem(LONGTERM_TASKS_KEY, JSON.stringify(longtermTasks));
   }, [longtermTasks]);
+
+  useEffect(() => {
+    localStorage.setItem(GOALS_WALL_VISIBLE_KEY, String(isVisible));
+  }, [isVisible]);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
 
   const handleAddLongtermTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,22 +110,42 @@ export default function TaskList({ isMidnight }: TaskListProps) {
     <div className="glass-effect rounded-xl p-4 shadow-glow">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xl font-bold text-[#d4af37]">
-          Long-term Goals
+          Goals Wall
         </h2>
-        <div className="text-sm font-medium text-[#ddc3a5]">
-          {longtermProgress}% complete
+        <div className="flex items-center gap-3">
+          <div className="text-sm font-medium text-[#ddc3a5]">
+            {longtermProgress}% complete
+          </div>
+          <button
+            onClick={toggleVisibility}
+            className="px-3 py-1 rounded-lg bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors flex items-center gap-1 text-sm font-medium"
+          >
+            {isVisible ? (
+              <>
+                <ChevronUp className="w-4 h-4" />
+                Hide
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4" />
+                Show
+              </>
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="mb-4 h-2 bg-black/40 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-[#d4af37] to-[#cd7f32] transition-all duration-500 rounded-full"
-          style={{ width: `${longtermProgress}%` }}
-        />
-      </div>
+      {isVisible && (
+        <>
+          {/* Progress Bar */}
+          <div className="mb-4 h-2 bg-black/40 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-[#d4af37] to-[#cd7f32] transition-all duration-500 rounded-full"
+              style={{ width: `${longtermProgress}%` }}
+            />
+          </div>
 
-      <form onSubmit={handleAddLongtermTask} className="mb-4">
+          <form onSubmit={handleAddLongtermTask} className="mb-4">
         <div className="flex gap-2">
           <input
             type="text"
@@ -160,15 +194,17 @@ export default function TaskList({ isMidnight }: TaskListProps) {
         </SortableContext>
       </DndContext>
 
-      {/* Clear Completed Button */}
-      {longtermTasks.some(t => t.completed) && (
-        <button
-          onClick={handleClearLongtermCompleted}
-          className="mt-4 w-full px-4 py-2 rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
-        >
-          <Trash2 className="w-4 h-4" />
-          Clear Completed
-        </button>
+          {/* Clear Completed Button */}
+          {longtermTasks.some(t => t.completed) && (
+            <button
+              onClick={handleClearLongtermCompleted}
+              className="mt-4 w-full px-4 py-2 rounded-lg bg-[#cd7f32] text-[#1a120d] font-medium flex items-center justify-center gap-2 hover:bg-[#b8941e] transition-all shadow-md"
+            >
+              <Trash2 className="w-4 h-4" />
+              Clear Completed
+            </button>
+          )}
+        </>
       )}
     </div>
   );

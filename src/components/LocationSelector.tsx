@@ -116,9 +116,9 @@ export default function LocationSelector({ onLocationChange, isMidnight: _isMidn
           <span className="text-xs">{selectedLocation || 'Select Location'}</span>
         </button>
 
-        <div className="text-xs text-white/60">
+        <div className="text-xs">
           {isOnline ? (
-            <span className="text-green-400">● Connected ({connectionSpeed})</span>
+            <span className="text-green-400">● Connected <span className="text-white">({connectionSpeed})</span></span>
           ) : (
             <span className="text-red-400">● Offline</span>
           )}

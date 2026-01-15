@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff } from 'lucide-react';
 import LocationSelector from './LocationSelector';
-import WhatsAppLink from './WhatsAppLink';
 
 interface WeatherData {
   temperature: number;
@@ -346,7 +345,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         connectionSpeed={connectionSpeed}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Time & Coordinates */}
         <div className="glass-effect rounded-xl p-4 shadow-glow">
           <div className="flex items-center justify-between mb-2">
@@ -386,9 +385,6 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             </div>
           )}
         </div>
-
-        {/* WhatsApp */}
-        <WhatsAppLink isMidnight={isMidnight} />
 
         {/* UV Index - Prominent Display */}
         <div className="glass-effect rounded-xl p-4 shadow-glow">
