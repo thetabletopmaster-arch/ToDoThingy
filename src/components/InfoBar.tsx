@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff } from 'lucide-react';
+import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff, MessageCircle } from 'lucide-react';
 import LocationSelector from './LocationSelector';
 
 interface WeatherData {
@@ -345,9 +345,9 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         connectionSpeed={connectionSpeed}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {/* Time & Coordinates */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-white/80" />
@@ -361,33 +361,48 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
               {is24Hour ? <Clock3 className="w-4 h-4" /> : <Clock12 className="w-4 h-4" />}
             </button>
           </div>
-          <div className="text-3xl font-bold tabular-nums text-white mb-1">
+          <div className="text-2xl font-bold tabular-nums text-white mb-1">
             {formatTime(time)}
           </div>
-          <div className="text-sm text-white/70 mb-2">
+          <div className="text-xs text-white/70 mb-1">
             {formatDate(time)}
           </div>
           {timezone && (
-            <div className="text-xs text-white/50 mb-2">
+            <div className="text-xs text-white/50 mb-1">
               {timezone}
             </div>
           )}
           {coordinates && (
-            <div className="flex items-center gap-3 pt-2 border-t border-white/10">
+            <div className="flex items-center gap-2 pt-1 border-t border-white/10">
               <div>
                 <span className="text-xs text-white/50">Lat</span>
-                <div className="text-xs font-medium text-white/80">{coordinates.lat.toFixed(4)}°</div>
+                <div className="text-xs font-medium text-white/80">{coordinates.lat.toFixed(2)}°</div>
               </div>
               <div>
                 <span className="text-xs text-white/50">Lon</span>
-                <div className="text-xs font-medium text-white/80">{coordinates.lon.toFixed(4)}°</div>
+                <div className="text-xs font-medium text-white/80">{coordinates.lon.toFixed(2)}°</div>
               </div>
             </div>
           )}
         </div>
 
+        {/* WhatsApp */}
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
+          <div className="flex items-center gap-2 mb-2">
+            <MessageCircle className="w-4 h-4 text-green-400" />
+            <span className="text-sm font-medium text-white/80">WhatsApp</span>
+          </div>
+          <button
+            onClick={() => window.open('https://web.whatsapp.com', '_blank')}
+            className="w-full py-2 px-3 bg-green-500/20 hover:bg-green-500/30 text-white rounded-lg transition-all border border-green-400/40 hover:border-green-400 flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4 text-green-400" />
+            <span className="text-sm font-medium">Open</span>
+          </button>
+        </div>
+
         {/* UV Index - Prominent Display */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
           <div className="flex items-center gap-2 mb-2">
             <Sun className="w-4 h-4 text-white/80" />
             <span className="text-sm font-medium text-white/80">UV Radiation</span>
@@ -395,14 +410,14 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           {isLoading ? (
             <div className="text-sm text-white/60">Loading...</div>
           ) : error ? (
-            <div className="space-y-2">
+            <div className="space-y-1">
               <div className="text-xs text-red-400">
-                {!isOnline ? 'No current connection' : error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+                {!isOnline ? 'No connection' : error.includes('Rate limit') ? 'Rate limited' : 'Error'}
               </div>
               {isOnline && (
                 <button
                   onClick={handleRetry}
-                  className="text-xs px-3 py-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors"
+                  className="text-xs px-2 py-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors"
                 >
                   Retry
                 </button>
@@ -410,20 +425,17 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             </div>
           ) : weather ? (
             <>
-              <div className="text-4xl font-bold text-white mb-2">
+              <div className="text-3xl font-bold text-white mb-1">
                 {weather.uvIndex}
               </div>
-              <div className="text-base font-medium text-white/90 mb-2">
+              <div className="text-sm font-medium text-white/90 mb-1">
                 {uvInfo?.level}
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-sm text-white/70">UVA + UVB Radiation</span>
-                <span className="text-xs text-white/60">
-                  {weather.uvIndex <= 2 && "Minimal protection needed"}
-                  {weather.uvIndex > 2 && weather.uvIndex <= 5 && "Moderate protection advised"}
-                  {weather.uvIndex > 5 && weather.uvIndex <= 7 && "High protection required"}
-                  {weather.uvIndex > 7 && "Extreme - Seek shade"}
-                </span>
+              <div className="text-xs text-white/60">
+                {weather.uvIndex <= 2 && "Low protection"}
+                {weather.uvIndex > 2 && weather.uvIndex <= 5 && "Moderate"}
+                {weather.uvIndex > 5 && weather.uvIndex <= 7 && "High"}
+                {weather.uvIndex > 7 && "Extreme"}
               </div>
             </>
           ) : (
@@ -432,7 +444,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         </div>
 
         {/* Weather */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
           <div className="flex items-center gap-2 mb-2">
             <Cloud className="w-4 h-4 text-white/80" />
             <span className="text-sm font-medium text-white/80">Current Weather</span>
@@ -441,23 +453,21 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <div className="text-sm text-white/60">Loading...</div>
           ) : error ? (
             <div className="text-xs text-red-400">
-              {!isOnline ? 'No current connection' : error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+              {!isOnline ? 'No connection' : 'Error'}
             </div>
           ) : weather ? (
             <>
-              <div className="text-4xl font-bold text-white mb-3">
+              <div className="text-3xl font-bold text-white mb-2">
                 {weather.temperature}°C
               </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Droplets className="w-4 h-4 text-white/70" />
-                  <span className="text-sm text-white/90">Humidity:</span>
-                  <span className="text-sm font-medium text-white">{weather.humidity}%</span>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1">
+                  <Droplets className="w-3 h-3 text-white/70" />
+                  <span className="text-xs text-white/70">{weather.humidity}%</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Wind className="w-4 h-4 text-white/70" />
-                  <span className="text-sm text-white/90">Wind:</span>
-                  <span className="text-sm font-medium text-white">{weather.windSpeed} km/h</span>
+                <div className="flex items-center gap-1">
+                  <Wind className="w-3 h-3 text-white/70" />
+                  <span className="text-xs text-white/70">{weather.windSpeed} km/h</span>
                 </div>
               </div>
             </>
@@ -467,7 +477,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         </div>
 
         {/* Sun Times */}
-        <div className="glass-effect rounded-xl p-4 shadow-glow">
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
           <div className="flex items-center gap-2 mb-3">
             <Sun className="w-4 h-4 text-white/80" />
             <span className="text-sm font-medium text-white/80">Sunrise & Sunset</span>
@@ -476,42 +486,36 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <div className="text-sm text-white/60">Loading...</div>
           ) : error ? (
             <div className="text-xs text-red-400">
-              {!isOnline ? 'No current connection' : error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+              {!isOnline ? 'No connection' : 'Error'}
             </div>
           ) : sunTimes ? (
-            <div className="space-y-4">
+            <div className="space-y-2">
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Sunrise className="w-4 h-4 text-white/70" />
-                  <span className="text-sm text-white/80">Sunrise</span>
+                <div className="flex items-center gap-1 mb-1">
+                  <Sunrise className="w-3 h-3 text-white/70" />
+                  <span className="text-xs text-white/80">Sunrise</span>
                 </div>
-                <div className="text-2xl font-bold tabular-nums text-white mb-1">
+                <div className="text-lg font-bold tabular-nums text-white mb-1">
                   {sunTimes.sunrise}
                 </div>
                 {getHoursUntil(sunTimes.sunriseDate) && (
-                  <div className="text-sm text-white/70">
+                  <div className="text-xs text-white/60">
                     In {getHoursUntil(sunTimes.sunriseDate)}
                   </div>
                 )}
-                {!getHoursUntil(sunTimes.sunriseDate) && (
-                  <div className="text-sm text-white/70">Already passed today</div>
-                )}
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Sunset className="w-4 h-4 text-white/70" />
-                  <span className="text-sm text-white/80">Sunset</span>
+                <div className="flex items-center gap-1 mb-1">
+                  <Sunset className="w-3 h-3 text-white/70" />
+                  <span className="text-xs text-white/80">Sunset</span>
                 </div>
-                <div className="text-2xl font-bold tabular-nums text-white mb-1">
+                <div className="text-lg font-bold tabular-nums text-white mb-1">
                   {sunTimes.sunset}
                 </div>
                 {getHoursUntil(sunTimes.sunsetDate) && (
-                  <div className="text-sm text-white/70">
+                  <div className="text-xs text-white/60">
                     In {getHoursUntil(sunTimes.sunsetDate)}
                   </div>
-                )}
-                {!getHoursUntil(sunTimes.sunsetDate) && (
-                  <div className="text-sm text-white/70">Already passed today</div>
                 )}
               </div>
             </div>
