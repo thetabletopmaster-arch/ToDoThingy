@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3 } from 'lucide-react';
+import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff } from 'lucide-react';
 import LocationSelector from './LocationSelector';
 
 interface WeatherData {
@@ -43,6 +43,8 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   const [coordinates, setCoordinates] = useState<{ lat: number; lon: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [connectionSpeed, setConnectionSpeed] = useState<string>('Checking...');
   const [is24Hour, setIs24Hour] = useState(() => {
     const stored = localStorage.getItem(TIME_FORMAT_KEY);
     return stored === 'true';
@@ -56,6 +58,68 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   useEffect(() => {
     localStorage.setItem(TIME_FORMAT_KEY, String(is24Hour));
   }, [is24Hour]);
+
+  // Monitor online/offline status
+  useEffect(() => {
+    const handleOnline = () => {
+      console.log('InfoBar: Connection restored');
+      setIsOnline(true);
+      checkConnectionSpeed();
+    };
+    const handleOffline = () => {
+      console.log('InfoBar: Connection lost');
+      setIsOnline(false);
+      setConnectionSpeed('No connection');
+      setError('No internet connection');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Initial connection speed check
+    if (navigator.onLine) {
+      checkConnectionSpeed();
+    } else {
+      setConnectionSpeed('No connection');
+    }
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const checkConnectionSpeed = () => {
+    // Use Network Information API if available
+    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+
+    if (connection && connection.effectiveType) {
+      const typeMap: { [key: string]: string } = {
+        'slow-2g': 'Very Slow',
+        '2g': 'Slow',
+        '3g': 'Moderate',
+        '4g': 'Fast'
+      };
+      setConnectionSpeed(typeMap[connection.effectiveType] || connection.effectiveType);
+
+      if (connection.downlink) {
+        setConnectionSpeed(`${connection.downlink} Mbps`);
+      }
+    } else {
+      // Fallback: estimate based on a quick fetch
+      const startTime = performance.now();
+      fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' })
+        .then(() => {
+          const duration = performance.now() - startTime;
+          if (duration < 100) setConnectionSpeed('Fast');
+          else if (duration < 300) setConnectionSpeed('Moderate');
+          else setConnectionSpeed('Slow');
+        })
+        .catch(() => {
+          setConnectionSpeed('Unknown');
+        });
+    }
+  };
 
   useEffect(() => {
     console.log('InfoBar: Coordinates changed:', coordinates);
@@ -121,6 +185,13 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   const fetchWeatherData = async (latitude: number, longitude: number) => {
     if (isLoading) {
       console.log('Already fetching weather, skipping...');
+      return;
+    }
+
+    // Check internet connection first
+    if (!navigator.onLine) {
+      console.log('InfoBar: No internet connection, skipping fetch');
+      setError('No internet connection');
       return;
     }
 
@@ -269,26 +340,8 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
       {/* Location Selector */}
       <LocationSelector onLocationChange={handleLocationChange} isMidnight={isMidnight} />
 
-      {/* Coordinates Display */}
-      {coordinates && (
-        <div className="glass-effect rounded-xl p-3 shadow-glow">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div>
-                <span className="text-xs text-white/60">Latitude</span>
-                <div className="text-base font-bold text-white">{coordinates.lat.toFixed(4)}°</div>
-              </div>
-              <div>
-                <span className="text-xs text-white/60">Longitude</span>
-                <div className="text-base font-bold text-white">{coordinates.lon.toFixed(4)}°</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        {/* Time */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+        {/* Time & Coordinates */}
         <div className="glass-effect rounded-xl p-4 shadow-glow">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
@@ -306,13 +359,56 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           <div className="text-3xl font-bold tabular-nums text-white mb-1">
             {formatTime(time)}
           </div>
-          <div className="text-sm text-white/70">
+          <div className="text-sm text-white/70 mb-2">
             {formatDate(time)}
           </div>
           {timezone && (
-            <div className="text-xs text-white/50 mt-1">
+            <div className="text-xs text-white/50 mb-2">
               {timezone}
             </div>
+          )}
+          {coordinates && (
+            <div className="flex items-center gap-3 pt-2 border-t border-white/10">
+              <div>
+                <span className="text-xs text-white/50">Lat</span>
+                <div className="text-xs font-medium text-white/80">{coordinates.lat.toFixed(4)}°</div>
+              </div>
+              <div>
+                <span className="text-xs text-white/50">Lon</span>
+                <div className="text-xs font-medium text-white/80">{coordinates.lon.toFixed(4)}°</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Internet Connection */}
+        <div className="glass-effect rounded-xl p-4 shadow-glow">
+          <div className="flex items-center gap-2 mb-2">
+            {isOnline ? (
+              <Wifi className="w-4 h-4 text-green-400" />
+            ) : (
+              <WifiOff className="w-4 h-4 text-red-400" />
+            )}
+            <span className="text-sm font-medium text-white/80">Internet</span>
+          </div>
+          {isOnline ? (
+            <>
+              <div className="text-2xl font-bold text-green-400 mb-1">
+                Connected
+              </div>
+              <div className="text-sm text-white/70">
+                Speed: {connectionSpeed}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-2xl font-bold text-red-400 mb-1">
+                Offline
+              </div>
+              <div className="text-sm text-white/60">
+                No current connection
+              </div>
+            </>
           )}
         </div>
 
@@ -327,14 +423,16 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           ) : error ? (
             <div className="space-y-2">
               <div className="text-xs text-red-400">
-                {error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+                {!isOnline ? 'No current connection' : error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
               </div>
-              <button
-                onClick={handleRetry}
-                className="text-xs px-3 py-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors"
-              >
-                Retry
-              </button>
+              {isOnline && (
+                <button
+                  onClick={handleRetry}
+                  className="text-xs px-3 py-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors"
+                >
+                  Retry
+                </button>
+              )}
             </div>
           ) : weather ? (
             <>
@@ -369,7 +467,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <div className="text-sm text-white/60">Loading...</div>
           ) : error ? (
             <div className="text-xs text-red-400">
-              {error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+              {!isOnline ? 'No current connection' : error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
             </div>
           ) : weather ? (
             <>
@@ -404,7 +502,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             <div className="text-sm text-white/60">Loading...</div>
           ) : error ? (
             <div className="text-xs text-red-400">
-              {error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
+              {!isOnline ? 'No current connection' : error.includes('Rate limit') ? 'API rate limited. Please wait 1-2 minutes.' : error}
             </div>
           ) : sunTimes ? (
             <div className="space-y-4">
