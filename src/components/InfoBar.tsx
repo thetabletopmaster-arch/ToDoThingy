@@ -50,14 +50,22 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
   }, [coordinates]);
 
   const fetchWeatherData = async (latitude: number, longitude: number) => {
+    console.log('Fetching weather for:', { latitude, longitude });
     try {
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=uv_index_max,sunrise,sunset&timezone=auto`
       );
+
+      if (!weatherResponse.ok) {
+        throw new Error(`HTTP error! status: ${weatherResponse.status}`);
+      }
+
       const weatherData = await weatherResponse.json();
+      console.log('Weather data received:', weatherData);
 
       // Store timezone from API
       if (weatherData.timezone) {
+        console.log('Setting timezone:', weatherData.timezone);
         setTimezone(weatherData.timezone);
       }
 
@@ -66,23 +74,29 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         weatherCode: weatherData.current.weather_code,
         humidity: weatherData.current.relative_humidity_2m,
         windSpeed: Math.round(weatherData.current.wind_speed_10m),
-        uvIndex: weatherData.daily.uv_index_max[0] || 0,
+        uvIndex: Math.round(weatherData.daily.uv_index_max[0] || 0),
       });
 
       const sunrise = new Date(weatherData.daily.sunrise[0]);
       const sunset = new Date(weatherData.daily.sunset[0]);
+      console.log('Sun times:', { sunrise, sunset });
+
       setSunTimes({
         sunrise: sunrise.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sunset: sunset.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sunriseDate: sunrise,
         sunsetDate: sunset,
       });
+
+      console.log('Weather state updated successfully');
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching weather data:', error);
+      alert('Failed to fetch weather data. Please try again.');
     }
   };
 
-  const handleLocationChange = (lat: number, lon: number, _name: string) => {
+  const handleLocationChange = (lat: number, lon: number, name: string) => {
+    console.log('Location changed:', { name, lat, lon });
     setCoordinates({ lat, lon });
   };
 
