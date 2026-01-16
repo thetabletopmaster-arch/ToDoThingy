@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff, MessageCircle } from 'lucide-react';
+import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff } from 'lucide-react';
 import LocationSelector from './LocationSelector';
 
 interface WeatherData {
@@ -313,6 +313,32 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
     return `${hours}h ${minutes}m`;
   };
 
+  const getSunAngle = () => {
+    if (!coordinates || !sunTimes) return 0;
+
+    const now = time; // Use the time state which updates every second
+    const currentTime = now.getTime();
+    const sunriseTime = sunTimes.sunriseDate.getTime();
+    const sunsetTime = sunTimes.sunsetDate.getTime();
+
+    // If before sunrise or after sunset, sun angle is below horizon (negative or 0)
+    if (currentTime < sunriseTime || currentTime > sunsetTime) {
+      return 0;
+    }
+
+    // Calculate the fraction of the day that has passed since sunrise
+    const dayLength = sunsetTime - sunriseTime;
+    const timeSinceSunrise = currentTime - sunriseTime;
+    const fractionOfDay = timeSinceSunrise / dayLength;
+
+    // Solar elevation angle follows a sine curve, with max at solar noon
+    // Maximum sun angle varies by latitude (closer to equator = higher sun)
+    const maxAngle = 90 - Math.abs(coordinates.lat);
+    const angle = Math.round(maxAngle * Math.sin(fractionOfDay * Math.PI));
+
+    return angle > 0 ? angle : 0;
+  };
+
   const getUVLevel = (uv: number) => {
     if (uv <= 2) return { level: 'Low', color: isMidnight ? 'text-green-400' : 'text-green-400' };
     if (uv <= 5) return { level: 'Mod', color: isMidnight ? 'text-yellow-300' : 'text-yellow-400' };
@@ -345,7 +371,7 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         connectionSpeed={connectionSpeed}
       />
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {/* Time & Coordinates */}
         <div className="glass-effect rounded-xl p-3 shadow-glow">
           <div className="flex items-center justify-between mb-2">
@@ -386,26 +412,11 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
           )}
         </div>
 
-        {/* WhatsApp */}
-        <div className="glass-effect rounded-xl p-3 shadow-glow">
-          <div className="flex items-center gap-2 mb-2">
-            <MessageCircle className="w-4 h-4 text-green-400" />
-            <span className="text-sm font-medium text-white/80">WhatsApp</span>
-          </div>
-          <button
-            onClick={() => window.open('https://web.whatsapp.com', '_blank')}
-            className="w-full py-2 px-3 bg-green-500/20 hover:bg-green-500/30 text-white rounded-lg transition-all border border-green-400/40 hover:border-green-400 flex items-center justify-center gap-2"
-          >
-            <MessageCircle className="w-4 h-4 text-green-400" />
-            <span className="text-sm font-medium">Open</span>
-          </button>
-        </div>
-
-        {/* UV Index - Prominent Display */}
+        {/* UV & Weather Combined */}
         <div className="glass-effect rounded-xl p-3 shadow-glow">
           <div className="flex items-center gap-2 mb-2">
             <Sun className="w-4 h-4 text-white/80" />
-            <span className="text-sm font-medium text-white/80">UV Radiation</span>
+            <span className="text-sm font-medium text-white/80">Weather & UV</span>
           </div>
           {isLoading ? (
             <div className="text-sm text-white/60">Loading...</div>
@@ -425,49 +436,23 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
             </div>
           ) : weather ? (
             <>
-              <div className="text-3xl font-bold text-white mb-1">
-                {weather.uvIndex}
+              <div className="flex items-center gap-4 mb-2">
+                <div>
+                  <div className="text-3xl font-bold text-white">{weather.temperature}°C</div>
+                </div>
+                <div className="border-l border-white/20 pl-3">
+                  <div className="text-2xl font-bold text-white mb-1">{weather.uvIndex}</div>
+                  <div className="text-xs text-white/70">{uvInfo?.level} UV</div>
+                </div>
               </div>
-              <div className="text-sm font-medium text-white/90 mb-1">
-                {uvInfo?.level}
-              </div>
-              <div className="text-xs text-white/60">
-                {weather.uvIndex <= 2 && "Low protection"}
-                {weather.uvIndex > 2 && weather.uvIndex <= 5 && "Moderate"}
-                {weather.uvIndex > 5 && weather.uvIndex <= 7 && "High"}
-                {weather.uvIndex > 7 && "Extreme"}
-              </div>
-            </>
-          ) : (
-            <div className="text-sm text-white/60">Select location</div>
-          )}
-        </div>
-
-        {/* Weather */}
-        <div className="glass-effect rounded-xl p-3 shadow-glow">
-          <div className="flex items-center gap-2 mb-2">
-            <Cloud className="w-4 h-4 text-white/80" />
-            <span className="text-sm font-medium text-white/80">Current Weather</span>
-          </div>
-          {isLoading ? (
-            <div className="text-sm text-white/60">Loading...</div>
-          ) : error ? (
-            <div className="text-xs text-red-400">
-              {!isOnline ? 'No connection' : 'Error'}
-            </div>
-          ) : weather ? (
-            <>
-              <div className="text-3xl font-bold text-white mb-2">
-                {weather.temperature}°C
-              </div>
-              <div className="space-y-1">
+              <div className="flex items-center gap-3 text-xs text-white/70">
                 <div className="flex items-center gap-1">
-                  <Droplets className="w-3 h-3 text-white/70" />
-                  <span className="text-xs text-white/70">{weather.humidity}%</span>
+                  <Droplets className="w-3 h-3" />
+                  <span>{weather.humidity}%</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Wind className="w-3 h-3 text-white/70" />
-                  <span className="text-xs text-white/70">{weather.windSpeed} km/h</span>
+                  <Wind className="w-3 h-3" />
+                  <span>{weather.windSpeed} km/h</span>
                 </div>
               </div>
             </>
@@ -489,36 +474,42 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
               {!isOnline ? 'No connection' : 'Error'}
             </div>
           ) : sunTimes ? (
-            <div className="space-y-2">
-              <div>
-                <div className="flex items-center gap-1 mb-1">
-                  <Sunrise className="w-3 h-3 text-white/70" />
-                  <span className="text-xs text-white/80">Sunrise</span>
-                </div>
-                <div className="text-lg font-bold tabular-nums text-white mb-1">
-                  {sunTimes.sunrise}
-                </div>
-                {getHoursUntil(sunTimes.sunriseDate) && (
-                  <div className="text-xs text-white/60">
-                    In {getHoursUntil(sunTimes.sunriseDate)}
-                  </div>
-                )}
+            <>
+              <div className="mb-3">
+                <div className="text-xs text-white/60 mb-1">Sun Angle</div>
+                <div className="text-2xl font-bold text-white">{getSunAngle()}°</div>
               </div>
-              <div>
-                <div className="flex items-center gap-1 mb-1">
-                  <Sunset className="w-3 h-3 text-white/70" />
-                  <span className="text-xs text-white/80">Sunset</span>
-                </div>
-                <div className="text-lg font-bold tabular-nums text-white mb-1">
-                  {sunTimes.sunset}
-                </div>
-                {getHoursUntil(sunTimes.sunsetDate) && (
-                  <div className="text-xs text-white/60">
-                    In {getHoursUntil(sunTimes.sunsetDate)}
+              <div className="space-y-2">
+                <div>
+                  <div className="flex items-center gap-1 mb-1">
+                    <Sunrise className="w-3 h-3 text-white/70" />
+                    <span className="text-xs text-white/80">Sunrise</span>
                   </div>
-                )}
+                  <div className="text-base font-bold tabular-nums text-white">
+                    {sunTimes.sunrise}
+                  </div>
+                  {getHoursUntil(sunTimes.sunriseDate) && (
+                    <div className="text-xs text-white/60">
+                      In {getHoursUntil(sunTimes.sunriseDate)}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-1 mb-1">
+                    <Sunset className="w-3 h-3 text-white/70" />
+                    <span className="text-xs text-white/80">Sunset</span>
+                  </div>
+                  <div className="text-base font-bold tabular-nums text-white">
+                    {sunTimes.sunset}
+                  </div>
+                  {getHoursUntil(sunTimes.sunsetDate) && (
+                    <div className="text-xs text-white/60">
+                      In {getHoursUntil(sunTimes.sunsetDate)}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            </>
           ) : (
             <div className="text-sm text-white/60">Select location</div>
           )}

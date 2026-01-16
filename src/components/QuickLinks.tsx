@@ -11,11 +11,12 @@ const links: QuickLink[] = [
   { name: 'ChatGPT', url: 'https://chat.openai.com' },
   { name: 'Skool', url: 'https://www.skool.com' },
   { name: 'Gmail', url: 'https://mail.google.com' },
+  { name: 'WhatsApp', url: 'https://web.whatsapp.com' },
 ];
 
 export default function QuickLinks({ isMidnight: _isMidnight }: { isMidnight: boolean }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
       {links.map((link, index) => (
         <motion.a
           key={link.name}
