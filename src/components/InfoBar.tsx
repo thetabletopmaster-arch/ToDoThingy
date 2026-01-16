@@ -129,7 +129,13 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
       if (cached) {
         console.log('InfoBar: Using cached weather data:', cached.data);
         setWeather(cached.data.weather);
-        setSunTimes(cached.data.sunTimes);
+        // Convert date strings back to Date objects
+        const sunTimesWithDates: SunTimes = {
+          ...cached.data.sunTimes,
+          sunriseDate: new Date(cached.data.sunTimes.sunriseDate),
+          sunsetDate: new Date(cached.data.sunTimes.sunsetDate),
+        };
+        setSunTimes(sunTimesWithDates);
         setTimezone(cached.data.timezone);
         setError(null); // Clear any errors
         console.log('InfoBar: State updated from cache');
