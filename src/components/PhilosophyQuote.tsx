@@ -24,7 +24,11 @@ const quotes = [
   { text: "The higher we soar the smaller we appear to those who cannot fly.", author: "Friedrich Nietzsche" },
   { text: "In individuals, insanity is rare; but in groups, parties, nations and epochs, it is the rule.", author: "Friedrich Nietzsche" },
   { text: "The thought of suicide is a great consolation: by means of it one gets through many a dark night.", author: "Friedrich Nietzsche" },
-  { text: "Without music, life would be a mistake.", author: "Friedrich Nietzsche" }
+  { text: "Without music, life would be a mistake.", author: "Friedrich Nietzsche" },
+
+  // Gorn Karg
+  { text: "If you're brave enough to say goodbye life will reward you with a new hello.", author: "Gorn Karg" },
+  { text: "Every act of beauty is a revolt against the modern world, be beautiful be godly.", author: "Gorn Karg" }
 ];
 
 const QUOTE_KEY = 'productivity-dashboard-daily-quote';
