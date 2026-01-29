@@ -111,3 +111,28 @@ h1, h2, h3, h4, h5, h6 {
 .drag-handle:active {
   cursor: grabbing;
 }
+
+/* Draggable component styling */
+.react-draggable {
+  user-select: none;
+}
+
+.react-draggable.dragging {
+  opacity: 0.9;
+  z-index: 1000;
+}
+
+/* Ensure proper box sizing for all components */
+* {
+  box-sizing: border-box;
+}
+
+/* Improve resize handle visibility */
+.resize-handle {
+  z-index: 10;
+  transition: opacity 0.2s;
+}
+
+.resize-handle:hover {
+  opacity: 1 !important;
+}

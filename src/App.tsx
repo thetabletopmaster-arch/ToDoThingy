@@ -29,35 +29,35 @@ interface Positions {
 const layoutPresets = {
   // Compact: Dense, efficient layout for focused work
   compact: {
-    'quick-links': { x: 40, y: 100, width: 1000, height: 85 },
-    'info-bar': { x: 40, y: 205, width: 620, height: 240 },
-    'daily-quote': { x: 680, y: 205, width: 360, height: 240 },
-    'task-list': { x: 40, y: 465, width: 620, height: 520 },
-    'timer': { x: 680, y: 465, width: 360, height: 240 },
-    'music': { x: 680, y: 725, width: 360, height: 130 },
-    'notes': { x: 680, y: 875, width: 360, height: 110 },
+    'quick-links': { x: 40, y: 100, width: 1200, height: 120 },
+    'info-bar': { x: 40, y: 240, width: 700, height: 280 },
+    'daily-quote': { x: 760, y: 240, width: 480, height: 280 },
+    'task-list': { x: 40, y: 540, width: 700, height: 500 },
+    'timer': { x: 760, y: 540, width: 480, height: 240 },
+    'music': { x: 760, y: 800, width: 480, height: 160 },
+    'notes': { x: 760, y: 980, width: 480, height: 200 },
   },
 
   // Wide: Panoramic layout for ultrawide monitors and multitasking
   wide: {
-    'quick-links': { x: 60, y: 100, width: 1400, height: 85 },
-    'info-bar': { x: 60, y: 205, width: 460, height: 280 },
-    'daily-quote': { x: 540, y: 205, width: 460, height: 280 },
-    'task-list': { x: 1020, y: 205, width: 440, height: 600 },
-    'timer': { x: 60, y: 505, width: 300, height: 280 },
-    'music': { x: 380, y: 505, width: 310, height: 140 },
-    'notes': { x: 380, y: 665, width: 310, height: 120 },
+    'quick-links': { x: 60, y: 100, width: 1600, height: 120 },
+    'info-bar': { x: 60, y: 240, width: 520, height: 320 },
+    'daily-quote': { x: 600, y: 240, width: 520, height: 320 },
+    'task-list': { x: 1140, y: 240, width: 520, height: 700 },
+    'timer': { x: 60, y: 580, width: 360, height: 300 },
+    'music': { x: 440, y: 580, width: 360, height: 180 },
+    'notes': { x: 440, y: 780, width: 360, height: 160 },
   },
 
   // Balanced: Harmonious layout with golden ratio spacing
   balanced: {
-    'quick-links': { x: 240, y: 100, width: 1100, height: 85 },
-    'info-bar': { x: 80, y: 205, width: 520, height: 260 },
-    'daily-quote': { x: 620, y: 205, width: 520, height: 260 },
-    'task-list': { x: 360, y: 485, width: 600, height: 500 },
-    'timer': { x: 80, y: 485, width: 260, height: 240 },
-    'music': { x: 80, y: 745, width: 260, height: 120 },
-    'notes': { x: 980, y: 485, width: 360, height: 500 },
+    'quick-links': { x: 200, y: 100, width: 1300, height: 120 },
+    'info-bar': { x: 80, y: 240, width: 600, height: 300 },
+    'daily-quote': { x: 700, y: 240, width: 600, height: 300 },
+    'task-list': { x: 360, y: 560, width: 700, height: 500 },
+    'timer': { x: 80, y: 560, width: 260, height: 280 },
+    'music': { x: 80, y: 860, width: 260, height: 160 },
+    'notes': { x: 1080, y: 560, width: 420, height: 500 },
   },
 };
 
@@ -202,8 +202,8 @@ function App() {
     if (!resizing) return;
 
     const pos = positions[resizing];
-    const newWidth = Math.max(200, e.clientX - pos.x);
-    const newHeight = Math.max(100, e.clientY - pos.y);
+    const newWidth = Math.max(250, e.clientX - pos.x + 10);
+    const newHeight = Math.max(150, e.clientY - pos.y + 10);
 
     const newPositions = {
       ...positions,
@@ -274,17 +274,39 @@ function App() {
             <GripVertical className="w-4 h-4 text-[#d4af37]" />
           </div>
         )}
-        <div className={`h-full overflow-auto ${isEditingLayout ? 'pt-8' : ''}`}>
-          {Component}
+        <div className={`h-full w-full ${isEditingLayout ? 'pt-8' : ''}`} style={{ overflow: 'hidden' }}>
+          <div className="h-full w-full overflow-auto">
+            {Component}
+          </div>
         </div>
         {isEditingLayout && (
           <div
             onMouseDown={(e) => handleResizeMouseDown(e, id)}
-            className="absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize"
+            className="resize-handle absolute bottom-0 right-0 w-16 h-16 cursor-nwse-resize hover:bg-[#d4af37]/30 transition-all rounded-tl-2xl"
             style={{
               background: 'linear-gradient(135deg, transparent 50%, rgba(212, 175, 55, 0.5) 50%)',
             }}
-          />
+          >
+            <div className="absolute bottom-2 right-2 w-10 h-10 flex items-center justify-center">
+              <div className="space-y-1">
+                <div className="flex gap-1 justify-end">
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                </div>
+                <div className="flex gap-1 justify-end">
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                </div>
+                <div className="flex gap-1 justify-end">
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-[#d4af37] rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </motion.div>
     );
