@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ListTodo, Edit3 } from 'lucide-react';
+import { ListTodo, Edit3, GripVertical } from 'lucide-react';
 import TaskList from './components/TaskList';
 import InfoBar from './components/InfoBar';
 import CompactTimer from './components/CompactTimer';
@@ -9,24 +9,29 @@ import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
 import BackgroundSelector from './components/BackgroundSelector';
 import MusicPlayer from './components/MusicPlayer';
-import { Responsive, WidthProvider } from 'react-grid-layout/legacy';
-import type { Layout } from 'react-grid-layout/legacy';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const BACKGROUND_KEY = 'productivity-dashboard-background';
-const LAYOUT_KEY = 'productivity-dashboard-layout';
+const POSITIONS_KEY = 'productivity-dashboard-positions';
 
-const defaultLayout: Layout[] = [
-  { i: 'quick-links', x: 0, y: 0, w: 12, h: 2, minW: 6, minH: 2 },
-  { i: 'info-bar', x: 0, y: 2, w: 12, h: 3, minW: 6, minH: 3 },
-  { i: 'task-list', x: 0, y: 5, w: 8, h: 8, minW: 4, minH: 6 },
-  { i: 'timer', x: 8, y: 5, w: 4, h: 3, minW: 3, minH: 3 },
-  { i: 'music', x: 8, y: 8, w: 4, h: 3, minW: 3, minH: 3 },
-  { i: 'notes', x: 8, y: 11, w: 4, h: 4, minW: 3, minH: 3 },
-];
+interface ComponentPosition {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+interface Positions {
+  [key: string]: ComponentPosition;
+}
+
+const defaultPositions: Positions = {
+  'quick-links': { x: 20, y: 100, width: 800, height: 80 },
+  'info-bar': { x: 20, y: 200, width: 800, height: 200 },
+  'task-list': { x: 20, y: 420, width: 500, height: 400 },
+  'timer': { x: 540, y: 420, width: 280, height: 180 },
+  'music': { x: 540, y: 620, width: 280, height: 180 },
+  'notes': { x: 540, y: 820, width: 280, height: 200 },
+};
 
 function App() {
   const [isMidnight, setIsMidnight] = useState(() => {
@@ -40,17 +45,21 @@ function App() {
 
   const [isEditingLayout, setIsEditingLayout] = useState(false);
 
-  const [layout, setLayout] = useState<Layout[]>(() => {
-    const saved = localStorage.getItem(LAYOUT_KEY);
+  const [positions, setPositions] = useState<Positions>(() => {
+    const saved = localStorage.getItem(POSITIONS_KEY);
     if (saved) {
       try {
         return JSON.parse(saved);
       } catch {
-        return defaultLayout;
+        return defaultPositions;
       }
     }
-    return defaultLayout;
+    return defaultPositions;
   });
+
+  const [dragging, setDragging] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [resizing, setResizing] = useState<string | null>(null);
 
   useEffect(() => {
     document.body.classList.toggle('midnight', isMidnight);
@@ -72,11 +81,135 @@ function App() {
     setBackgroundImage(newBackground);
   };
 
-  const handleLayoutChange = (currentLayout: Layout[], allLayouts: { [key: string]: Layout[] }) => {
-    if (allLayouts.lg) {
-      setLayout(allLayouts.lg);
-      localStorage.setItem(LAYOUT_KEY, JSON.stringify(allLayouts.lg));
+  const handleMouseDown = (e: React.MouseEvent, id: string) => {
+    if (!isEditingLayout) return;
+
+    const pos = positions[id];
+    setDragging(id);
+    setDragOffset({
+      x: e.clientX - pos.x,
+      y: e.clientY - pos.y
+    });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!dragging) return;
+
+    const newPositions = {
+      ...positions,
+      [dragging]: {
+        ...positions[dragging],
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y
+      }
+    };
+
+    setPositions(newPositions);
+  };
+
+  const handleMouseUp = () => {
+    if (dragging) {
+      localStorage.setItem(POSITIONS_KEY, JSON.stringify(positions));
+      setDragging(null);
     }
+    if (resizing) {
+      localStorage.setItem(POSITIONS_KEY, JSON.stringify(positions));
+      setResizing(null);
+    }
+  };
+
+  const handleResizeMouseDown = (e: React.MouseEvent, id: string) => {
+    if (!isEditingLayout) return;
+    e.stopPropagation();
+    setResizing(id);
+  };
+
+  const handleResizeMouseMove = (e: MouseEvent) => {
+    if (!resizing) return;
+
+    const pos = positions[resizing];
+    const newWidth = Math.max(200, e.clientX - pos.x);
+    const newHeight = Math.max(100, e.clientY - pos.y);
+
+    const newPositions = {
+      ...positions,
+      [resizing]: {
+        ...positions[resizing],
+        width: newWidth,
+        height: newHeight
+      }
+    };
+
+    setPositions(newPositions);
+  };
+
+  useEffect(() => {
+    if (dragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [dragging, dragOffset]);
+
+  useEffect(() => {
+    if (resizing) {
+      window.addEventListener('mousemove', handleResizeMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleResizeMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [resizing, positions]);
+
+  const renderDraggableComponent = (
+    id: string,
+    Component: React.ReactNode,
+    delay: number
+  ) => {
+    const pos = positions[id];
+    return (
+      <motion.div
+        key={id}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay }}
+        style={{
+          position: 'absolute',
+          left: `${pos.x}px`,
+          top: `${pos.y}px`,
+          width: `${pos.width}px`,
+          height: `${pos.height}px`,
+          cursor: isEditingLayout ? 'move' : 'default',
+          zIndex: dragging === id ? 1000 : 1,
+        }}
+        className="transition-shadow"
+      >
+        {isEditingLayout && (
+          <div
+            onMouseDown={(e) => handleMouseDown(e, id)}
+            className="absolute top-0 left-0 right-0 h-8 bg-[#d4af37]/20 rounded-t-xl flex items-center justify-center cursor-move border-b-2 border-[#d4af37]/40 hover:bg-[#d4af37]/30 transition-colors"
+          >
+            <GripVertical className="w-4 h-4 text-[#d4af37]" />
+          </div>
+        )}
+        <div className={`h-full overflow-auto ${isEditingLayout ? 'pt-8' : ''}`}>
+          {Component}
+        </div>
+        {isEditingLayout && (
+          <div
+            onMouseDown={(e) => handleResizeMouseDown(e, id)}
+            className="absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize"
+            style={{
+              background: 'linear-gradient(135deg, transparent 50%, rgba(212, 175, 55, 0.5) 50%)',
+            }}
+          />
+        )}
+      </motion.div>
+    );
   };
 
   return (
@@ -85,114 +218,42 @@ function App() {
       <BackgroundSelector onBackgroundChange={handleBackgroundChange} />
 
       <div className="min-h-screen p-2 md:p-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.header
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-3"
-          >
-            <div className="flex items-center justify-center gap-2 mb-1 relative">
-              <ListTodo className="w-6 h-6 text-[#d4af37]" />
-              <h1 className="text-2xl md:text-3xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
-                Productivity Dashboard
-              </h1>
-              <button
-                onClick={() => setIsEditingLayout(!isEditingLayout)}
-                className={`absolute right-0 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 transition-all ${
-                  isEditingLayout
-                    ? 'bg-[#d4af37] text-[#1a120d]'
-                    : 'bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30'
-                }`}
-              >
-                <Edit3 className="w-4 h-4" />
-                {isEditingLayout ? 'Done' : 'Edit Layout'}
-              </button>
-            </div>
-            <p className="text-xs text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
-              Build Your Legacy, One Task at a Time
-            </p>
-          </motion.header>
+        {/* Header */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-3"
+        >
+          <div className="flex items-center justify-center gap-2 mb-1 relative max-w-7xl mx-auto">
+            <ListTodo className="w-6 h-6 text-[#d4af37]" />
+            <h1 className="text-2xl md:text-3xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
+              Productivity Dashboard
+            </h1>
+            <button
+              onClick={() => setIsEditingLayout(!isEditingLayout)}
+              className={`absolute right-0 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 transition-all ${
+                isEditingLayout
+                  ? 'bg-[#d4af37] text-[#1a120d]'
+                  : 'bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30'
+              }`}
+            >
+              <Edit3 className="w-4 h-4" />
+              {isEditingLayout ? 'Done' : 'Edit Layout'}
+            </button>
+          </div>
+          <p className="text-xs text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
+            Build Your Legacy, One Task at a Time
+          </p>
+        </motion.header>
 
-          {/* Grid Layout */}
-          <ResponsiveGridLayout
-            className="layout"
-            layouts={{ lg: layout }}
-            breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 480, xxs: 0 }}
-            cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-            rowHeight={30}
-            onLayoutChange={handleLayoutChange}
-            isDraggable={isEditingLayout}
-            isResizable={isEditingLayout}
-            compactType="vertical"
-            preventCollision={false}
-          >
-            <div key="quick-links" className="overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="h-full w-full"
-              >
-                <QuickLinks isMidnight={isMidnight} />
-              </motion.div>
-            </div>
-
-            <div key="info-bar" className="overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="h-full w-full"
-              >
-                <InfoBar isMidnight={isMidnight} />
-              </motion.div>
-            </div>
-
-            <div key="task-list" className="overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="h-full w-full"
-              >
-                <TaskList isMidnight={isMidnight} />
-              </motion.div>
-            </div>
-
-            <div key="timer" className="overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 }}
-                className="h-full w-full"
-              >
-                <CompactTimer isMidnight={isMidnight} />
-              </motion.div>
-            </div>
-
-            <div key="music" className="overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-                className="h-full w-full"
-              >
-                <MusicPlayer isMidnight={isMidnight} />
-              </motion.div>
-            </div>
-
-            <div key="notes" className="overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
-                className="h-full w-full"
-              >
-                <Notes isMidnight={isMidnight} />
-              </motion.div>
-            </div>
-          </ResponsiveGridLayout>
+        {/* Free-form draggable components */}
+        <div className="relative" style={{ minHeight: '1200px' }}>
+          {renderDraggableComponent('quick-links', <QuickLinks isMidnight={isMidnight} />, 0.1)}
+          {renderDraggableComponent('info-bar', <InfoBar isMidnight={isMidnight} />, 0.2)}
+          {renderDraggableComponent('task-list', <TaskList isMidnight={isMidnight} />, 0.3)}
+          {renderDraggableComponent('timer', <CompactTimer isMidnight={isMidnight} />, 0.4)}
+          {renderDraggableComponent('music', <MusicPlayer isMidnight={isMidnight} />, 0.5)}
+          {renderDraggableComponent('notes', <Notes isMidnight={isMidnight} />, 0.6)}
         </div>
       </div>
     </>
