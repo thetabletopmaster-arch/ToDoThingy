@@ -7,7 +7,6 @@ import CompactTimer from './components/CompactTimer';
 import QuickLinks from './components/QuickLinks';
 import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
-import PhilosophyQuote from './components/PhilosophyQuote';
 import BackgroundSelector from './components/BackgroundSelector';
 import MusicPlayer from './components/MusicPlayer';
 
@@ -77,17 +76,7 @@ function App() {
             <QuickLinks isMidnight={isMidnight} />
           </motion.div>
 
-          {/* Philosophy Quote */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="mb-2"
-          >
-            <PhilosophyQuote isMidnight={isMidnight} />
-          </motion.div>
-
-          {/* Info Bar */}
+          {/* Info Bar (now includes quote) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

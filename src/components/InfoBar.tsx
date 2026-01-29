@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Clock, Cloud, Sunrise, Sunset, Sun, Droplets, Wind, Clock12, Clock3, Wifi, WifiOff } from 'lucide-react';
 import LocationSelector from './LocationSelector';
+import PhilosophyQuote from './PhilosophyQuote';
 
 interface WeatherData {
   temperature: number;
@@ -351,143 +352,114 @@ export default function InfoBar({ isMidnight }: InfoBarProps) {
         connectionSpeed={connectionSpeed}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {/* Time & Coordinates */}
-        <div className="glass-effect rounded-xl p-2 shadow-glow">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-2">
-              <Clock className="w-3 h-3 text-white/80" />
-              <span className="text-xs font-medium text-white/80">Local Time</span>
-            </div>
-            <button
-              onClick={toggleTimeFormat}
-              className="text-white/60 hover:text-white transition-colors"
-              title={is24Hour ? 'Switch to 12-hour format' : 'Switch to 24-hour format'}
-            >
-              {is24Hour ? <Clock3 className="w-3 h-3" /> : <Clock12 className="w-3 h-3" />}
-            </button>
-          </div>
-          <div className="text-xl font-bold tabular-nums text-white mb-1">
-            {formatTime(time)}
-          </div>
-          <div className="text-xs text-white/70">
-            {formatDate(time)}
-          </div>
-          {timezone && (
-            <div className="text-xs text-white/50 mb-1">
-              {timezone}
-            </div>
-          )}
-          {coordinates && (
-            <div className="flex items-center gap-2 pt-1 border-t border-white/10">
-              <div>
-                <span className="text-xs text-white/50">Lat</span>
-                <div className="text-xs font-medium text-white/80">{coordinates.lat.toFixed(2)}°</div>
-              </div>
-              <div>
-                <span className="text-xs text-white/50">Lon</span>
-                <div className="text-xs font-medium text-white/80">{coordinates.lon.toFixed(2)}°</div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* UV & Weather Combined */}
-        <div className="glass-effect rounded-xl p-2 shadow-glow">
-          <div className="flex items-center gap-2 mb-1">
-            <Sun className="w-3 h-3 text-white/80" />
-            <span className="text-xs font-medium text-white/80">Weather & UV</span>
-          </div>
-          {isLoading ? (
-            <div className="text-sm text-white/60">Loading...</div>
-          ) : error ? (
-            <div className="space-y-1">
-              <div className="text-xs text-red-400">
-                {!isOnline ? 'No connection' : error.includes('Rate limit') ? 'Rate limited' : 'Error'}
-              </div>
-              {isOnline && (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        {/* Combined Location Info */}
+        <div className="glass-effect rounded-xl p-3 shadow-glow">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {/* Time Section */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-white/80" />
+                  <span className="text-xs font-medium text-white/80">Time</span>
+                </div>
                 <button
-                  onClick={handleRetry}
-                  className="text-xs px-2 py-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30 transition-colors"
+                  onClick={toggleTimeFormat}
+                  className="text-white/60 hover:text-white transition-colors"
+                  title={is24Hour ? 'Switch to 12-hour format' : 'Switch to 24-hour format'}
                 >
-                  Retry
+                  {is24Hour ? <Clock3 className="w-3 h-3" /> : <Clock12 className="w-3 h-3" />}
                 </button>
+              </div>
+              <div className="text-lg font-bold tabular-nums text-white">
+                {formatTime(time)}
+              </div>
+              <div className="text-xs text-white/70">{formatDate(time)}</div>
+              {timezone && <div className="text-xs text-white/50">{timezone}</div>}
+              {coordinates && (
+                <div className="flex gap-2 mt-1 text-xs">
+                  <span className="text-white/50">Lat: {coordinates.lat.toFixed(2)}°</span>
+                  <span className="text-white/50">Lon: {coordinates.lon.toFixed(2)}°</span>
+                </div>
               )}
             </div>
-          ) : weather ? (
-            <>
-              <div className="flex items-center gap-3 mb-1">
+
+            {/* Weather Section */}
+            <div>
+              <div className="flex items-center gap-1 mb-1">
+                <Cloud className="w-3 h-3 text-white/80" />
+                <span className="text-xs font-medium text-white/80">Weather</span>
+              </div>
+              {isLoading ? (
+                <div className="text-xs text-white/60">Loading...</div>
+              ) : error ? (
                 <div>
-                  <div className="text-2xl font-bold text-white">{weather.temperature}°C</div>
+                  <div className="text-xs text-red-400">
+                    {!isOnline ? 'No connection' : 'Error'}
+                  </div>
+                  {isOnline && (
+                    <button
+                      onClick={handleRetry}
+                      className="text-xs px-2 py-1 mt-1 rounded bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30"
+                    >
+                      Retry
+                    </button>
+                  )}
                 </div>
-                <div className="border-l border-white/20 pl-2">
-                  <div className="text-xl font-bold text-white">{weather.uvIndex}</div>
-                  <div className="text-xs text-white/70">{uvInfo?.level} UV</div>
-                </div>
+              ) : weather ? (
+                <>
+                  <div className="text-xl font-bold text-white">{weather.temperature}°C</div>
+                  <div className="text-xs text-white/70 mb-1">UV: {weather.uvIndex} ({uvInfo?.level})</div>
+                  <div className="flex gap-2 text-xs text-white/60">
+                    <span><Droplets className="w-3 h-3 inline mr-1" />{weather.humidity}%</span>
+                    <span><Wind className="w-3 h-3 inline mr-1" />{weather.windSpeed}km/h</span>
+                  </div>
+                </>
+              ) : (
+                <div className="text-xs text-white/60">Select location</div>
+              )}
+            </div>
+
+            {/* Sun Times Section */}
+            <div>
+              <div className="flex items-center gap-1 mb-1">
+                <Sun className="w-3 h-3 text-white/80" />
+                <span className="text-xs font-medium text-white/80">Sun</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-white/70">
-                <div className="flex items-center gap-1">
-                  <Droplets className="w-3 h-3" />
-                  <span>{weather.humidity}%</span>
+              {isLoading ? (
+                <div className="text-xs text-white/60">Loading...</div>
+              ) : error ? (
+                <div className="text-xs text-red-400">Error</div>
+              ) : sunTimes ? (
+                <div className="space-y-1">
+                  <div>
+                    <div className="flex items-center gap-1">
+                      <Sunrise className="w-3 h-3 text-white/60" />
+                      <span className="text-sm font-bold text-white">{sunTimes.sunrise}</span>
+                    </div>
+                    {getHoursUntil(sunTimes.sunriseDate) && (
+                      <div className="text-xs text-white/50">In {getHoursUntil(sunTimes.sunriseDate)}</div>
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1">
+                      <Sunset className="w-3 h-3 text-white/60" />
+                      <span className="text-sm font-bold text-white">{sunTimes.sunset}</span>
+                    </div>
+                    {getHoursUntil(sunTimes.sunsetDate) && (
+                      <div className="text-xs text-white/50">In {getHoursUntil(sunTimes.sunsetDate)}</div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Wind className="w-3 h-3" />
-                  <span>{weather.windSpeed} km/h</span>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="text-sm text-white/60">Select location</div>
-          )}
+              ) : (
+                <div className="text-xs text-white/60">Select location</div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Sun Times */}
-        <div className="glass-effect rounded-xl p-2 shadow-glow">
-          <div className="flex items-center gap-2 mb-1">
-            <Sun className="w-3 h-3 text-white/80" />
-            <span className="text-xs font-medium text-white/80">Sunrise & Sunset</span>
-          </div>
-          {isLoading ? (
-            <div className="text-sm text-white/60">Loading...</div>
-          ) : error ? (
-            <div className="text-xs text-red-400">
-              {!isOnline ? 'No connection' : 'Error'}
-            </div>
-          ) : sunTimes ? (
-            <div className="space-y-2">
-              <div>
-                <div className="flex items-center gap-1 mb-1">
-                  <Sunrise className="w-3 h-3 text-white/70" />
-                  <span className="text-xs text-white/80">Sunrise</span>
-                </div>
-                <div className="text-base font-bold tabular-nums text-white">
-                  {sunTimes.sunrise}
-                </div>
-                {getHoursUntil(sunTimes.sunriseDate) && (
-                  <div className="text-xs text-white/60">
-                    In {getHoursUntil(sunTimes.sunriseDate)}
-                  </div>
-                )}
-              </div>
-              <div>
-                <div className="flex items-center gap-1 mb-1">
-                  <Sunset className="w-3 h-3 text-white/70" />
-                  <span className="text-xs text-white/80">Sunset</span>
-                </div>
-                <div className="text-base font-bold tabular-nums text-white">
-                  {sunTimes.sunset}
-                </div>
-                {getHoursUntil(sunTimes.sunsetDate) && (
-                  <div className="text-xs text-white/60">
-                    In {getHoursUntil(sunTimes.sunsetDate)}
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="text-sm text-white/60">Select location</div>
-          )}
-        </div>
+        {/* Daily Quote */}
+        <PhilosophyQuote isMidnight={isMidnight} />
       </div>
     </div>
   );

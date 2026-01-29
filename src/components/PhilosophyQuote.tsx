@@ -59,7 +59,7 @@ export default function PhilosophyQuote({ isMidnight: _isMidnight }: { isMidnigh
   };
 
   return (
-    <div className="glass-effect rounded-xl p-3 shadow-glow">
+    <div className="glass-effect rounded-xl p-3 shadow-glow h-full flex flex-col">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Quote className="w-3 h-3 text-[#d4af37]" />
@@ -76,8 +76,8 @@ export default function PhilosophyQuote({ isMidnight: _isMidnight }: { isMidnigh
         </button>
       </div>
 
-      <blockquote className="relative">
-        <p className="text-sm text-[#ddc3a5] italic leading-relaxed mb-1" style={{ fontFamily: 'Lora, Georgia, serif' }}>
+      <blockquote className="relative flex-1 flex flex-col justify-center">
+        <p className="text-sm text-[#ddc3a5] italic leading-relaxed mb-2" style={{ fontFamily: 'Lora, Georgia, serif' }}>
           "{quote.text}"
         </p>
         <footer className="text-sm text-[#d4af37]/80" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
