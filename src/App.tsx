@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ListTodo, Edit3, GripVertical } from 'lucide-react';
+import { ListTodo, Edit3, GripVertical, Settings as SettingsIcon } from 'lucide-react';
 import TaskList from './components/TaskList';
 import InfoBar from './components/InfoBar';
 import CompactTimer from './components/CompactTimer';
 import QuickLinks from './components/QuickLinks';
-import ThemeToggle from './components/ThemeToggle';
 import Notes from './components/Notes';
-import BackgroundSelector from './components/BackgroundSelector';
 import MusicPlayer from './components/MusicPlayer';
+import PhilosophyQuote from './components/PhilosophyQuote';
+import Settings from './components/Settings';
 
 const BACKGROUND_KEY = 'productivity-dashboard-background';
 const POSITIONS_KEY = 'productivity-dashboard-positions';
@@ -26,7 +26,8 @@ interface Positions {
 
 const defaultPositions: Positions = {
   'quick-links': { x: 20, y: 100, width: 800, height: 80 },
-  'info-bar': { x: 20, y: 200, width: 800, height: 200 },
+  'info-bar': { x: 20, y: 200, width: 500, height: 200 },
+  'daily-quote': { x: 540, y: 200, width: 280, height: 200 },
   'task-list': { x: 20, y: 420, width: 500, height: 400 },
   'timer': { x: 540, y: 420, width: 280, height: 180 },
   'music': { x: 540, y: 620, width: 280, height: 180 },
@@ -44,6 +45,7 @@ function App() {
   });
 
   const [isEditingLayout, setIsEditingLayout] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const [positions, setPositions] = useState<Positions>(() => {
     const saved = localStorage.getItem(POSITIONS_KEY);
@@ -79,6 +81,11 @@ function App() {
 
   const handleBackgroundChange = (newBackground: string | null) => {
     setBackgroundImage(newBackground);
+    if (newBackground) {
+      localStorage.setItem(BACKGROUND_KEY, newBackground);
+    } else {
+      localStorage.removeItem(BACKGROUND_KEY);
+    }
   };
 
   const handleMouseDown = (e: React.MouseEvent, id: string) => {
@@ -214,8 +221,13 @@ function App() {
 
   return (
     <>
-      <ThemeToggle isMidnight={isMidnight} onToggle={() => setIsMidnight(!isMidnight)} />
-      <BackgroundSelector onBackgroundChange={handleBackgroundChange} />
+      <Settings
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        isMidnight={isMidnight}
+        onToggleMidnight={() => setIsMidnight(!isMidnight)}
+        onBackgroundChange={handleBackgroundChange}
+      />
 
       <div className="min-h-screen p-2 md:p-4">
         {/* Header */}
@@ -229,17 +241,26 @@ function App() {
             <h1 className="text-2xl md:text-3xl font-bold text-[#d4af37]" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
               Productivity Dashboard
             </h1>
-            <button
-              onClick={() => setIsEditingLayout(!isEditingLayout)}
-              className={`absolute right-0 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 transition-all ${
-                isEditingLayout
-                  ? 'bg-[#d4af37] text-[#1a120d]'
-                  : 'bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30'
-              }`}
-            >
-              <Edit3 className="w-4 h-4" />
-              {isEditingLayout ? 'Done' : 'Edit Layout'}
-            </button>
+            <div className="absolute right-0 flex items-center gap-2">
+              <button
+                onClick={() => setIsEditingLayout(!isEditingLayout)}
+                className={`px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 transition-all ${
+                  isEditingLayout
+                    ? 'bg-[#d4af37] text-[#1a120d]'
+                    : 'bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30'
+                }`}
+              >
+                <Edit3 className="w-4 h-4" />
+                {isEditingLayout ? 'Done' : 'Edit Layout'}
+              </button>
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                className="px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 transition-all bg-[#d4af37]/20 text-[#d4af37] hover:bg-[#d4af37]/30"
+              >
+                <SettingsIcon className="w-4 h-4" />
+                Settings
+              </button>
+            </div>
           </div>
           <p className="text-xs text-[#cd7f32]/80" style={{ fontFamily: 'Lora, Georgia, serif' }}>
             Build Your Legacy, One Task at a Time
@@ -250,6 +271,7 @@ function App() {
         <div className="relative" style={{ minHeight: '1200px' }}>
           {renderDraggableComponent('quick-links', <QuickLinks isMidnight={isMidnight} />, 0.1)}
           {renderDraggableComponent('info-bar', <InfoBar isMidnight={isMidnight} />, 0.2)}
+          {renderDraggableComponent('daily-quote', <PhilosophyQuote isMidnight={isMidnight} />, 0.25)}
           {renderDraggableComponent('task-list', <TaskList isMidnight={isMidnight} />, 0.3)}
           {renderDraggableComponent('timer', <CompactTimer isMidnight={isMidnight} />, 0.4)}
           {renderDraggableComponent('music', <MusicPlayer isMidnight={isMidnight} />, 0.5)}
