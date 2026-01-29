@@ -51,7 +51,9 @@ function App() {
     const saved = localStorage.getItem(POSITIONS_KEY);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const savedPositions = JSON.parse(saved);
+        // Merge saved positions with defaults to handle new components
+        return { ...defaultPositions, ...savedPositions };
       } catch {
         return defaultPositions;
       }
@@ -178,6 +180,10 @@ function App() {
     delay: number
   ) => {
     const pos = positions[id];
+    if (!pos) {
+      console.error(`No position found for component: ${id}`);
+      return null;
+    }
     return (
       <motion.div
         key={id}
