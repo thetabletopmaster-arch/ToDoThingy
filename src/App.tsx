@@ -25,39 +25,39 @@ interface Positions {
   [key: string]: ComponentPosition;
 }
 
-// Preset Layouts - Professionally crafted for optimal workflow
+// Preset Layouts - Optimized for 1920x1080 displays
 const layoutPresets = {
-  // Compact: Dense, efficient layout for focused work
+  // Compact: Classic 2-column layout
   compact: {
-    'quick-links': { x: 40, y: 100, width: 1200, height: 120 },
-    'info-bar': { x: 40, y: 240, width: 700, height: 280 },
-    'daily-quote': { x: 760, y: 240, width: 480, height: 280 },
-    'task-list': { x: 40, y: 540, width: 700, height: 500 },
-    'timer': { x: 760, y: 540, width: 480, height: 240 },
-    'music': { x: 760, y: 800, width: 480, height: 160 },
-    'notes': { x: 760, y: 980, width: 480, height: 200 },
+    'quick-links': { x: 20, y: 100, width: 1100, height: 100 },
+    'info-bar': { x: 20, y: 220, width: 650, height: 250 },
+    'daily-quote': { x: 690, y: 220, width: 430, height: 250 },
+    'task-list': { x: 20, y: 490, width: 650, height: 450 },
+    'timer': { x: 690, y: 490, width: 430, height: 200 },
+    'music': { x: 690, y: 710, width: 430, height: 120 },
+    'notes': { x: 690, y: 850, width: 430, height: 90 },
   },
 
-  // Wide: Panoramic layout for ultrawide monitors and multitasking
+  // Wide: 3-column layout with task list on right
   wide: {
-    'quick-links': { x: 60, y: 100, width: 1600, height: 120 },
-    'info-bar': { x: 60, y: 240, width: 520, height: 320 },
-    'daily-quote': { x: 600, y: 240, width: 520, height: 320 },
-    'task-list': { x: 1140, y: 240, width: 520, height: 700 },
-    'timer': { x: 60, y: 580, width: 360, height: 300 },
-    'music': { x: 440, y: 580, width: 360, height: 180 },
-    'notes': { x: 440, y: 780, width: 360, height: 160 },
+    'quick-links': { x: 20, y: 100, width: 1400, height: 100 },
+    'info-bar': { x: 20, y: 220, width: 450, height: 280 },
+    'daily-quote': { x: 490, y: 220, width: 450, height: 280 },
+    'task-list': { x: 960, y: 220, width: 460, height: 720 },
+    'timer': { x: 20, y: 520, width: 280, height: 250 },
+    'music': { x: 320, y: 520, width: 310, height: 210 },
+    'notes': { x: 320, y: 750, width: 310, height: 190 },
   },
 
-  // Balanced: Harmonious layout with golden ratio spacing
+  // Balanced: Centered layout with symmetry
   balanced: {
-    'quick-links': { x: 200, y: 100, width: 1300, height: 120 },
-    'info-bar': { x: 80, y: 240, width: 600, height: 300 },
-    'daily-quote': { x: 700, y: 240, width: 600, height: 300 },
-    'task-list': { x: 360, y: 560, width: 700, height: 500 },
-    'timer': { x: 80, y: 560, width: 260, height: 280 },
-    'music': { x: 80, y: 860, width: 260, height: 160 },
-    'notes': { x: 1080, y: 560, width: 420, height: 500 },
+    'quick-links': { x: 180, y: 100, width: 1200, height: 100 },
+    'info-bar': { x: 50, y: 220, width: 550, height: 280 },
+    'daily-quote': { x: 620, y: 220, width: 550, height: 280 },
+    'task-list': { x: 320, y: 520, width: 680, height: 420 },
+    'timer': { x: 50, y: 520, width: 250, height: 250 },
+    'music': { x: 50, y: 790, width: 250, height: 150 },
+    'notes': { x: 1020, y: 520, width: 360, height: 420 },
   },
 };
 
