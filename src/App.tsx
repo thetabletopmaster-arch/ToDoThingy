@@ -12,6 +12,7 @@ import Settings from './components/Settings';
 
 const BACKGROUND_KEY = 'productivity-dashboard-background';
 const POSITIONS_KEY = 'productivity-dashboard-positions';
+const LAYOUT_PRESET_KEY = 'productivity-dashboard-layout-preset';
 
 interface ComponentPosition {
   x: number;
@@ -24,15 +25,38 @@ interface Positions {
   [key: string]: ComponentPosition;
 }
 
-const defaultPositions: Positions = {
-  'quick-links': { x: 20, y: 100, width: 800, height: 80 },
-  'info-bar': { x: 20, y: 200, width: 500, height: 200 },
-  'daily-quote': { x: 540, y: 200, width: 280, height: 200 },
-  'task-list': { x: 20, y: 420, width: 500, height: 400 },
-  'timer': { x: 540, y: 420, width: 280, height: 180 },
-  'music': { x: 540, y: 620, width: 280, height: 180 },
-  'notes': { x: 540, y: 820, width: 280, height: 200 },
+// Preset Layouts
+const layoutPresets = {
+  compact: {
+    'quick-links': { x: 20, y: 100, width: 800, height: 80 },
+    'info-bar': { x: 20, y: 200, width: 500, height: 200 },
+    'daily-quote': { x: 540, y: 200, width: 280, height: 200 },
+    'task-list': { x: 20, y: 420, width: 500, height: 400 },
+    'timer': { x: 540, y: 420, width: 280, height: 180 },
+    'music': { x: 540, y: 620, width: 280, height: 180 },
+    'notes': { x: 540, y: 820, width: 280, height: 200 },
+  },
+  wide: {
+    'quick-links': { x: 20, y: 100, width: 1200, height: 80 },
+    'info-bar': { x: 20, y: 200, width: 400, height: 250 },
+    'daily-quote': { x: 440, y: 200, width: 400, height: 250 },
+    'task-list': { x: 860, y: 200, width: 360, height: 500 },
+    'timer': { x: 20, y: 470, width: 400, height: 230 },
+    'music': { x: 440, y: 470, width: 200, height: 230 },
+    'notes': { x: 660, y: 470, width: 180, height: 230 },
+  },
+  balanced: {
+    'quick-links': { x: 300, y: 100, width: 800, height: 80 },
+    'info-bar': { x: 50, y: 200, width: 450, height: 220 },
+    'daily-quote': { x: 520, y: 200, width: 350, height: 220 },
+    'task-list': { x: 300, y: 440, width: 500, height: 400 },
+    'timer': { x: 50, y: 440, width: 230, height: 200 },
+    'music': { x: 50, y: 660, width: 230, height: 180 },
+    'notes': { x: 820, y: 440, width: 280, height: 400 },
+  },
 };
+
+const defaultPositions: Positions = layoutPresets.compact;
 
 function App() {
   const [isMidnight, setIsMidnight] = useState(() => {
@@ -65,6 +89,29 @@ function App() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [resizing, setResizing] = useState<string | null>(null);
 
+  // Snap-to-grid helper
+  const snapToGrid = (value: number, screenSize: number) => {
+    const SNAP_DISTANCE = 20; // pixels
+    const snapPoints = [
+      0, // Edge
+      screenSize / 8,
+      screenSize / 4,
+      (screenSize * 3) / 8,
+      screenSize / 2, // Center
+      (screenSize * 5) / 8,
+      (screenSize * 3) / 4,
+      (screenSize * 7) / 8,
+      screenSize - 20, // Other edge (with padding)
+    ];
+
+    for (const point of snapPoints) {
+      if (Math.abs(value - point) < SNAP_DISTANCE) {
+        return point;
+      }
+    }
+    return value;
+  };
+
   useEffect(() => {
     document.body.classList.toggle('midnight', isMidnight);
     localStorage.setItem('midnight-mode', String(isMidnight));
@@ -90,6 +137,12 @@ function App() {
     }
   };
 
+  const applyLayoutPreset = (presetName: keyof typeof layoutPresets) => {
+    setPositions(layoutPresets[presetName]);
+    localStorage.setItem(POSITIONS_KEY, JSON.stringify(layoutPresets[presetName]));
+    localStorage.setItem(LAYOUT_PRESET_KEY, presetName);
+  };
+
   const handleMouseDown = (e: React.MouseEvent, id: string) => {
     if (!isEditingLayout) return;
 
@@ -104,12 +157,19 @@ function App() {
   const handleMouseMove = (e: MouseEvent) => {
     if (!dragging) return;
 
+    const rawX = e.clientX - dragOffset.x;
+    const rawY = e.clientY - dragOffset.y;
+
+    // Apply snapping
+    const snappedX = snapToGrid(rawX, window.innerWidth);
+    const snappedY = snapToGrid(rawY, window.innerHeight);
+
     const newPositions = {
       ...positions,
       [dragging]: {
         ...positions[dragging],
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y
+        x: snappedX,
+        y: snappedY
       }
     };
 
@@ -233,6 +293,7 @@ function App() {
         isMidnight={isMidnight}
         onToggleMidnight={() => setIsMidnight(!isMidnight)}
         onBackgroundChange={handleBackgroundChange}
+        onApplyLayoutPreset={applyLayoutPreset}
       />
 
       <div className="min-h-screen p-2 md:p-4">
