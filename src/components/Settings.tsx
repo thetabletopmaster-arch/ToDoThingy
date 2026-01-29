@@ -90,16 +90,21 @@ export default function Settings({
                     className="group relative overflow-hidden rounded-xl border-2 border-[#d4af37]/40 bg-black/40 hover:border-[#d4af37] hover:bg-[#d4af37]/10 transition-all p-4"
                   >
                     <div className="text-center">
-                      <div className="w-full h-24 mb-3 rounded-lg bg-[#d4af37]/20 flex items-center justify-center">
-                        <div className="grid grid-cols-2 gap-1 w-16">
-                          <div className="h-3 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-3 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-8 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-8 bg-[#d4af37]/60 rounded"></div>
+                      <div className="w-full h-28 mb-3 rounded-lg bg-gradient-to-br from-[#d4af37]/10 to-black/60 p-2 flex items-center justify-center">
+                        <div className="w-full h-full grid grid-cols-3 gap-1">
+                          <div className="col-span-3 h-2 bg-[#d4af37]/70 rounded"></div>
+                          <div className="col-span-2 h-5 bg-[#d4af37]/60 rounded"></div>
+                          <div className="col-span-1 h-5 bg-[#d4af37]/50 rounded"></div>
+                          <div className="col-span-2 h-12 bg-[#d4af37]/60 rounded"></div>
+                          <div className="col-span-1 space-y-1">
+                            <div className="h-5 bg-[#d4af37]/50 rounded"></div>
+                            <div className="h-3 bg-[#d4af37]/40 rounded"></div>
+                            <div className="h-2 bg-[#d4af37]/30 rounded"></div>
+                          </div>
                         </div>
                       </div>
                       <p className="text-sm font-semibold text-[#d4af37]">Compact</p>
-                      <p className="text-xs text-white/50 mt-1">Dense layout</p>
+                      <p className="text-xs text-white/50 mt-1">Dense & efficient</p>
                     </div>
                   </button>
 
@@ -111,17 +116,21 @@ export default function Settings({
                     className="group relative overflow-hidden rounded-xl border-2 border-[#d4af37]/40 bg-black/40 hover:border-[#d4af37] hover:bg-[#d4af37]/10 transition-all p-4"
                   >
                     <div className="text-center">
-                      <div className="w-full h-24 mb-3 rounded-lg bg-[#d4af37]/20 flex items-center justify-center">
-                        <div className="grid grid-cols-3 gap-1 w-20">
-                          <div className="h-2 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-2 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-10 bg-[#d4af37]/60 rounded row-span-2"></div>
-                          <div className="h-7 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-7 bg-[#d4af37]/60 rounded"></div>
+                      <div className="w-full h-28 mb-3 rounded-lg bg-gradient-to-br from-[#d4af37]/10 to-black/60 p-2 flex items-center justify-center">
+                        <div className="w-full h-full grid grid-cols-5 gap-1">
+                          <div className="col-span-5 h-2 bg-[#d4af37]/70 rounded"></div>
+                          <div className="col-span-2 h-6 bg-[#d4af37]/60 rounded"></div>
+                          <div className="col-span-2 h-6 bg-[#d4af37]/50 rounded"></div>
+                          <div className="col-span-1 row-span-2 h-full bg-[#d4af37]/60 rounded"></div>
+                          <div className="col-span-1 h-5 bg-[#d4af37]/50 rounded"></div>
+                          <div className="col-span-2 space-y-1">
+                            <div className="h-2 bg-[#d4af37]/40 rounded"></div>
+                            <div className="h-1 bg-[#d4af37]/30 rounded"></div>
+                          </div>
                         </div>
                       </div>
                       <p className="text-sm font-semibold text-[#d4af37]">Wide</p>
-                      <p className="text-xs text-white/50 mt-1">Horizontal spread</p>
+                      <p className="text-xs text-white/50 mt-1">Ultrawide panorama</p>
                     </div>
                   </button>
 
@@ -133,18 +142,21 @@ export default function Settings({
                     className="group relative overflow-hidden rounded-xl border-2 border-[#d4af37]/40 bg-black/40 hover:border-[#d4af37] hover:bg-[#d4af37]/10 transition-all p-4"
                   >
                     <div className="text-center">
-                      <div className="w-full h-24 mb-3 rounded-lg bg-[#d4af37]/20 flex items-center justify-center">
-                        <div className="grid grid-cols-3 gap-1 w-20">
-                          <div className="h-4 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-4 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-4 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-7 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-7 bg-[#d4af37]/60 rounded"></div>
-                          <div className="h-7 bg-[#d4af37]/60 rounded"></div>
+                      <div className="w-full h-28 mb-3 rounded-lg bg-gradient-to-br from-[#d4af37]/10 to-black/60 p-2 flex items-center justify-center">
+                        <div className="w-full h-full grid grid-cols-4 gap-1">
+                          <div className="col-start-2 col-span-2 h-2 bg-[#d4af37]/70 rounded"></div>
+                          <div className="col-span-2 h-5 bg-[#d4af37]/60 rounded"></div>
+                          <div className="col-span-2 h-5 bg-[#d4af37]/50 rounded"></div>
+                          <div className="col-span-1 space-y-1">
+                            <div className="h-4 bg-[#d4af37]/50 rounded"></div>
+                            <div className="h-2 bg-[#d4af37]/40 rounded"></div>
+                          </div>
+                          <div className="col-span-2 h-10 bg-[#d4af37]/60 rounded"></div>
+                          <div className="col-span-1 h-10 bg-[#d4af37]/50 rounded"></div>
                         </div>
                       </div>
                       <p className="text-sm font-semibold text-[#d4af37]">Balanced</p>
-                      <p className="text-xs text-white/50 mt-1">Even distribution</p>
+                      <p className="text-xs text-white/50 mt-1">Golden harmony</p>
                     </div>
                   </button>
                 </div>
