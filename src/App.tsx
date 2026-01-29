@@ -71,9 +71,11 @@ function App() {
     setBackgroundImage(newBackground);
   };
 
-  const handleLayoutChange = (newLayout: Layout[]) => {
-    setLayout(newLayout);
-    localStorage.setItem(LAYOUT_KEY, JSON.stringify(newLayout));
+  const handleLayoutChange = (currentLayout: Layout[], allLayouts: { [key: string]: Layout[] }) => {
+    if (allLayouts.lg) {
+      setLayout(allLayouts.lg);
+      localStorage.setItem(LAYOUT_KEY, JSON.stringify(allLayouts.lg));
+    }
   };
 
   return (
@@ -124,67 +126,67 @@ function App() {
             compactType="vertical"
             preventCollision={false}
           >
-            <div key="quick-links">
+            <div key="quick-links" className="overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <QuickLinks isMidnight={isMidnight} />
               </motion.div>
             </div>
 
-            <div key="info-bar">
+            <div key="info-bar" className="overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <InfoBar isMidnight={isMidnight} />
               </motion.div>
             </div>
 
-            <div key="task-list">
+            <div key="task-list" className="overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <TaskList isMidnight={isMidnight} />
               </motion.div>
             </div>
 
-            <div key="timer">
+            <div key="timer" className="overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <CompactTimer isMidnight={isMidnight} />
               </motion.div>
             </div>
 
-            <div key="music">
+            <div key="music" className="overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <MusicPlayer isMidnight={isMidnight} />
               </motion.div>
             </div>
 
-            <div key="notes">
+            <div key="notes" className="overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <Notes isMidnight={isMidnight} />
               </motion.div>
