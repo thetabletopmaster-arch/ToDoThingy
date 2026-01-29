@@ -77,10 +77,10 @@ export default function PhilosophyQuote({ isMidnight: _isMidnight }: { isMidnigh
       </div>
 
       <blockquote className="relative">
-        <p className="text-xs text-[#ddc3a5] italic leading-relaxed mb-1" style={{ fontFamily: 'Lora, Georgia, serif' }}>
+        <p className="text-sm text-[#ddc3a5] italic leading-relaxed mb-1" style={{ fontFamily: 'Lora, Georgia, serif' }}>
           "{quote.text}"
         </p>
-        <footer className="text-xs text-[#d4af37]/80" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
+        <footer className="text-sm text-[#d4af37]/80" style={{ fontFamily: 'Cinzel, Georgia, serif' }}>
           — {quote.author}
         </footer>
       </blockquote>

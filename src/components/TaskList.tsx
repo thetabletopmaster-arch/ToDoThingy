@@ -1,21 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import type { DragEndEvent } from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import SortableTaskItem from './SortableTaskItem';
 
 interface Task {
   id: string;
@@ -50,13 +34,6 @@ export default function TaskList({ isMidnight }: TaskListProps) {
 
   const [newLongtermTask, setNewLongtermTask] = useState('');
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   useEffect(() => {
     localStorage.setItem(LONGTERM_TASKS_KEY, JSON.stringify(longtermTasks));
   }, [longtermTasks]);
@@ -74,17 +51,6 @@ export default function TaskList({ isMidnight }: TaskListProps) {
     if (newLongtermTask.trim()) {
       setLongtermTasks([...longtermTasks, { id: Date.now().toString(), text: newLongtermTask, completed: false }]);
       setNewLongtermTask('');
-    }
-  };
-
-  const handleLongtermDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (over && active.id !== over.id) {
-      setLongtermTasks((tasks) => {
-        const oldIndex = tasks.findIndex((task) => task.id === active.id);
-        const newIndex = tasks.findIndex((task) => task.id === over.id);
-        return arrayMove(tasks, oldIndex, newIndex);
-      });
     }
   };
 
@@ -146,44 +112,51 @@ export default function TaskList({ isMidnight }: TaskListProps) {
           </div>
 
           <form onSubmit={handleAddLongtermTask} className="mb-4">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newLongtermTask}
-            onChange={(e) => setNewLongtermTask(e.target.value)}
-            placeholder="Add a long-term goal..."
-            className="flex-1 px-4 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-2 hover:bg-[#cd7f32] transition-all shadow-md"
-          >
-            <Plus className="w-5 h-5" />
-            Add
-          </button>
-        </div>
-      </form>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newLongtermTask}
+                onChange={(e) => setNewLongtermTask(e.target.value)}
+                placeholder="Add a long-term goal..."
+                className="flex-1 px-4 py-2 rounded-lg border-2 border-[#d4af37]/40 focus:outline-none focus:border-[#d4af37] bg-black/40 text-[#ddc3a5] placeholder-amber-500/30 transition-all"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-[#d4af37] text-[#1a120d] font-medium flex items-center gap-2 hover:bg-[#cd7f32] transition-all shadow-md"
+              >
+                <Plus className="w-5 h-5" />
+                Add
+              </button>
+            </div>
+          </form>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleLongtermDragEnd}
-      >
-        <SortableContext
-          items={longtermTasks.map(t => t.id)}
-          strategy={verticalListSortingStrategy}
-        >
           <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-2">
             {longtermTasks.map(task => (
-              <SortableTaskItem
+              <div
                 key={task.id}
-                id={task.id}
-                text={task.text}
-                completed={task.completed}
-                onToggle={handleToggleLongtermTask}
-                onDelete={handleDeleteLongtermTask}
-                isMidnight={isMidnight}
-              />
+                className="flex items-center gap-3 px-4 py-3 rounded-lg border-2 border-[#d4af37]/40 bg-black/40 hover:border-[#d4af37] transition-all"
+              >
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => handleToggleLongtermTask(task.id)}
+                  className="w-5 h-5 rounded border-2 border-[#d4af37] text-[#d4af37] focus:ring-[#d4af37] focus:ring-offset-0 bg-black/40 cursor-pointer"
+                />
+                <span
+                  className={`flex-1 text-[#ddc3a5] transition-all ${
+                    task.completed ? 'line-through opacity-50' : ''
+                  }`}
+                >
+                  {task.text}
+                </span>
+                <button
+                  onClick={() => handleDeleteLongtermTask(task.id)}
+                  className="text-[#cd7f32] hover:text-red-400 transition-colors"
+                  title="Delete task"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             ))}
             {longtermTasks.length === 0 && (
               <div className="text-center py-6 text-[#d4af37]/50 text-sm">
@@ -191,8 +164,6 @@ export default function TaskList({ isMidnight }: TaskListProps) {
               </div>
             )}
           </div>
-        </SortableContext>
-      </DndContext>
 
           {/* Clear Completed Button */}
           {longtermTasks.some(t => t.completed) && (
