@@ -1,5 +1,11 @@
-import { X, Moon, Sun, Image, Layout } from 'lucide-react';
+import { X, Moon, Sun, Image, Layout, Eye, EyeOff, Palette } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+
+interface ComponentStyle {
+  backgroundColor?: string;
+  opacity?: number;
+}
 
 interface SettingsProps {
   isOpen: boolean;
@@ -8,7 +14,22 @@ interface SettingsProps {
   onToggleMidnight: () => void;
   onBackgroundChange: (background: string | null) => void;
   onApplyLayoutPreset: (preset: 'compact' | 'wide' | 'balanced') => void;
+  componentVisibility: { [key: string]: boolean };
+  onToggleVisibility: (id: string) => void;
+  componentStyles: { [key: string]: ComponentStyle };
+  onUpdateStyle: (id: string, style: ComponentStyle) => void;
 }
+
+const componentNames: { [key: string]: string } = {
+  'quick-links': 'Quick Links',
+  'info-bar': 'Location Info',
+  'daily-quote': 'Daily Quote',
+  'task-list': 'Goals Wall',
+  'timer': 'Timer',
+  'crypto': 'Bitcoin Price',
+  'music': 'Music Player',
+  'notes': 'Notes',
+};
 
 export default function Settings({
   isOpen,
@@ -17,7 +38,12 @@ export default function Settings({
   onToggleMidnight,
   onBackgroundChange,
   onApplyLayoutPreset,
+  componentVisibility,
+  onToggleVisibility,
+  componentStyles,
+  onUpdateStyle,
 }: SettingsProps) {
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const handleBackgroundUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -74,9 +100,9 @@ export default function Settings({
             </div>
 
             {/* Settings Grid */}
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto">
+            <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
               {/* Layout Presets */}
-              <div className="md:col-span-2">
+              <div>
                 <h3 className="text-lg font-semibold text-[#d4af37] mb-4 flex items-center gap-2">
                   <Layout className="w-5 h-5" />
                   Layout Presets
@@ -162,12 +188,113 @@ export default function Settings({
                 </div>
               </div>
 
-              {/* Theme */}
+              {/* Component Visibility */}
               <div>
                 <h3 className="text-lg font-semibold text-[#d4af37] mb-4 flex items-center gap-2">
-                  {isMidnight ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-                  Theme
+                  <Eye className="w-5 h-5" />
+                  Show/Hide Components
                 </h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.keys(componentNames).map((id) => (
+                    <button
+                      key={id}
+                      onClick={() => onToggleVisibility(id)}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                        componentVisibility[id]
+                          ? 'bg-[#d4af37]/20 border-2 border-[#d4af37]/60 text-[#d4af37]'
+                          : 'bg-black/40 border-2 border-white/20 text-white/40'
+                      }`}
+                    >
+                      {componentVisibility[id] ? (
+                        <Eye className="w-4 h-4" />
+                      ) : (
+                        <EyeOff className="w-4 h-4" />
+                      )}
+                      {componentNames[id]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Component Customization */}
+              <div>
+                <h3 className="text-lg font-semibold text-[#d4af37] mb-4 flex items-center gap-2">
+                  <Palette className="w-5 h-5" />
+                  Customize Components
+                </h3>
+                <div className="space-y-3">
+                  <select
+                    value={selectedComponent || ''}
+                    onChange={(e) => setSelectedComponent(e.target.value || null)}
+                    className="w-full px-4 py-2 rounded-lg bg-black/40 border-2 border-[#d4af37]/40 text-white"
+                  >
+                    <option value="">Select a component...</option>
+                    {Object.keys(componentNames).map((id) => (
+                      <option key={id} value={id}>
+                        {componentNames[id]}
+                      </option>
+                    ))}
+                  </select>
+
+                  {selectedComponent && (
+                    <div className="space-y-3 p-4 rounded-lg bg-black/40 border-2 border-[#d4af37]/40">
+                      <div>
+                        <label className="text-sm text-white/80 mb-2 block">Background Color</label>
+                        <input
+                          type="color"
+                          value={componentStyles[selectedComponent]?.backgroundColor || '#000000'}
+                          onChange={(e) =>
+                            onUpdateStyle(selectedComponent, {
+                              ...componentStyles[selectedComponent],
+                              backgroundColor: e.target.value,
+                            })
+                          }
+                          className="w-full h-10 rounded-lg border-2 border-[#d4af37]/40 cursor-pointer"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-sm text-white/80 mb-2 block">
+                          Transparency: {Math.round((componentStyles[selectedComponent]?.opacity || 1) * 100)}%
+                        </label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={componentStyles[selectedComponent]?.opacity || 1}
+                          onChange={(e) =>
+                            onUpdateStyle(selectedComponent, {
+                              ...componentStyles[selectedComponent],
+                              opacity: parseFloat(e.target.value),
+                            })
+                          }
+                          className="w-full"
+                        />
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          onUpdateStyle(selectedComponent, {});
+                          setSelectedComponent(null);
+                        }}
+                        className="w-full px-4 py-2 rounded-lg text-sm bg-red-900/20 border-2 border-red-500/40 text-red-300 hover:bg-red-900/30"
+                      >
+                        Reset to Default
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Theme and Background */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Theme */}
+                <div>
+                  <h3 className="text-lg font-semibold text-[#d4af37] mb-4 flex items-center gap-2">
+                    {isMidnight ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                    Theme
+                  </h3>
                 <button
                   onClick={onToggleMidnight}
                   className={`w-full px-6 py-4 rounded-xl text-base font-medium transition-all ${
@@ -214,15 +341,9 @@ export default function Settings({
                   >
                     Remove Background
                   </button>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Footer */}
-            <div className="p-6 border-t-2 border-[#d4af37]/20 bg-black/20">
-              <p className="text-sm text-white/50 text-center" style={{ fontFamily: 'Lora, Georgia, serif' }}>
-                <strong className="text-[#d4af37]">Tip:</strong> Use "Edit Layout" mode to freely drag and resize components. Components snap to 8ths of the screen for perfect alignment.
-              </p>
             </div>
           </motion.div>
         </motion.div>
