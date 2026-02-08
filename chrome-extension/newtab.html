@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Productivity Dashboard</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
+      color: #d4af37;
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">Loading Dashboard...</div>
+  <iframe id="dashboard" src="http://localhost:5173" style="display: none;"></iframe>
+
+  <script>
+    const iframe = document.getElementById('dashboard');
+    const loading = document.getElementById('loading');
+
+    iframe.onload = function() {
+      loading.style.display = 'none';
+      iframe.style.display = 'block';
+    };
+
+    // Show iframe after 1 second even if onload doesn't fire
+    setTimeout(() => {
+      loading.style.display = 'none';
+      iframe.style.display = 'block';
+    }, 1000);
+  </script>
+</body>
+</html>
